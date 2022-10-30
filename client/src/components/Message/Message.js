@@ -9,13 +9,14 @@ import moment from "moment"
 
 const Message = ({ message, next }) => {
 
+
     const dispatch = useDispatch();
     const socket = useContext(SocketContext)
 
     const user = useSelector((state) => state.user.details)
     const chat = useSelector((state) => state.chat)
 
-    const senderDetails = chat.users.filter(member => (member._id !== user.id && member._id === message.senderId))[0]
+    const senderDetails = chat.otherMembers.filter(member => (member._id === message.senderId))[0]
 
     const dateFormat = "YYYY-MM-DD HH:mm:ss"
     const start = moment(message.createdAt).format(dateFormat)
@@ -26,32 +27,32 @@ const Message = ({ message, next }) => {
     const currentUserMessage = (user.id === message.senderId)
 
     const [hover, setHover] = useState(false)
-    const [readByUpdated, setReadByUpdated] = useState(((chat?.latestMessages?.filter(c => c._id === message._id)[0]?.readBy) || message.readBy))
+    // const [readByUpdated, setReadByUpdated] = useState(((chat?.latestMessages?.filter(c => c._id === message._id)[0]?.readBy) || message.readBy))
 
-    const updateRecentMessage = useCallback(() => {
-        if (message.senderId !== user.id && (chat.users.length !== readByUpdated.length)) {
-            socket.emit("readMessage", { chatId: chat.chatId, messageId: message._id, userId: user.id })
-            dispatch(chatActions.updateReadBy({ chatId: chat.chatId, messageId: message._id, userId: user.id }))
-        }
-    }, [dispatch, socket, readByUpdated, chat.chatId, chat.users.length, message._id, message.senderId, user.id])
+    // const updateRecentMessage = useCallback(() => {
+    //     if (message.senderId !== user.id && (chat.users.length !== readByUpdated.length)) {
+    //         socket.emit("readMessage", { chatId: chat.chatId, messageId: message._id, userId: user.id })
+    //         dispatch(chatActions.updateReadBy({ chatId: chat.chatId, messageId: message._id, userId: user.id }))
+    //     }
+    // }, [dispatch, socket, readByUpdated, chat.chatId, chat.users.length, message._id, message.senderId, user.id])
 
-    const updateReadBy = useCallback(() => {
-        socket.on("getMessageReadby", (details) => {
-            if (details.messageId === message._id && !readByUpdated.includes(details.userId)) {
-                setReadByUpdated((prev) => [...prev, details.userId])
-                dispatch(chatActions.updateReadBy(details))
-            }
-        });
-        // eslint-disable-next-line
-    }, [socket, dispatch])
+    // const updateReadBy = useCallback(() => {
+    //     socket.on("getMessageReadby", (details) => {
+    //         if (details.messageId === message._id && !readByUpdated.includes(details.userId)) {
+    //             setReadByUpdated((prev) => [...prev, details.userId])
+    //             dispatch(chatActions.updateReadBy(details))
+    //         }
+    //     });
+    //     // eslint-disable-next-line
+    // }, [socket, dispatch])
 
-    useEffect(() => {
-        updateRecentMessage();
-    }, [updateRecentMessage])
+    // useEffect(() => {
+    //     updateRecentMessage();
+    // }, [updateRecentMessage])
 
-    useEffect(() => {
-        updateReadBy();
-    }, [updateReadBy])
+    // useEffect(() => {
+    //     updateReadBy();
+    // }, [updateReadBy])
 
     return (
         <>
@@ -68,7 +69,7 @@ const Message = ({ message, next }) => {
                     <Typography sx={{ fontSize: "16px" }}>{message.content}</Typography>
                 </MessageBox>
 
-                {
+                {/* {
                     !readByUpdated.every(id => next?.readBy.includes(id)) &&
                     <>
                         {
@@ -76,14 +77,14 @@ const Message = ({ message, next }) => {
                                 (value !== user.id && message.senderId === user.id) &&
                                 <div key={message._id}>
                                     <Avatar
-                                        src={chat.users.filter(m => m._id === value)[0]?.profilePicture || UserImage}
+                                        src={(chat.otherMembers.filter(m => m._id === value)[0]?.profilePicture) || UserImage}
                                         sx={{ width: 20, height: 20, alignSelf: "flex-end" }}
                                     />
                                 </div>
                             )
                         }
                     </>
-                }
+                } */}
 
 
                 {hover &&
@@ -94,6 +95,7 @@ const Message = ({ message, next }) => {
                     </Flexbox>
                 }
             </MessageContainer >
+
             {
                 (duration > 2 && next)
                 &&

@@ -9,7 +9,6 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
 
     const socket = useContext(SocketContext)
 
-    const activeChat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
     const latestMessages = useSelector((state) => state.chat.latestMessages)
 

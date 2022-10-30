@@ -15,18 +15,16 @@ const RecentChats = () => {
 
     const [chats, setChats] = useState([])
     const [onlineUsers, setOnlineUsers] = useState([])
+    const [newChat, setNewChat] = useState(false)
 
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
-    const [newChat, setNewChat] = useState(false)
 
     const fetchUsers = useCallback(async () => {
         socket.on("getLatestMessage", (data) => {
             setNewChat(true)
             dispatch(chatActions.latestMessages(data))
-            // console.log("emitting")
         })
-        // console.log("executing fetch users");
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/${userId}`)
         setChats(response.data)
         // eslint-disable-next-line
@@ -42,9 +40,13 @@ const RecentChats = () => {
 
     const clickHandler = async (selectedChat) => {
         if (selectedChat._id === chat?.chatId) return;
+
         await axios.put(`${process.env.REACT_APP_SERVER}/message/${selectedChat._id}`, { userId: userId })
-        dispatch(chatActions.openChat(selectedChat.members.filter(user => user._id !== userId)[0]))
-        dispatch(chatActions.conversation(selectedChat))
+
+        const { _id, isGroupChat, members } = selectedChat;
+        const activeChat = { chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId) }
+        dispatch(chatActions.conversation(activeChat))
+
     }
 
     return (

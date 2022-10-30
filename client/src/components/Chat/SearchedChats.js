@@ -12,12 +12,12 @@ const SearchedChats = ({ searchedUsers }) => {
     const chat = useSelector((state) => state.chat)
 
     const chatHandler = async (member) => {
-        if (member._id === chat?.selectedUser?._id) return;
-        dispatch(chatActions.openChat(member))
+        if (member._id === chat?.otherMembers[0]?._id) return;
 
-        const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/find/${userId}/${member._id}`)
-        if (response.data.length === 0 || chat.chatId === response.data[0]._id) return
-        dispatch(chatActions.conversation(response.data[0]))
+        // dispatch(chatActions.openChat(member))
+        // const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/find/${userId}/${member._id}`)
+        // if (response.data.length === 0 || chat.chatId === response.data[0]._id) return
+        // dispatch(chatActions.conversation(response.data[0]))
     }
 
     return (

@@ -18,17 +18,24 @@ const Messages = () => {
     const chat = useSelector((state) => state.chat)
     const user = useSelector((state) => state.user.details)
 
-    const [receivedMessage, setReceivedMessage] = useState(null)
+    const [messages, setMessages] = useState([])
+    // const [receivedMessage, setReceivedMessage] = useState(null)
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
 
-    const getMessages = useCallback(() => {
+    const getMessages = useCallback(async () => {
+
+        const response = await axios.get(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`)
+        console.log(response.data.length)
+        setMessages(response.data)
+
         socket.on("getMessage", async (data) => {
-            setReceivedMessage(data)
-            dispatch(chatActions.updateReadBy({ chatId: data.chatId, messageId: data._id, userId: user.id }))
-            await axios.put(`${process.env.REACT_APP_SERVER}/message/${data.chatId}`, { userId: user.id })
+            console.log(data);
+            // setReceivedMessage(data)
+            // dispatch(chatActions.updateReadBy({ chatId: data.chatId, messageId: data._id, userId: user.id }))
+            // await axios.put(`${process.env.REACT_APP_SERVER}/message/${data.chatId}`, { userId: user.id })
         });
-        // eslint-disable-next-line
-    }, [socket, chat.chatId, user.id])
+
+    }, [socket, chat.chatId])
 
     useEffect(() => {
         getMessages()
@@ -40,22 +47,22 @@ const Messages = () => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     })
 
-    useEffect(() => {
-        if (receivedMessage && receivedMessage.chatId === chat.chatId) {
-            dispatch(chatActions.addMessage(receivedMessage))
-        }
-        // eslint-disable-next-line
-    }, [receivedMessage, socket, dispatch, chat.chatId]);
+    // useEffect(() => {
+    //     if (receivedMessage && receivedMessage.chatId === chat.chatId) {
+    //         dispatch(chatActions.addMessage(receivedMessage))
+    //     }
+    //     // eslint-disable-next-line
+    // }, [receivedMessage, socket, dispatch, chat.chatId]);
 
     return (
         <Box padding="30px">
-            {chat?.messages.length > 0 ?
+            {messages.length > 0 ?
                 <>
                     <Box sx={{ height: "80vh", overflow: "auto" }}>
-                        {chat?.messages.map((message, index) => {
+                        {messages.map((message, index) => {
                             return (
                                 <Box ref={scrollRef} key={index}>
-                                    <Message message={message} next={chat?.messages[index + 1]} />
+                                    <Message message={message} next={messages[index + 1]} />
                                 </Box>
                             )
                         })}
