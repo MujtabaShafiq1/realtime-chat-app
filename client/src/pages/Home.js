@@ -11,7 +11,7 @@ const Home = () => {
 
     const socket = useContext(SocketContext);
 
-    const member = useSelector((state) => state.chat.selectedUser)
+    const members = useSelector((state) => state.chat.otherMembers)
     const userId = useSelector((state) => state.user.details.id)
 
     useEffect(() => {
@@ -23,7 +23,7 @@ const Home = () => {
         <Flexbox>
             <Userbar />
             <Chat />
-            {member && <Detailbar />}
+            {members.length > 0 && <Detailbar />}
         </Flexbox>
     )
 }

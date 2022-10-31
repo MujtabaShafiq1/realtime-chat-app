@@ -24,16 +24,18 @@ const Messages = () => {
 
     const getMessages = useCallback(async () => {
 
-        const response = await axios.get(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`)
-        console.log(response.data.length)
-        setMessages(response.data)
-
         socket.on("getMessage", async (data) => {
             console.log(data);
             // setReceivedMessage(data)
             // dispatch(chatActions.updateReadBy({ chatId: data.chatId, messageId: data._id, userId: user.id }))
             // await axios.put(`${process.env.REACT_APP_SERVER}/message/${data.chatId}`, { userId: user.id })
         });
+
+        if (!chat.chatId) return setMessages([])
+
+        const response = await axios.get(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`)
+        console.log(response.data.length)
+        setMessages(response.data)
 
     }, [socket, chat.chatId])
 

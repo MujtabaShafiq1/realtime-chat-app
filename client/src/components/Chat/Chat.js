@@ -17,7 +17,7 @@ const Chat = () => {
     const chat = useSelector((state) => state.chat)
 
     const getMessages = useCallback(async () => {
-        if (chat?.chatId) {
+        if (chat.chatId) {
             await axios.put(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`, { userId: user.id })
             socket.emit("join chat", chat.chatId);
         }
@@ -30,7 +30,7 @@ const Chat = () => {
     return (
         <>
             <Box sx={{ minHeight: "100vh", flex: 4, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
-                {chat.chatId ?
+                {chat.otherMembers.length > 0 ?
                     <>
                         <Flexbox sx={{
                             justifyContent: "flex-start",

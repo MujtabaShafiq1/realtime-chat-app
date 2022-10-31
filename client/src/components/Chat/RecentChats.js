@@ -15,20 +15,17 @@ const RecentChats = () => {
 
     const [chats, setChats] = useState([])
     const [onlineUsers, setOnlineUsers] = useState([])
-    const [newChat, setNewChat] = useState(false)
 
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
 
     const fetchUsers = useCallback(async () => {
         socket.on("getLatestMessage", (data) => {
-            setNewChat(true)
             dispatch(chatActions.latestMessages(data))
         })
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/${userId}`)
         setChats(response.data)
-        // eslint-disable-next-line
-    }, [userId, socket, dispatch, newChat])
+    }, [userId, socket, dispatch])
 
     useEffect(() => {
         socket.on("getUsers", (users) => setOnlineUsers(users))
@@ -42,11 +39,9 @@ const RecentChats = () => {
         if (selectedChat._id === chat?.chatId) return;
 
         await axios.put(`${process.env.REACT_APP_SERVER}/message/${selectedChat._id}`, { userId: userId })
-
         const { _id, isGroupChat, members } = selectedChat;
         const activeChat = { chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId) }
         dispatch(chatActions.conversation(activeChat))
-
     }
 
     return (

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    chatId: "",
+    chatId: null,
     isGroupChat: null,
     otherMembers: [],
     unreadMessages: []
@@ -12,8 +12,8 @@ const chatSlice = createSlice({
     initialState,
     reducers: {
         conversation(state, action) {
-            state.chatId = action.payload.chatId;
-            state.isGroupChat = action.payload.isGroupChat;
+            state.chatId = action.payload.chatId || null;
+            state.isGroupChat = action.payload.isGroupChat || null;
             state.otherMembers = action.payload.otherMembers;
         },
         addMessage(state, action) {

@@ -12,12 +12,16 @@ const SearchedChats = ({ searchedUsers }) => {
     const chat = useSelector((state) => state.chat)
 
     const chatHandler = async (member) => {
-        if (member._id === chat?.otherMembers[0]?._id) return;
 
-        // dispatch(chatActions.openChat(member))
-        // const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/find/${userId}/${member._id}`)
-        // if (response.data.length === 0 || chat.chatId === response.data[0]._id) return
-        // dispatch(chatActions.conversation(response.data[0]))
+        if (chat.otherMembers.includes(member)) return;
+
+        const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/find/${userId}/${member._id}`)
+        const activeChat = {
+            chatId: response.data[0]?._id,
+            isGroupChat: response.data[0]?.isGroupChat,
+            otherMembers: (response.data[0]?.members.filter(memberId => memberId._id !== userId) || [member])
+        }
+        dispatch(chatActions.conversation(activeChat))
     }
 
     return (

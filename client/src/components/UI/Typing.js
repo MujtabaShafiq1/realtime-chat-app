@@ -7,8 +7,7 @@ import UserImage from "../../assets/user.jpg"
 
 const Typing = () => {
 
-    const userId = useSelector((state) => state.user.details.id)
-    const typingUser = useSelector((state) => state.chat.users).filter(user => user._id !== userId)
+    const typingUser = useSelector((state) => state.chat.otherMembers)
 
     const defaultOptions = {
         loop: true,

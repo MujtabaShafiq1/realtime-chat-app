@@ -6,7 +6,7 @@ import UserImage from "../../assets/user.jpg";
 
 const Status = () => {
 
-    const member = useSelector((state) => state.chat.selectedUser)
+    const member = useSelector((state) => state.chat.otherMembers[0])
 
     return (
         <>
