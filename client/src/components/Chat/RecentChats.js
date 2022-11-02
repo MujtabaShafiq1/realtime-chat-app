@@ -20,12 +20,9 @@ const RecentChats = () => {
     const userId = useSelector((state) => state.user.details.id)
 
     const fetchUsers = useCallback(async () => {
-        socket.on("getLatestMessage", (data) => {
-            dispatch(chatActions.latestMessages(data))
-        })
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/${userId}`)
         setChats(response.data)
-    }, [userId, socket, dispatch])
+    }, [userId])
 
     useEffect(() => {
         socket.on("getUsers", (users) => setOnlineUsers(users))

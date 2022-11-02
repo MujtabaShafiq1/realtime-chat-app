@@ -54,7 +54,7 @@ const NewMessage = () => {
             const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
 
             socket.emit("sendMessage", messageResponse.data);
-            // socket.emit("latestMessage", { messageBody: messageResponse.data, users: (newChat?.members || chat.users) });
+            socket.emit("latestMessage", { messageBody: messageResponse.data, users: (newChat?.members || [...chat.otherMembers, user.id]) });
 
             // dispatch(chatActions.addMessage(messageResponse.data))
         }

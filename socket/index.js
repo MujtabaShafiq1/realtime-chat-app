@@ -10,7 +10,7 @@ const getUsersId = () => {
 }
 
 const getUsersSocket = (members) => {
-    const usersSockets = users.filter(user => JSON.stringify(members)?.includes(user.userId))
+    const usersSockets = users.filter(user => JSON.stringify(members?._id || members)?.includes(user.userId))
     return usersSockets.map(user => { return user.socketId });
 }
 
@@ -40,7 +40,7 @@ io.on("connect", (socket) => {
 
     socket.on("latestMessage", (message) => {
         const userSockets = getUsersSocket(message.users)
-        socket.to(userSockets).emit('getLatestMessage', message.messageBody);
+        io.to(userSockets).emit('getLatestMessage', message.messageBody);
     });
 
     socket.on("readMessage", (details) => {

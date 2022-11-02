@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useContext, useCallback } from "react"
-import { useSelector, useDispatch } from 'react-redux'
-import { chatActions } from "../../store/chatSlice"
+import { useSelector } from 'react-redux'
 import { Box, Typography } from '@mui/material'
 import { Flexbox } from '../../misc/MUIComponents'
 import { SocketContext } from "../../context/Socket"
@@ -12,7 +11,7 @@ const Messages = () => {
 
     const scrollRef = useRef()
 
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     const socket = useContext(SocketContext)
 
     const chat = useSelector((state) => state.chat)
@@ -36,6 +35,7 @@ const Messages = () => {
         console.log(response.data.length)
         setMessages(response.data)
 
+        // eslint-disable-next-line
     }, [socket, chat.chatId])
 
     // useEffect(() => {
