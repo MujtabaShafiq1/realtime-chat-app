@@ -19,16 +19,15 @@ const Messages = () => {
     const user = useSelector((state) => state.user.details)
 
     const [messages, setMessages] = useState([])
-    // const [receivedMessage, setReceivedMessage] = useState(null)
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
 
     const getMessages = useCallback(async () => {
 
         socket.on("getMessage", async (data) => {
-            console.log(data);
-            // setReceivedMessage(data)
             // dispatch(chatActions.updateReadBy({ chatId: data.chatId, messageId: data._id, userId: user.id }))
-            // await axios.put(`${process.env.REACT_APP_SERVER}/message/${data.chatId}`, { userId: user.id })
+            await axios.put(`${process.env.REACT_APP_SERVER}/message/${data.chatId}`, { userId: user.id })
+            data.readBy.push(user.id)
+            setMessages(prev => [...prev, data])
         });
 
         if (!chat.chatId) return setMessages([])
@@ -38,6 +37,14 @@ const Messages = () => {
         setMessages(response.data)
 
     }, [socket, chat.chatId])
+
+    // useEffect(() => {
+    //     if (receivedMessage && receivedMessage.chatId === chat.chatId) {
+    //         dispatch(chatActions.addMessage(receivedMessage))
+    //     }
+    //     // eslint-disable-next-line
+    // }, [receivedMessage, socket, dispatch, chat.chatId]);
+
 
     useEffect(() => {
         getMessages()
@@ -49,12 +56,6 @@ const Messages = () => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     })
 
-    // useEffect(() => {
-    //     if (receivedMessage && receivedMessage.chatId === chat.chatId) {
-    //         dispatch(chatActions.addMessage(receivedMessage))
-    //     }
-    //     // eslint-disable-next-line
-    // }, [receivedMessage, socket, dispatch, chat.chatId]);
 
     return (
         <Box padding="30px">

@@ -41,24 +41,22 @@ const NewMessage = () => {
 
             let newChat
 
-            if (!chat?.chatId) {
+            if (!chat.chatId) {
+                console.log("creating newChat")
                 const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, { senderId: user.id, receiverId: chat.selectedUser._id })
                 dispatch(chatActions.conversation(response.data))
                 newChat = response.data
             }
 
-            const messageBody = { chatId: chat.chatId || newChat._id, senderId: user.id, content: newMessage, readBy: [user.id], users: chat.users }
-
+            const messageBody = { chatId: chat.chatId || newChat._id, senderId: user.id, content: newMessage, readBy: [user.id] }
             setNewMessage("")
 
             const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
-            await axios.put(`${process.env.REACT_APP_SERVER}/chat/${chat.chatId || newChat._id}`, { latestMessage: messageResponse.data._id })
-
 
             socket.emit("sendMessage", messageResponse.data);
-            socket.emit("latestMessage", { messageBody: messageResponse.data, users: (newChat?.members || chat.users) });
+            // socket.emit("latestMessage", { messageBody: messageResponse.data, users: (newChat?.members || chat.users) });
 
-            dispatch(chatActions.addMessage(messageResponse.data))
+            // dispatch(chatActions.addMessage(messageResponse.data))
         }
         socket.emit("stop typing", chat?.chatId);
     }

@@ -35,7 +35,7 @@ io.on("connect", (socket) => {
     })
 
     socket.on("sendMessage", (messageBody) => {
-        socket.to(messageBody.chatId).emit('getMessage', messageBody);
+        io.in(messageBody.chatId).emit('getMessage', messageBody);
     });
 
     socket.on("latestMessage", (message) => {
