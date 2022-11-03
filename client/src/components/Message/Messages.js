@@ -10,8 +10,6 @@ import axios from "axios"
 const Messages = () => {
 
     const scrollRef = useRef()
-
-    // const dispatch = useDispatch()
     const socket = useContext(SocketContext)
 
     const chat = useSelector((state) => state.chat)
@@ -20,31 +18,13 @@ const Messages = () => {
     const [messages, setMessages] = useState([])
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
 
+
     const getMessages = useCallback(async () => {
-
-        socket.on("getMessage", async (data) => {
-            // dispatch(chatActions.updateReadBy({ chatId: data.chatId, messageId: data._id, userId: user.id }))
-            await axios.put(`${process.env.REACT_APP_SERVER}/message/${data.chatId}`, { userId: user.id })
-            data.readBy.push(user.id)
-            setMessages(prev => [...prev, data])
-        });
-
         if (!chat.chatId) return setMessages([])
-
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`)
         console.log(response.data.length)
         setMessages(response.data)
-
-        // eslint-disable-next-line
-    }, [socket, chat.chatId])
-
-    // useEffect(() => {
-    //     if (receivedMessage && receivedMessage.chatId === chat.chatId) {
-    //         dispatch(chatActions.addMessage(receivedMessage))
-    //     }
-    //     // eslint-disable-next-line
-    // }, [receivedMessage, socket, dispatch, chat.chatId]);
-
+    }, [chat.chatId])
 
     useEffect(() => {
         getMessages()
@@ -56,6 +36,16 @@ const Messages = () => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     })
 
+    useEffect(() => {
+        const newMessage = () => {
+            socket.on("getMessage", async (data) => {
+                await axios.put(`${process.env.REACT_APP_SERVER}/message/${data.chatId}`, { userId: user.id })
+                setMessages(prev => [...prev, data])
+            });
+        }
+        newMessage()
+        // eslint-disable-next-line
+    }, [socket, chat.chatId])
 
     return (
         <Box padding="30px">
