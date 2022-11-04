@@ -42,6 +42,11 @@ const Message = ({ message, next }) => {
         });
     }, [message._id, socket])
 
+    // const latestMessageReadBy = useCallback(() => {
+    //     socket.on("getMessageReadbyAll", (data) => {
+    //         if(data.chatId === message.chatId && )
+    //     })
+    // }, [socket])
 
     useEffect(() => {
         updateRecentMessage()
@@ -50,6 +55,10 @@ const Message = ({ message, next }) => {
     useEffect(() => {
         updateReadBy()
     }, [updateReadBy])
+
+    // useEffect(() => {
+    //     latestMessageReadBy()
+    // }, [latestMessageReadBy])
 
 
     return (

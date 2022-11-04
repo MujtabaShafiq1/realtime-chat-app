@@ -21,7 +21,7 @@ const updateReadby = asyncHandler(async (req, res) => {
 
 // just for deleting un-necessary messages for testing
 const deleteMessage = asyncHandler(async (req, res) => {
-    await Message.deleteMany({ content: "1" });
+    await Message.deleteMany({ content: req.body.content });
     res.status(200).json(`Deleted Successfully`)
 });
 

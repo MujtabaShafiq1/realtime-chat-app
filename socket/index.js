@@ -47,6 +47,10 @@ io.on("connect", (socket) => {
         socket.in(details.chatId).emit('getMessageReadby', details);
     });
 
+    socket.on("readAllMessage", (details) => {
+        socket.in(details.chatId).emit('getMessageReadbyAll', details);
+    });
+
     socket.on("typing", (chat) => {
         const userSockets = getUsersSocket(chat?.members)
         socket.to(userSockets).emit("typing", chat.chatId)

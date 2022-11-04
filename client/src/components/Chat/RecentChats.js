@@ -14,15 +14,23 @@ const RecentChats = () => {
     const socket = useContext(SocketContext);
 
     const [chats, setChats] = useState([])
+    const [newChat, setNewChat] = useState(false)
     const [onlineUsers, setOnlineUsers] = useState([])
 
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
 
+    // excess request in fetchUsers
     const fetchUsers = useCallback(async () => {
+        socket.on("getLatestMessage", (data) => {
+            if (chats.some(chat => chat._id?.includes(data.chatId)) && data.senderId === userId) return;
+            setNewChat(true)
+        })
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/${userId}`)
         setChats(response.data)
-    }, [userId])
+        console.log("refetching");
+        // eslint-disable-next-line
+    }, [socket, newChat, userId])
 
     useEffect(() => {
         socket.on("getUsers", (users) => setOnlineUsers(users))
@@ -38,8 +46,10 @@ const RecentChats = () => {
         await axios.put(`${process.env.REACT_APP_SERVER}/message/${selectedChat._id}`, { userId: userId })
         const { _id, isGroupChat, members } = selectedChat;
         const activeChat = { chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId) }
+        // socket.emit("readAllMessage", { chatId: _id, readByUser: userId })
         dispatch(chatActions.conversation(activeChat))
     }
+
 
     return (
         <Box sx={{ height: "80vh", overflow: "auto" }}>
