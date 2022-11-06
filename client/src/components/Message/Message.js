@@ -34,7 +34,6 @@ const Message = ({ message, next }) => {
         // eslint-disable-next-line
     }, [socket, message._id])
 
-
     const updateReadBy = useCallback(() => {
         socket.on("getMessageReadby", (details) => {
             if (details._id !== message._id) return;
@@ -42,11 +41,13 @@ const Message = ({ message, next }) => {
         });
     }, [message._id, socket])
 
-    // const latestMessageReadBy = useCallback(() => {
-    //     socket.on("getMessageReadbyAll", (data) => {
-    //         if(data.chatId === message.chatId && )
-    //     })
-    // }, [socket])
+    const latestMessageReadBy = useCallback(() => {
+        socket.on("getMessageReadbyAll", (data) => {
+            if (data.chatId === message.chatId && data.totalMembers > readBy.length) {
+                setReadBy(prev => [...prev, data.readByUser])
+            }
+        })
+    }, [socket, message._id, message.chatId, readBy.length])
 
     useEffect(() => {
         updateRecentMessage()
@@ -56,10 +57,9 @@ const Message = ({ message, next }) => {
         updateReadBy()
     }, [updateReadBy])
 
-    // useEffect(() => {
-    //     latestMessageReadBy()
-    // }, [latestMessageReadBy])
-
+    useEffect(() => {
+        latestMessageReadBy()
+    }, [latestMessageReadBy])
 
     return (
         <>

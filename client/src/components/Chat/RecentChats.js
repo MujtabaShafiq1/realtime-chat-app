@@ -46,7 +46,7 @@ const RecentChats = () => {
         await axios.put(`${process.env.REACT_APP_SERVER}/message/${selectedChat._id}`, { userId: userId })
         const { _id, isGroupChat, members } = selectedChat;
         const activeChat = { chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId) }
-        // socket.emit("readAllMessage", { chatId: _id, readByUser: userId })
+        socket.emit("readAllMessage", { chatId: _id, readByUser: userId, totalMembers: members.length })
         dispatch(chatActions.conversation(activeChat))
     }
 
