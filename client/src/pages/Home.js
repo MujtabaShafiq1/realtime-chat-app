@@ -16,7 +16,7 @@ const Home = () => {
 
     useEffect(() => {
         socket.emit("connection", userId);
-        // console.clear()
+        console.clear()
     })
 
     return (

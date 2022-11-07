@@ -43,11 +43,11 @@ const Message = ({ message, next }) => {
 
     const latestMessageReadBy = useCallback(() => {
         socket.on("getMessageReadbyAll", (data) => {
-            if (data.chatId === message.chatId && data.totalMembers > readBy.length) {
+            if (data.chatId === message.chatId && data.totalMembers !== readBy.length) {
                 setReadBy(prev => [...prev, data.readByUser])
             }
         })
-    }, [socket, message._id, message.chatId, readBy.length])
+    }, [socket, message.chatId, readBy.length])
 
     useEffect(() => {
         updateRecentMessage()
@@ -78,23 +78,18 @@ const Message = ({ message, next }) => {
                 </MessageBox>
 
                 {
-                    !readBy.every(id => next?.readBy.includes(id)) &&
-                    <>
-                        {
-                            readBy.map((value) =>
-                                (value !== user.id && message.senderId === user.id) &&
-                                <div key={value}>
-                                    <Avatar
-                                        src={(value === user.id ? user?.profilePicture : chat.otherMembers.filter(m => m._id === value)[0]?.profilePicture) || UserImage}
-                                        sx={{ width: 20, height: 20, alignSelf: "flex-end" }}
-                                    />
-                                </div>
-                            )
-
-                        }
-                    </>
+                    // when receive new message it doesnt show
+                    ((chat.otherMembers.length + 1) !== readBy.length || next?.readBy === undefined) &&
+                    readBy.map((value) =>
+                        (value !== user.id && message.senderId === user.id) &&
+                        <div key={value}>
+                            <Avatar
+                                src={(value === user.id ? user?.profilePicture : chat.otherMembers.filter(m => m._id === value)[0]?.profilePicture) || UserImage}
+                                sx={{ width: 20, height: 20, alignSelf: "flex-end" }}
+                            />
+                        </div>
+                    )
                 }
-
 
                 {hover &&
                     <Flexbox sx={{ backgroundColor: "gray", borderRadius: "10px", width: "auto", height: "2vh", opacity: 0.8, padding: "5px" }}>

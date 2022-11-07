@@ -20,7 +20,7 @@ const RecentChats = () => {
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
 
-    // excess request in fetchUsers
+    // extra request in fetchUsers
     const fetchUsers = useCallback(async () => {
         socket.on("getLatestMessage", (data) => {
             if (chats.some(chat => chat._id?.includes(data.chatId)) && data.senderId === userId) return;

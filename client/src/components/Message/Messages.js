@@ -18,7 +18,6 @@ const Messages = () => {
     const [messages, setMessages] = useState([])
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
 
-
     const getMessages = useCallback(async () => {
         if (!chat.chatId) return setMessages([])
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`)
@@ -28,11 +27,12 @@ const Messages = () => {
 
     const newMessage = useCallback(() => {
         socket.on("getMessage", async (data) => {
+            if (data.chatId !== chat.chatId) return;
             await axios.put(`${process.env.REACT_APP_SERVER}/message/${data.chatId}`, { userId: user.id })
             console.log("messaging");
             setMessages(prev => [...prev, data])
         });
-    }, [socket, user.id])
+    }, [socket, user.id, chat.chatId])
 
     useEffect(() => {
         getMessages()
