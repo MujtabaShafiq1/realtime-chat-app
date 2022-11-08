@@ -1,10 +1,12 @@
 import { useState, useEffect, useContext, useCallback } from 'react'
 import { useSelector } from 'react-redux';
-import { Avatar, Typography } from '@mui/material'
+import { Avatar, Box, Typography } from '@mui/material'
 import { Flexbox, MessageBox, MessageContainer } from "../../misc/MUIComponents"
 import { SocketContext } from '../../context/Socket';
-import UserImage from "../../assets/user.jpg";
 import moment from "moment"
+import Seen from "../../assets/seen.png";
+import Delivered from "../../assets/delivered.png";
+import UserImage from "../../assets/user.jpg";
 
 const Message = ({ message, next }) => {
 
@@ -25,9 +27,10 @@ const Message = ({ message, next }) => {
     const duration = moment(end).diff(start, 'hours');
 
     const updateRecentMessage = useCallback(() => {
-        if (message.senderId !== user.id && (chat.otherMembers.length + 1) !== readBy.length) {
+        if (message.senderId !== user.id && (chat.otherMembers + 1) !== readBy.length && !readBy.includes(user.id)) {
             setTimeout(() => {
                 message.readBy.push(user.id)
+                console.log(message.readBy);
                 socket.emit("readMessage", message)
             }, 1000)
         }
@@ -39,15 +42,17 @@ const Message = ({ message, next }) => {
             if (details._id !== message._id) return;
             setReadBy(details.readBy)
         });
-    }, [message._id, socket])
+    }, [socket, message._id])
 
+    // state updating but over exceeding when new message occurs and page refresh
     const latestMessageReadBy = useCallback(() => {
         socket.on("getMessageReadbyAll", (data) => {
-            if (data.chatId === message.chatId && data.totalMembers !== readBy.length) {
-                setReadBy(prev => [...prev, data.readByUser])
+            if (data.chatId === message.chatId && data.totalMembers !== readBy.length && !readBy.includes(data.readByUser)) {
+                const updatedReadby = [...readBy, data.readByUser]
+                setReadBy(updatedReadby)
             }
         })
-    }, [socket, message.chatId, readBy.length])
+    }, [socket, message.chatId, readBy])
 
     useEffect(() => {
         updateRecentMessage()
@@ -65,7 +70,6 @@ const Message = ({ message, next }) => {
         <>
             <MessageContainer sender={currentUserMessage ? 1 : 0} consecutive={consecutiveMessage ? 1 : 0}>
 
-
                 {(consecutiveMessage && currentUserMessage) &&
                     < Avatar src={user.profilePicture || UserImage} sx={{ alignSelf: "flex-end" }} />}
 
@@ -74,14 +78,15 @@ const Message = ({ message, next }) => {
 
 
                 <MessageBox sender={currentUserMessage ? 1 : 0} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                    <Typography sx={{ fontSize: "16px" }}>{message.content}</Typography>
+                    <Flexbox>
+                        <Typography sx={{ fontSize: "16px" }}>{message.content}</Typography>
+                    </Flexbox>
+                    {message.senderId === user.id &&
+                        <Box component="img" src={((chat.otherMembers.length + 1) === readBy.length) ? Seen : Delivered} sx={{ width: "auto", height: "2vh" }} />}
                 </MessageBox>
 
                 {
-                    // when receive new message it doesnt show
-                    ((chat.otherMembers.length + 1) !== readBy.length || next?.readBy === undefined) &&
                     readBy.map((value) =>
-                        (value !== user.id && message.senderId === user.id) &&
                         <div key={value}>
                             <Avatar
                                 src={(value === user.id ? user?.profilePicture : chat.otherMembers.filter(m => m._id === value)[0]?.profilePicture) || UserImage}

@@ -37,13 +37,15 @@ const StlyedButton = styled(Button)(({ theme }) => ({
 
 const MessageBox = styled(Box)(({ sender }) => ({
     display: "flex",
-    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "end",
     color: sender ? "black" : "white",
     backgroundColor: sender ? "lightgray" : "lightblue",
     padding: "5px 10px",
     maxWidth: "50%",
     borderRadius: "15px",
-    wordBreak: "break-word"
+    wordBreak: "break-word",
+    gap: 10
 }))
 
 const MessageContainer = styled(Box)(({ sender, consecutive }) => ({
