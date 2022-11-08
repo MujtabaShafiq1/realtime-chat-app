@@ -16,6 +16,7 @@ const Messages = () => {
     const user = useSelector((state) => state.user.details)
 
     const [messages, setMessages] = useState([])
+    const [newMessage, setNewMessage] = useState()
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
 
     const getMessages = useCallback(async () => {
@@ -25,22 +26,27 @@ const Messages = () => {
         setMessages(response.data)
     }, [chat.chatId])
 
-    const newMessage = useCallback(() => {
-        socket.on("getMessage", async (data) => {
-            if (data.chatId !== chat.chatId) return;
-            await axios.put(`${process.env.REACT_APP_SERVER}/message/${data.chatId}`, { userId: user.id })
-            console.log("messaging");
-            setMessages(prev => [...prev, data])
-        });
-    }, [socket, user.id, chat.chatId])
+    const newMessageHandler = useCallback(() => {
+        socket.on("getMessage", (data) => setNewMessage(data));
+    }, [socket])
+
+    const updateMessages = useCallback(async () => {
+        if (newMessage?.chatId !== chat.chatId) return;
+        await axios.put(`${process.env.REACT_APP_SERVER}/message/${newMessage.chatId}`, { userId: user.id })
+        setMessages(prev => [...prev, newMessage])
+    }, [chat.chatId, user.id, newMessage])
 
     useEffect(() => {
         getMessages()
     }, [getMessages])
 
     useEffect(() => {
-        newMessage()
-    }, [newMessage])
+        newMessageHandler()
+    }, [newMessageHandler])
+
+    useEffect(() => {
+        updateMessages()
+    }, [updateMessages])
 
     useEffect(() => {
         socket.on("typing", (chatId) => setTypingDetails({ typing: true, chatId: chatId }));

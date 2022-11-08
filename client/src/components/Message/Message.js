@@ -30,7 +30,6 @@ const Message = ({ message, next }) => {
         if (message.senderId !== user.id && (chat.otherMembers + 1) !== readBy.length && !readBy.includes(user.id)) {
             setTimeout(() => {
                 message.readBy.push(user.id)
-                console.log(message.readBy);
                 socket.emit("readMessage", message)
             }, 1000)
         }
@@ -44,7 +43,6 @@ const Message = ({ message, next }) => {
         });
     }, [socket, message._id])
 
-    // state updating but over exceeding when new message occurs and page refresh
     const latestMessageReadBy = useCallback(() => {
         socket.on("getMessageReadbyAll", (data) => {
             if (data.chatId === message.chatId && data.totalMembers !== readBy.length && !readBy.includes(data.readByUser)) {
@@ -84,17 +82,6 @@ const Message = ({ message, next }) => {
                     {message.senderId === user.id &&
                         <Box component="img" src={((chat.otherMembers.length + 1) === readBy.length) ? Seen : Delivered} sx={{ width: "auto", height: "2vh" }} />}
                 </MessageBox>
-
-                {
-                    readBy.map((value) =>
-                        <div key={value}>
-                            <Avatar
-                                src={(value === user.id ? user?.profilePicture : chat.otherMembers.filter(m => m._id === value)[0]?.profilePicture) || UserImage}
-                                sx={{ width: 20, height: 20, alignSelf: "flex-end" }}
-                            />
-                        </div>
-                    )
-                }
 
                 {hover &&
                     <Flexbox sx={{ backgroundColor: "gray", borderRadius: "10px", width: "auto", height: "2vh", opacity: 0.8, padding: "5px" }}>

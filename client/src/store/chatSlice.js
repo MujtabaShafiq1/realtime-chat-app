@@ -4,7 +4,6 @@ const initialState = {
     chatId: null,
     isGroupChat: null,
     otherMembers: [],
-    messageRead: []
 }
 
 const chatSlice = createSlice({
@@ -15,9 +14,6 @@ const chatSlice = createSlice({
             state.chatId = action.payload.chatId || null;
             state.isGroupChat = action.payload.isGroupChat || null;
             state.otherMembers = action.payload.otherMembers;
-        },
-        readBy(state, action) {
-            console.log(action.payload)
         },
         reset: () => initialState
     },
