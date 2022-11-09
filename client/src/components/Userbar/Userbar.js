@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Box, TextField, Typography } from '@mui/material'
+import { Avatar, Box, TextField, Typography, Container } from '@mui/material'
 import { Flexbox, StlyedButton } from '../../misc/MUIComponents'
 
 import { userActions } from '../../store/userSlice';
@@ -8,7 +8,10 @@ import axios from 'axios';
 
 import RecentChats from '../Chat/RecentChats';
 import SearchedChats from '../Chat/SearchedChats';
+import CreateGroupChat from '../Chat/CreateGroupChat';
+
 import UserImage from "../../assets/user.jpg";
+import NewGroupIcon from "../../assets/group.png"
 
 
 const Userbar = () => {
@@ -18,6 +21,8 @@ const Userbar = () => {
 
     const [users, setUsers] = useState([])
     const [search, setSearch] = useState("")
+    const [groupText, setGroupText] = useState(false)
+    const [createGroup, setCreateGroup] = useState(false)
     const [searchedUsers, setSearchedUser] = useState([])
 
     const fetchUsers = useCallback(async () => {
@@ -41,8 +46,13 @@ const Userbar = () => {
         setSearchedUser(filtered)
     }
 
+    const closeCreateGroup = () => {
+        setCreateGroup(false)
+    }
+
     return (
         <>
+
             <Box sx={{ minHeight: "100vh", flex: 1.5, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
 
                 <Flexbox sx={{ justifyContent: "space-around", marginTop: "3%" }}>
@@ -53,7 +63,8 @@ const Userbar = () => {
                     </StlyedButton>
                 </Flexbox>
 
-                <Flexbox>
+                <Flexbox gap={3}>
+
                     <TextField
                         variant="filled"
                         placeholder="Search user"
@@ -64,13 +75,35 @@ const Userbar = () => {
                         InputProps={{ disableUnderline: true, autoComplete: "off" }}
                         sx={{
                             margin: "4% 0%",
-                            width: "90%",
+                            width: "75%",
                             border: "0.2px solid lightgray",
                         }}
                     />
+
+                    <Flexbox>
+                        {groupText &&
+                            <Flexbox sx={{ padding: "5px", borderRadius: "20px", backgroundColor: "rgba(191,191,191,1)", position: "absolute", top: "5%" }}>
+                                <Typography sx={{ color: "black", fontSize: "12px" }}>Create Group</Typography>
+                            </Flexbox>
+                        }
+                        <Box
+                            component="img"
+                            src={NewGroupIcon}
+                            sx={{ width: 50, height: "auto", cursor: "pointer" }}
+                            onClick={() => setCreateGroup(true)}
+                            onMouseOver={() => setGroupText(true)}
+                            onMouseOut={() => setGroupText(false)}
+                        />
+                    </Flexbox>
+
                 </Flexbox>
 
-                {search ? <SearchedChats searchedUsers={searchedUsers} /> : <RecentChats />}
+                <Container maxWidth="sm">
+                    {createGroup ?
+                        <CreateGroupChat users={search ? searchedUsers : users} close={closeCreateGroup} /> :
+                        <> {search ? <SearchedChats searchedUsers={searchedUsers} /> : <RecentChats />}</>
+                    }
+                </Container>
 
             </Box>
         </>

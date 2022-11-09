@@ -26,7 +26,7 @@ const SearchedChats = ({ searchedUsers }) => {
 
     return (
         <>
-            <Typography sx={{ fontSize: "22px", textAlign: "center" }}>Searching user</Typography>
+            <Typography sx={{ fontSize: "22px", m: "3% 0%", textAlign: "center" }}>Searching user</Typography>
             {searchedUsers.length > 0 ?
                 <>
                     {searchedUsers.map(user =>

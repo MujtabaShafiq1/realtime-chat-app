@@ -55,7 +55,7 @@ const RecentChats = () => {
         <Box sx={{ height: "80vh", overflow: "auto" }}>
             {chats.length > 0 ?
                 <>
-                    <Typography sx={{ fontSize: "18px", textAlign: "center" }}>Recent Chats</Typography>
+                    <Typography sx={{ fontSize: "22px", textAlign: "center", m: "3% 0%" }}>Recent Chats</Typography>
                     {chats.map(chat => {
                         return (
                             <Box key={chat._id} onClick={() => clickHandler(chat)}>

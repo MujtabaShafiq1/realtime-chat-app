@@ -33,8 +33,10 @@ const Messages = () => {
     const updateMessages = useCallback(async () => {
         if (newMessage?.chatId !== chat.chatId) return;
         await axios.put(`${process.env.REACT_APP_SERVER}/message/${newMessage.chatId}`, { userId: user.id })
+        console.log("updating message");
         setMessages(prev => [...prev, newMessage])
-    }, [chat.chatId, user.id, newMessage])
+        // eslint-disable-next-line
+    }, [user.id, newMessage])
 
     useEffect(() => {
         getMessages()
