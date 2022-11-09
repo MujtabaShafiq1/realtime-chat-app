@@ -82,7 +82,7 @@ const Userbar = () => {
 
                     <Flexbox>
                         {groupText &&
-                            <Flexbox sx={{ padding: "5px", borderRadius: "20px", backgroundColor: "rgba(191,191,191,1)", position: "absolute", top: "5%" }}>
+                            <Flexbox sx={{ padding: "5px", borderRadius: "20px", backgroundColor: "rgba(191,191,191,1)", position: "absolute", top: "7%" }}>
                                 <Typography sx={{ color: "black", fontSize: "12px" }}>Create Group</Typography>
                             </Flexbox>
                         }

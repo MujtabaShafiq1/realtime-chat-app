@@ -64,7 +64,9 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
                 </Flexbox>
 
                 <Flexbox sx={{ justifyContent: "flex-start", gap: 1 }}>
-                    {/* fix username */}
+                    {/* fix username and read issue */}
+                    {/* when creating group chat there is no latest message */}
+
                     {/* <Typography color={(chat.members.every(val => latestMessage.readBy.includes(val._id))) ? "lightgray" : "black"} sx={{ fontSize: "16px", fontWeight: 500 }}> */}
                     <Typography color="lightgray" sx={{ fontSize: "16px", fontWeight: 500 }}>
                         {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser.username}: `}

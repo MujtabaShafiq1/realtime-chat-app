@@ -18,7 +18,6 @@ const NewMessage = () => {
     const user = useSelector((state) => state.user.details)
     const chat = useSelector((state) => state.chat)
 
-
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (newMessage.length > 0) {
