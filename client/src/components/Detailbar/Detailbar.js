@@ -17,7 +17,7 @@ const Status = () => {
                     <>
                         <Typography sx={{ fontSize: "24px", m: "3% 0%", textAlign: "center" }}>Group Members</Typography>
                         {chat.otherMembers.map(user =>
-                            <Userbox user={user} />
+                            <Userbox user={user} key={user._id} />
                         )}
                     </>
                     :

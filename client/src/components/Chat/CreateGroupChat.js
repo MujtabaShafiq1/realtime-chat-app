@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box, Typography, Avatar } from "@mui/material"
 import { Flexbox } from "../../misc/MUIComponents"
 import { chatActions } from "../../store/chatSlice";
+import CustomSnackbar from "../UI/CustomSnackbar"
 import axios from "axios"
 
 import UserImage from "../../assets/user.jpg";
@@ -16,26 +17,36 @@ const CreateGroupChat = ({ users, close }) => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.details)
+
     const [addedUsers, setAddedUsers] = useState([])
+    const [snackbar, setSnackbar] = useState({ open: false, details: "" })
 
     const clickHandler = (user) => {
-        if (addedUsers.some(member => member.id.includes(user._id))) {
-            setAddedUsers(addedUsers.filter(member => member.id !== user._id))
+        if (addedUsers.some(member => member._id.includes(user._id))) {
+            setAddedUsers(addedUsers.filter(member => member._id !== user._id))
             return;
         }
-        setAddedUsers(prev => [...prev, { id: user._id, username: user.username }])
+        setAddedUsers(prev => [...prev, user])
     }
 
     // issue in recent user box after creating chat
     const createGroup = async () => {
-        const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, { senderId: user.id, receiverId: addedUsers.map(user => user.id), isGroupChat: true })
-        const { _id, isGroupChat, members } = response.data
-        dispatch(chatActions.conversation({ chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== user.id) }))
-        close();
+        if (addedUsers.length > 1) {
+            const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, { senderId: user.id, receiverId: addedUsers.map(user => user._id), isGroupChat: true })
+            const { _id, isGroupChat } = response.data
+            dispatch(chatActions.conversation({ chatId: _id, isGroupChat, otherMembers: addedUsers }))
+            close();
+            return;
+        }
+        setSnackbar({ open: true, details: "Minimum 2 Users to create Group Chat" })
+        setTimeout(() => {
+            setSnackbar({ open: false, details: "" })
+        }, 2000)
     }
 
     return (
         <>
+            {snackbar.open && <CustomSnackbar type="error" details={snackbar.details} />}
             <Flexbox sx={{ justifyContent: "space-around" }}>
                 <Typography sx={{ fontSize: "22px", m: "3% 0%" }}>Create New Group</Typography>
                 <Box
@@ -45,14 +56,13 @@ const CreateGroupChat = ({ users, close }) => {
                     onClick={close}
                 />
             </Flexbox>
-
             {addedUsers.length > 0
                 &&
                 <Flexbox sx={{ justifyContent: "space-between", m: "2% 0 5% 0" }}>
                     <Flexbox sx={{ justifyContent: "flex-start", flexWrap: "wrap", gap: 1 }}>
                         {addedUsers.map(user => {
                             return (
-                                <Flexbox key={user.id} sx={{ padding: "5px 10px", borderRadius: "20px", backgroundColor: "rgba(191,191,191,1)", gap: 0.5 }}>
+                                <Flexbox key={user._id} sx={{ padding: "5px 10px", borderRadius: "20px", backgroundColor: "rgba(191,191,191,1)", gap: 0.5 }}>
                                     <Typography sx={{ color: "black", fontSize: "12px" }}>{user.username}</Typography>
                                     <Box
                                         component="img"
@@ -91,7 +101,7 @@ const CreateGroupChat = ({ users, close }) => {
                         <Box
                             component="img"
                             sx={{ width: 20, height: "auto", cursor: "pointer" }}
-                            src={addedUsers.some(member => member.id.includes(user._id)) ? RemoveIcon : AddIcon}
+                            src={addedUsers.some(member => member._id.includes(user._id)) ? RemoveIcon : AddIcon}
                             onClick={() => clickHandler(user)}
                         />
                     </Flexbox>
