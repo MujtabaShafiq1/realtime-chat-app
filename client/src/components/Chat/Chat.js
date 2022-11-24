@@ -1,6 +1,6 @@
 import { useEffect, useContext, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { Avatar, Box, Typography } from '@mui/material'
+import { Avatar, Box, Typography, AvatarGroup } from '@mui/material'
 import axios from 'axios';
 
 import { SocketContext } from '../../context/Socket';
@@ -40,9 +40,18 @@ const Chat = () => {
                             borderBottom: "0.5px solid rgba(102, 51, 153, 0.1)"
                         }}
                         >
-                            <Avatar sx={{ margin: "1%" }} src={chat.otherMembers[0].profilePicture || UserImage} />
+                            {chat.isGroupChat ?
+                                <AvatarGroup total={chat.otherMembers.length} sx={{ margin: "1%" }}>
+                                    <Avatar src={chat.otherMembers[0].profilePicture || UserImage} />
+                                    <Avatar src={chat.otherMembers[1].profilePicture || UserImage} />
+                                </AvatarGroup>
+                                :
+                                <Avatar sx={{ margin: "1%" }} src={chat.otherMembers[0].profilePicture || UserImage} />
+                            }
                             <Typography sx={{ fontSize: "18px" }}>{chat.otherMembers[0].username}</Typography>
+                            {chat.isGroupChat && <Typography sx={{ fontSize: "18px", color: "gray" }}>and {chat.otherMembers.length - 1} others</Typography>}
                         </Flexbox>
+
                         <Box sx={{ minHeight: "92.5vh", backgroundColor: "rgba(180, 180, 180, 0.3)" }}>
                             <Messages />
                             <NewMessage />

@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { Box, Typography, Avatar } from "@mui/material"
 import { Flexbox } from "../../misc/MUIComponents"
+import { chatActions } from "../../store/chatSlice";
 import axios from "axios"
 
 import UserImage from "../../assets/user.jpg";
@@ -27,11 +28,9 @@ const CreateGroupChat = ({ users, close }) => {
 
     // issue in recent user box after creating chat
     const createGroup = async () => {
-        console.log("creating newChat")
         const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, { senderId: user.id, receiverId: addedUsers.map(user => user.id), isGroupChat: true })
         const { _id, isGroupChat, members } = response.data
-        console.log({ chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== user.id) })
-        // dispatch(chatActions.conversation({ chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== user.id) }))
+        dispatch(chatActions.conversation({ chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== user.id) }))
         close();
     }
 

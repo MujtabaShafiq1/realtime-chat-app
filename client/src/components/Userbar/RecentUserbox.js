@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { Box, Avatar, Typography } from '@mui/material';
+import { Box, Avatar, Typography, AvatarGroup } from '@mui/material';
 import { Flexbox, StyledStatusBadge } from '../../misc/MUIComponents';
 import { SocketContext } from '../../context/Socket';
 import UserImage from "../../assets/user.jpg";
@@ -13,7 +13,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
     const [latestMessage, setLatestMessage] = useState(chat.latestMessage)
 
-    const filteredUser = chat.members.filter(user => user._id !== userId)[0]
+    const filteredUser = chat.members.filter(user => user._id !== userId)
 
     const fetchLatestMessage = useCallback(() => {
         socket.on("getLatestMessage", (data) => {
@@ -43,37 +43,57 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
             }
         }}
         >
-
-            <StyledStatusBadge
-                overlap="circular"
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                variant="dot"
-                show={(onlineUsers.some(r => r.includes(filteredUser._id)) ? 1 : 0)}
-                sx={{ marginLeft: "3%" }}
-            >
-                <Avatar
-                    sx={{ width: 50, height: 50 }}
-                    src={filteredUser.profilePicture || UserImage}
-                />
-            </StyledStatusBadge>
+            {
+                chat.isGroupChat ?
+                    <AvatarGroup total={filteredUser.length} sx={{ marginLeft: "3%" }}>
+                        <StyledStatusBadge
+                            overlap="circular"
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                            variant="dot"
+                            show={(onlineUsers.some(r => r.includes(filteredUser[0]._id)) ? 1 : 0)}
+                        >
+                            <Avatar
+                                sx={{ width: 50, height: 50 }}
+                                src={filteredUser[0].profilePicture || UserImage}
+                            />
+                        </StyledStatusBadge>
+                    </AvatarGroup>
+                    :
+                    <StyledStatusBadge
+                        overlap="circular"
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                        variant="dot"
+                        show={(onlineUsers.some(r => r.includes(filteredUser[0]._id)) ? 1 : 0)}
+                        sx={{ marginLeft: "3%" }}
+                    >
+                        <Avatar
+                            sx={{ width: 50, height: 50 }}
+                            src={filteredUser[0].profilePicture || UserImage}
+                        />
+                    </StyledStatusBadge>
+            }
 
             <Box>
                 <Flexbox sx={{ justifyContent: "flex-start", gap: 2 }}>
-                    <Typography sx={{ fontSize: "18px" }}>{filteredUser.username}</Typography>
+                    <Flexbox gap={1}>
+                        <Typography sx={{ fontSize: "18px" }}>{filteredUser[0].username}</Typography>
+                        {chat.isGroupChat && <Typography sx={{ fontSize: "18px", color: "gray" }}>and {filteredUser.length - 1} others</Typography>}
+                    </Flexbox>
                     {typingDetails.typing && typingDetails.chatId === chat._id && <Typography sx={{ fontSize: "16px" }} color="green">typing... </Typography>}
                 </Flexbox>
 
-                <Flexbox sx={{ justifyContent: "flex-start", gap: 1 }}>
-                    {/* fix username and read issue */}
-                    {/* when creating group chat there is no latest message */}
 
-                    {/* <Typography color={(chat.members.every(val => latestMessage.readBy.includes(val._id))) ? "lightgray" : "black"} sx={{ fontSize: "16px", fontWeight: 500 }}> */}
-                    <Typography color="lightgray" sx={{ fontSize: "16px", fontWeight: 500 }}>
-                        {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser.username}: `}
-                        {(chat._id === latestMessage.chatId) && (latestMessage?.content).substring(0, 25)}
-                        {(latestMessage.content).length > 25 && `...`}
-                    </Typography>
-                </Flexbox>
+                {chat.latestMessage &&
+                    <Flexbox sx={{ justifyContent: "flex-start", gap: 1 }}>
+                        {/* fix username and read issue */}
+                        {/* <Typography color={(chat.members.every(val => latestMessage.readBy.includes(val._id))) ? "lightgray" : "black"}> */}
+                        <Typography color="lightgray" sx={{ fontSize: "16px", fontWeight: 500 }}>
+                            {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
+                            {(chat._id === latestMessage.chatId) && (latestMessage?.content).substring(0, 25)}
+                            {(latestMessage.content).length > 25 && `...`}
+                        </Typography>
+                    </Flexbox>
+                }
             </Box>
 
         </Box >
