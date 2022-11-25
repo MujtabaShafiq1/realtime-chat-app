@@ -1,10 +1,10 @@
 import { useEffect, useContext, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Avatar, Box, Typography, AvatarGroup } from '@mui/material'
+import { Flexbox } from '../../misc/MUIComponents'
+import { SocketContext } from '../../context/Socket';
 import axios from 'axios';
 
-import { SocketContext } from '../../context/Socket';
-import { Flexbox } from '../../misc/MUIComponents'
 import Messages from '../Message/Messages';
 import NewMessage from '../Message/NewMessage';
 import UserImage from "../.././assets/user.jpg";
@@ -29,7 +29,7 @@ const Chat = () => {
 
     return (
         <>
-            <Box sx={{ minHeight: "100vh", flex: 4, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
+            <Box sx={{ flex: 4, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
                 {chat.otherMembers.length > 0 ?
                     <>
                         <Flexbox sx={{
@@ -52,7 +52,8 @@ const Chat = () => {
                             {chat.isGroupChat && <Typography sx={{ fontSize: "18px", color: "gray" }}>and {chat.otherMembers.length - 1} others</Typography>}
                         </Flexbox>
 
-                        <Box sx={{ minHeight: "92.5vh", backgroundColor: "rgba(180, 180, 180, 0.3)" }}>
+
+                        <Box sx={{ minHeight: "93vh", backgroundColor: "rgba(180, 180, 180, 0.3)" }}>
                             <Messages />
                             <NewMessage />
                         </Box>

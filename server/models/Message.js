@@ -10,6 +10,14 @@ const MessageSchema = mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
+        type: {
+            type: String,
+        },
+        images: [
+            {
+                type: String,
+            }
+        ],
         content: {
             type: String,
         },

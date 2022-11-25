@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material'
 import { Flexbox } from '../../misc/MUIComponents'
 import { SocketContext } from "../../context/Socket"
 import Message from './Message'
+
 import Typing from "../UI/Typing"
 import axios from "axios"
 
@@ -57,10 +58,10 @@ const Messages = () => {
     })
 
     return (
-        <Box padding="30px">
+        <Box>
             {messages.length > 0 ?
                 <>
-                    <Box sx={{ height: "80vh", overflow: "auto" }}>
+                    <Box sx={{ height: "70vh", overflow: "auto", padding: "15px 15px 0px 15px" }}>
                         {messages.map((message, index) => {
                             return (
                                 <Box ref={scrollRef} key={index}>
@@ -72,8 +73,8 @@ const Messages = () => {
                     </Box>
                 </>
                 :
-                <Flexbox sx={{ minHeight: "80vh" }}>
-                    <Typography sx={{ fontSize: "24px", color: "gray", opacity: 0.4 }}>
+                <Flexbox sx={{ minHeight: "72vh" }}>
+                    <Typography sx={{ fontSize: "32px", color: "gray", opacity: 0.4 }}>
                         No message found
                     </Typography>
                 </Flexbox>

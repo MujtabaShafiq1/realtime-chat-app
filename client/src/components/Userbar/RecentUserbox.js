@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Box, Avatar, Typography, AvatarGroup } from '@mui/material';
 import { Flexbox, StyledStatusBadge } from '../../misc/MUIComponents';
 import { SocketContext } from '../../context/Socket';
+
 import UserImage from "../../assets/user.jpg";
 
 const RecentUserbox = ({ chat, onlineUsers }) => {
@@ -83,7 +84,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
                 </Flexbox>
 
 
-                {chat.latestMessage &&
+                {latestMessage &&
                     <Flexbox sx={{ justifyContent: "flex-start", gap: 1 }}>
                         {/* fix username and read issue */}
                         {/* <Typography color={(chat.members.every(val => latestMessage.readBy.includes(val._id))) ? "lightgray" : "black"}> */}
