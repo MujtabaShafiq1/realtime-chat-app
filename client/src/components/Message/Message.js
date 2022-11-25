@@ -1,10 +1,14 @@
 import { useState, useEffect, useContext, useCallback } from 'react'
 import { useSelector } from 'react-redux';
 import { Avatar, Box, Typography } from '@mui/material'
-import { Flexbox, MessageBox, MessageContainer } from "../../misc/MUIComponents"
+import { ImageListItem, ImageList } from '@mui/material'
+import { Flexbox, ImageBox, TextBox, MessageContainer } from "../../misc/MUIComponents"
 import { SocketContext } from '../../context/Socket';
 import moment from "moment"
+
 import Seen from "../../assets/seen.png";
+import SeenImage from "../../assets/seen-image.png";
+import DeliveredImage from "../../assets/delivered-image.png";
 import Delivered from "../../assets/delivered.png";
 import UserImage from "../../assets/user.jpg";
 
@@ -75,13 +79,51 @@ const Message = ({ message, next }) => {
                     < Avatar src={chat.otherMembers.filter(member => (member._id === message.senderId))[0]?.profilePicture || UserImage} sx={{ alignSelf: "flex-end" }} />}
 
 
-                <MessageBox sender={currentUserMessage ? 1 : 0} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                    <Flexbox>
-                        <Typography sx={{ fontSize: "16px" }}>{message.content}</Typography>
-                    </Flexbox>
-                    {message.senderId === user.id &&
-                        <Box component="img" src={((chat.otherMembers.length + 1) === readBy.length) ? Seen : Delivered} sx={{ width: "auto", height: "2vh" }} />}
-                </MessageBox>
+                {/* Images */}
+                {
+                    message.images.length > 0
+                    &&
+                    <Box sx={{ display: "flex" }}>
+                        <ImageBox sender={currentUserMessage ? 1 : 0} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+                            <ImageList
+                                sx={{ width: 300, height: 300, borderRadius: "10px" }}
+                                variant="quilted"
+                                cols={4}
+                                rowHeight={121}
+                            >
+                                {message.images.map((image) => (
+                                    <ImageListItem key={image} >
+                                        <img src={image} loading="lazy" />
+                                    </ImageListItem>
+                                ))}
+                            </ImageList>
+                        </ImageBox>
+
+                        {message.senderId === user.id &&
+                            <Box
+                                component="img"
+                                sx={{ width: "auto", height: "2vh", alignSelf: "flex-end" }}
+                                src={((chat.otherMembers.length + 1) === readBy.length) ? SeenImage : DeliveredImage}
+                            />
+                        }
+                    </Box>
+                }
+
+                {/* Text */}
+                {
+                    message.content
+                    &&
+                    <TextBox sender={currentUserMessage ? 1 : 0} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+                        <Flexbox>
+                            <Typography sx={{ fontSize: "16px" }}>{message.content}</Typography>
+                        </Flexbox>
+                        {
+                            message.senderId === user.id &&
+                            <Box component="img" src={((chat.otherMembers.length + 1) === readBy.length) ? Seen : Delivered} sx={{ width: "auto", height: "2vh" }} />
+                        }
+                    </TextBox>
+                }
+
 
                 {hover &&
                     <Flexbox sx={{ backgroundColor: "gray", borderRadius: "10px", width: "auto", height: "2vh", opacity: 0.8, padding: "5px" }}>
@@ -90,6 +132,7 @@ const Message = ({ message, next }) => {
                         </Typography>
                     </Flexbox>
                 }
+
             </MessageContainer >
 
             {

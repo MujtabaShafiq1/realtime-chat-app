@@ -90,8 +90,13 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
                         {/* <Typography color={(chat.members.every(val => latestMessage.readBy.includes(val._id))) ? "lightgray" : "black"}> */}
                         <Typography color="lightgray" sx={{ fontSize: "16px", fontWeight: 500 }}>
                             {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
-                            {(chat._id === latestMessage.chatId) && (latestMessage?.content).substring(0, 25)}
-                            {(latestMessage.content).length > 25 && `...`}
+                            {
+                                latestMessage.type === "image" ?
+                                    `Sent an image`
+                                    :
+                                    (chat._id === latestMessage.chatId) && (latestMessage?.content).substring(0, 25)
+                                        (latestMessage.content).length > 25 && `...`
+                            }
                         </Typography>
                     </Flexbox>
                 }

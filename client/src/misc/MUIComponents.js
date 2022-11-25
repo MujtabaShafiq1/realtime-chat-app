@@ -35,7 +35,7 @@ const StlyedButton = styled(Button)(({ theme }) => ({
     },
 }))
 
-const MessageBox = styled(Box)(({ sender }) => ({
+const TextBox = styled(Box)(({ sender }) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "end",
@@ -47,6 +47,15 @@ const MessageBox = styled(Box)(({ sender }) => ({
     wordBreak: "break-word",
     gap: 10
 }))
+
+const ImageBox = styled(Box)({
+    display: "flex",
+    justifyContent: "right",
+    alignItems: "end",
+    backgroundColor: "lightgray",
+    padding: "2px",
+    borderRadius: "15px",
+})
 
 const MessageContainer = styled(Box)(({ sender, consecutive }) => ({
     display: "flex",
@@ -87,4 +96,4 @@ const StyledStatusBadge = styled(Badge)(({ show }) => ({
 
 
 
-export { Flexbox, StyledField, StlyedButton, MessageBox, MessageContainer, StyledStatusBadge }
+export { Flexbox, StyledField, StlyedButton, TextBox, ImageBox, MessageContainer, StyledStatusBadge }

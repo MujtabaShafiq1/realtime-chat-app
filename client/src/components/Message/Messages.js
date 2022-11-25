@@ -61,7 +61,7 @@ const Messages = () => {
         <Box>
             {messages.length > 0 ?
                 <>
-                    <Box sx={{ height: "70vh", overflow: "auto", padding: "15px 15px 0px 15px" }}>
+                    <Box sx={{ height: "77vh", overflow: "auto", padding: "15px 15px 0px 15px" }}>
                         {messages.map((message, index) => {
                             return (
                                 <Box ref={scrollRef} key={index}>
@@ -73,7 +73,7 @@ const Messages = () => {
                     </Box>
                 </>
                 :
-                <Flexbox sx={{ minHeight: "72vh" }}>
+                <Flexbox sx={{ minHeight: "77vh" }}>
                     <Typography sx={{ fontSize: "32px", color: "gray", opacity: 0.4 }}>
                         No message found
                     </Typography>

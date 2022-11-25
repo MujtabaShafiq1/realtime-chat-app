@@ -42,18 +42,19 @@ const NewMessage = () => {
 
     const uploadImages = async () => {
         if (files.length > 0) {
-            await Promise.all(
+            const list = await Promise.all(
                 files.map(async (image) => {
-                    if (image.type === "image/jpeg" || image.type === "image/png") {
-                        const data = new FormData();
-                        data.append("file", image);
-                        data.append("upload_preset", "chatting-app");
-                        data.append("cloud_name", "dkai1pma6");
-                        await axios.post("https://api.cloudinary.com/v1_1/dkai1pma6/image/upload", data)
-                    }
+                    const data = new FormData();
+                    data.append("file", image);
+                    data.append("upload_preset", "chatting-app");
+                    data.append("cloud_name", "dkai1pma6");
+                    const response = await axios.post("https://api.cloudinary.com/v1_1/dkai1pma6/image/upload", data)
+                    const { url } = response.data
+                    return url;
                 })
             );
             setFiles([])
+            return list;
         }
     }
 
@@ -74,24 +75,32 @@ const NewMessage = () => {
 
             let newChat
 
-            uploadImages()
+            const imageList = await uploadImages()
 
-            // if (!chat.chatId) {
-            //     console.log("creating newChat")
-            //     const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, { senderId: user.id, receiverId: chat.otherMembers[0]._id })
-            //     const { _id, isGroupChat } = response.data
-            //     dispatch(chatActions.conversation({ chatId: _id, isGroupChat, otherMembers: chat.otherMembers }))
-            //     newChat = response.data
-            // }
+            if (!chat.chatId) {
+                console.log("creating newChat")
+                const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, { senderId: user.id, receiverId: chat.otherMembers[0]._id })
+                const { _id, isGroupChat } = response.data
+                dispatch(chatActions.conversation({ chatId: _id, isGroupChat, otherMembers: chat.otherMembers }))
+                newChat = response.data
+            }
 
-            // const messageBody = { chatId: chat.chatId || newChat._id, senderId: user.id, content: newMessage, readBy: [user.id] }
-            // setNewMessage("")
+            const messageBody = {
+                chatId: chat.chatId || newChat._id,
+                senderId: user.id,
+                type: imageList.length > 0 && "image",
+                images: imageList.length > 0 && imageList,
+                content: newMessage,
+                readBy: [user.id]
+            }
 
-            // const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
+            setNewMessage("")
 
-            // socket.emit("sendMessage", messageResponse.data);
-            // socket.emit("latestMessage", { messageBody: messageResponse.data, users: (newChat?.members || [...chat.otherMembers, user.id]) });
-            // socket.emit("stop typing", (chat.chatId || newChat._id));
+            const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
+
+            socket.emit("sendMessage", messageResponse.data);
+            socket.emit("latestMessage", { messageBody: messageResponse.data, users: (newChat?.members || [...chat.otherMembers, user.id]) });
+            socket.emit("stop typing", (chat.chatId || newChat._id));
 
         }
     }
@@ -99,7 +108,7 @@ const NewMessage = () => {
     return (
         <>
             {snackbar.open && <CustomSnackbar type="error" details={snackbar.details} />}
-            <Box position="sticky" mt={files.length > 0 ? "5%" : "10%"} >
+            <Box sx={{ position: "sticky", mt: (files.length > 0 ? "1%" : "5%") }}>
                 <Flexbox>
                     <Flexbox sx={{ justifyContent: "flex-start", width: "94%", gap: 1, flexWrap: "wrap" }}>
                         {Object.values(files).map((file) => {

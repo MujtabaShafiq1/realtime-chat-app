@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     chatId: null,
     isGroupChat: null,
+    groupAdmin: null,
     otherMembers: [],
 }
 
@@ -14,6 +15,7 @@ const chatSlice = createSlice({
             state.chatId = action.payload.chatId || null;
             state.isGroupChat = action.payload.isGroupChat || null;
             state.otherMembers = action.payload.otherMembers;
+            state.groupAdmin = action.payload.groupAdmin || null;
         },
         reset: () => initialState
     },
