@@ -57,6 +57,7 @@ const Messages = () => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     })
 
+
     return (
         <Box>
             {messages.length > 0 ?

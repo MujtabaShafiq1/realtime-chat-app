@@ -10,7 +10,7 @@ import Seen from "../../assets/seen.png";
 import SeenImage from "../../assets/seen-image.png";
 import DeliveredImage from "../../assets/delivered-image.png";
 import Delivered from "../../assets/delivered.png";
-import UserImage from "../../assets/user.jpg";
+import UserImage from "../../assets/user.jpg"
 
 const Message = ({ message, next }) => {
 
@@ -22,38 +22,50 @@ const Message = ({ message, next }) => {
     const [hover, setHover] = useState(false)
     const [readBy, setReadBy] = useState(message.readBy)
 
+    // back to back message
     const consecutiveMessage = !(message.senderId === next?.senderId)
     const currentUserMessage = (user.id === message.senderId)
 
+    // message interval
     const dateFormat = "YYYY-MM-DD HH:mm:ss"
     const start = moment(message.createdAt).format(dateFormat)
     const end = moment(next?.createdAt).format(dateFormat)
     const duration = moment(end).diff(start, 'hours');
 
+    // to read message by logged in user
     const updateRecentMessage = useCallback(() => {
+
         if (message.senderId !== user.id && (chat.otherMembers + 1) !== readBy.length && !readBy.includes(user.id)) {
             setTimeout(() => {
                 message.readBy.push(user.id)
                 socket.emit("readMessage", message)
             }, 1000)
         }
+
         // eslint-disable-next-line
     }, [socket, message._id])
 
+    // to update readby of all message of all users
     const updateReadBy = useCallback(() => {
+
         socket.on("getMessageReadby", (details) => {
             if (details._id !== message._id) return;
             setReadBy(details.readBy)
         });
+
     }, [socket, message._id])
 
+
+    // to update readby of new message of all users
     const latestMessageReadBy = useCallback(() => {
+
         socket.on("getMessageReadbyAll", (data) => {
             if (data.chatId === message.chatId && data.totalMembers !== readBy.length && !readBy.includes(data.readByUser)) {
                 const updatedReadby = [...readBy, data.readByUser]
                 setReadBy(updatedReadby)
             }
         })
+
     }, [socket, message.chatId, readBy])
 
     useEffect(() => {
@@ -67,6 +79,15 @@ const Message = ({ message, next }) => {
     useEffect(() => {
         latestMessageReadBy()
     }, [latestMessageReadBy])
+
+
+    function srcset(image, size = 148, rows = 1, cols = 1) {
+        return {
+            src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
+            srcSet: `${image}?w=${size * cols}&h=${size * rows
+                }&fit=crop&auto=format&dpr=2 2x`,
+        };
+    }
 
     return (
         <>
@@ -84,20 +105,70 @@ const Message = ({ message, next }) => {
                     message.images.length > 0
                     &&
                     <Box sx={{ display: "flex" }}>
-                        <ImageBox sender={currentUserMessage ? 1 : 0} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                            <ImageList
-                                sx={{ width: 300, height: 300, borderRadius: "10px" }}
-                                variant="quilted"
-                                cols={4}
-                                rowHeight={121}
-                            >
-                                {message.images.map((image) => (
-                                    <ImageListItem key={image} >
-                                        <img src={image} loading="lazy" />
-                                    </ImageListItem>
-                                ))}
-                            </ImageList>
-                        </ImageBox>
+
+                        {
+                            message.images.length === 1 ?
+                                <Box
+                                    component="img"
+                                    sx={{ width: 300, height: 300, borderRadius: "10px" }}
+                                    src={message.images[0]}
+                                />
+                                :
+                                <ImageBox sender={currentUserMessage ? 1 : 0} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+                                    <ImageList
+                                        sx={{ width: 450, height: 300 }}
+                                        variant="quilted"
+                                        cols={4}
+                                        rowHeight={148}
+                                    >
+                                        <ImageListItem cols={2} rows={2} >
+                                            <img
+                                                {...srcset(message.images[0])}
+                                                loading="lazy"
+                                                alt=""
+                                                style={{ borderRadius: "10px" }}
+                                            />
+                                        </ImageListItem>
+                                        <ImageListItem
+                                            cols={(message.images.length === 2 || message.images.length === 3) ? 2 : 1}
+                                            rows={message.images.length === 2 ? 2 : 1}
+                                        >
+                                            <img
+                                                {...srcset(message.images[1])}
+                                                loading="lazy"
+                                                alt=""
+                                                style={{ borderRadius: "10px" }}
+                                            />
+                                        </ImageListItem>
+                                        {message.images[2] &&
+                                            <ImageListItem
+                                                cols={message.images.length === 3 ? 2 : 1}
+                                                rows={1}
+                                            >
+                                                <img
+                                                    {...srcset(message.images[2])}
+                                                    loading="lazy"
+                                                    alt=""
+                                                    style={{ borderRadius: "10px" }}
+                                                />
+                                            </ImageListItem>
+                                        }
+                                        {message.images[3] &&
+                                            <ImageListItem cols={2} rows={1} >
+                                                <img
+                                                    {...srcset(message.images[3])}
+                                                    loading="lazy"
+                                                    alt=""
+                                                    style={{ borderRadius: "10px" }}
+                                                />
+                                                {/* {message.images.length > 4 &&
+                                                    <Typography sx={{ position: "absolute" }}>+{message.images.length - 4}</Typography>
+                                                } */}
+                                            </ImageListItem>
+                                        }
+                                    </ImageList>
+                                </ImageBox>
+                        }
 
                         {message.senderId === user.id &&
                             <Box
@@ -106,6 +177,7 @@ const Message = ({ message, next }) => {
                                 src={((chat.otherMembers.length + 1) === readBy.length) ? SeenImage : DeliveredImage}
                             />
                         }
+
                     </Box>
                 }
 

@@ -52,9 +52,6 @@ const ImageBox = styled(Box)({
     display: "flex",
     justifyContent: "right",
     alignItems: "end",
-    backgroundColor: "lightgray",
-    padding: "2px",
-    borderRadius: "15px",
 })
 
 const MessageContainer = styled(Box)(({ sender, consecutive }) => ({
