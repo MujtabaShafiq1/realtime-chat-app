@@ -58,7 +58,7 @@ const MessageContainer = styled(Box)(({ sender, consecutive }) => ({
     display: "flex",
     flexDirection: sender && "row-reverse",
     gap: 15,
-    margin: sender ? (!consecutive ? "0 6% 0.4% 0" : "0 1% 0.4% 0") : (!consecutive && "0 0% 0.4% 5%"),
+    margin: sender ? (!consecutive ? "0 6% 0.5% 0" : "0 1% 0.4% 0") : (!consecutive && "0 0 0.4% 5%"),
     alignItems: "center",
     justifyContent: sender ? "flex-between" : "flex-start"
 }))

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { SocketContext } from '../../context/Socket'
 import { chatActions } from '../../store/chatSlice'
 import { Flexbox } from '../../misc/MUIComponents'
-import { Box, Avatar, TextField, IconButton, InputAdornment } from "@mui/material"
+import { Box, Avatar, TextField, IconButton, InputAdornment, CircularProgress } from "@mui/material"
 import CustomSnackbar from '../UI/CustomSnackbar'
 import axios from 'axios'
 
@@ -21,6 +21,7 @@ const NewMessage = () => {
 
     const [files, setFiles] = useState([])
     const [newMessage, setNewMessage] = useState("")
+    const [loading, setLoading] = useState(false)
     const [snackbar, setSnackbar] = useState({ open: false, details: "" })
 
     useEffect(() => {
@@ -42,17 +43,20 @@ const NewMessage = () => {
 
     const uploadImages = async () => {
         if (files.length > 0) {
-            const list = await Promise.all(
-                files.map(async (image) => {
-                    const data = new FormData();
-                    data.append("file", image);
-                    data.append("upload_preset", "chatting-app");
-                    data.append("cloud_name", "dkai1pma6");
-                    const response = await axios.post("https://api.cloudinary.com/v1_1/dkai1pma6/image/upload", data)
-                    const { url } = response.data
-                    return url;
-                })
-            );
+            setLoading(true)
+            const list =
+                await Promise.all(
+                    files.map(async (image) => {
+                        const data = new FormData();
+                        data.append("file", image);
+                        data.append("upload_preset", "chatting-app");
+                        data.append("cloud_name", "dkai1pma6");
+                        const response = await axios.post("https://api.cloudinary.com/v1_1/dkai1pma6/image/upload", data)
+                        const { url } = response.data
+                        return url;
+                    })
+                );
+            setLoading(false)
             setFiles([])
             return list;
         }
@@ -71,7 +75,7 @@ const NewMessage = () => {
 
 
     const messageHandler = async () => {
-        if (newMessage?.trim().length > 0 || files.length > 0) {
+        if ((newMessage?.trim().length > 0 || files.length > 0) && !loading) {
 
             let newChat
 
@@ -88,8 +92,8 @@ const NewMessage = () => {
             const messageBody = {
                 chatId: chat.chatId || newChat._id,
                 senderId: user.id,
-                type: imageList.length > 0 && "image",
-                images: imageList.length > 0 && imageList,
+                type: imageList ? "image" : "text",
+                images: imageList,
                 content: newMessage,
                 readBy: [user.id]
             }
@@ -108,7 +112,7 @@ const NewMessage = () => {
     return (
         <>
             {snackbar.open && <CustomSnackbar type="error" details={snackbar.details} />}
-            <Box sx={{ position: "sticky", mt: (files.length > 0 ? "1%" : "5%") }}>
+            <Box sx={{ position: "sticky", mt: (files.length > 0 ? "1%" : "4%") }}>
                 <Flexbox>
                     <Flexbox sx={{ justifyContent: "flex-start", width: "94%", gap: 1, flexWrap: "wrap" }}>
                         {Object.values(files).map((file) => {
@@ -161,9 +165,13 @@ const NewMessage = () => {
                     />
 
                     <Flexbox>
-                        <Avatar sx={{ backgroundColor: "lightblue", cursor: "pointer" }} onClick={messageHandler}>
-                            <Box component="img" src={SendIcon} />
-                        </Avatar>
+                        {loading ?
+                            <CircularProgress />
+                            :
+                            <Avatar sx={{ backgroundColor: "lightblue", cursor: "pointer" }} disabled={loading} onClick={messageHandler}>
+                                <Box component="img" src={SendIcon} />
+                            </Avatar>
+                        }
                     </Flexbox>
                 </Flexbox>
             </Box>
