@@ -3,8 +3,7 @@ const Chat = require("../models/Chat");
 
 const createChat = asyncHandler(async (req, res) => {
 
-    const newChat = new Chat({ members: [req.body.senderId, req.body.receiverId], groupAdmin: req.body.senderId, isGroupChat: (req.body?.isGroupChat || false) });
-    // console.log(newChat);
+    const newChat = new Chat({ members: [req.body.senderId, ...req.body.receiverId], groupAdmin: req.body.senderId, isGroupChat: (req.body?.isGroupChat || false) });
     const savedChat = await newChat.save();
     res.status(200).json(savedChat);
 

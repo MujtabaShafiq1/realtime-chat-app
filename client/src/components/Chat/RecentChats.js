@@ -41,11 +41,17 @@ const RecentChats = () => {
     }, [fetchUsers])
 
     const clickHandler = async (selectedChat) => {
+
         if (selectedChat._id === chat?.chatId) return;
 
         await axios.put(`${process.env.REACT_APP_SERVER}/message/${selectedChat._id}`, { userId: userId })
-        const { _id, isGroupChat, members } = selectedChat;
-        const activeChat = { chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId) }
+
+        const { _id, isGroupChat, members, groupAdmin, createdAt } = selectedChat;
+
+        const activeChat = {
+            chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId), groupAdmin, createdAt
+        }
+
         dispatch(chatActions.conversation(activeChat))
         socket.emit("readAllMessage", { chatId: _id, readByUser: userId, totalMembers: members.length })
     }

@@ -2,7 +2,7 @@ import { useState, useEffect, useContext, useCallback } from 'react'
 import { useSelector } from 'react-redux';
 import { Avatar, Box, Typography } from '@mui/material'
 import { ImageListItem, ImageList } from '@mui/material'
-import { Flexbox, ImageBox, TextBox, MessageContainer } from "../../misc/MUIComponents"
+import { Flexbox, TextBox, MessageContainer } from "../../misc/MUIComponents"
 import { SocketContext } from '../../context/Socket';
 import moment from "moment"
 
@@ -91,124 +91,120 @@ const Message = ({ message, next }) => {
 
     return (
         <>
-            <MessageContainer sender={currentUserMessage ? 1 : 0} consecutive={consecutiveMessage ? 1 : 0}>
+            <MessageContainer sender={currentUserMessage ? 1 : 0} consecutive={consecutiveMessage ? 1 : 0} >
 
-                {(consecutiveMessage && currentUserMessage) &&
+                {(consecutiveMessage && currentUserMessage && message.type !== "info") &&
                     < Avatar src={user.profilePicture || UserImage} sx={{ alignSelf: "flex-end" }} />}
 
-                {(consecutiveMessage && !currentUserMessage) &&
+                {(consecutiveMessage && !currentUserMessage && message.type !== "info") &&
                     < Avatar src={chat.otherMembers.filter(member => (member._id === message.senderId))[0]?.profilePicture || UserImage} sx={{ alignSelf: "flex-end" }} />}
 
+                <Flexbox sx={{ flexDirection: "column", alignItems: currentUserMessage ? "flex-end" : "flex-start", maxWidth: "50%" }}>
 
-                {/* Images */}
-                {
-                    message.images.length > 0
-                    &&
-                    <>
-                        {gallery && <ImageGallery images={message.images} close={() => setGallery(false)} />}
-
-                        <Box
-                            sx={{ display: "flex", mt: "2%", cursor: "pointer" }}
-                            onClick={() => setGallery(true)}
-                            onMouseEnter={() => setHover(true)}
-                            onMouseLeave={() => setHover(false)}
-                        >
-                            {
-                                message.images.length === 1 ?
+                    {/* Images */}
+                    {message.images.length > 0 &&
+                        <>
+                            {gallery && <ImageGallery images={message.images} close={() => setGallery(false)} />}
+                            <Box
+                                sx={{ display: "flex", flexDirection: "column", m: "1.5% 0%", cursor: "pointer", position: "relative" }}
+                                onClick={() => setGallery(true)}
+                                onMouseEnter={() => setHover(true)}
+                                onMouseLeave={() => setHover(false)}
+                            >
+                                {message.images.length === 1 ?
                                     <Box
                                         component="img"
                                         sx={{ maxWidth: 300, maxHeight: 300, borderRadius: "8px" }}
                                         src={message.images[0]}
                                     />
                                     :
-                                    <ImageBox sender={currentUserMessage ? 1 : 0}>
-                                        <ImageList
-                                            sx={{ width: 450, height: 300 }}
-                                            variant="quilted"
-                                            cols={4}
-                                            rowHeight={148}
+                                    <ImageList
+                                        sx={{ width: 450, height: 300, }}
+                                        variant="quilted"
+                                        cols={4}
+                                        rowHeight={148}
+                                    >
+                                        <ImageListItem cols={2} rows={2} >
+                                            <img
+                                                {...srcset(message.images[0])}
+                                                loading="lazy"
+                                                alt=""
+                                                style={{ borderRadius: "8px" }}
+                                            />
+                                        </ImageListItem>
+                                        <ImageListItem
+                                            cols={(message.images.length === 2 || message.images.length === 3) ? 2 : 1}
+                                            rows={message.images.length === 2 ? 2 : 1}
                                         >
-                                            <ImageListItem cols={2} rows={2} >
-                                                <img
-                                                    {...srcset(message.images[0])}
-                                                    loading="lazy"
-                                                    alt=""
-                                                    style={{ borderRadius: "8px" }}
-                                                />
-                                            </ImageListItem>
+                                            <img
+                                                {...srcset(message.images[1])}
+                                                loading="lazy"
+                                                alt=""
+                                                style={{ borderRadius: "8px" }}
+                                            />
+                                        </ImageListItem>
+                                        {message.images[2] &&
                                             <ImageListItem
-                                                cols={(message.images.length === 2 || message.images.length === 3) ? 2 : 1}
-                                                rows={message.images.length === 2 ? 2 : 1}
+                                                cols={message.images.length === 3 ? 2 : 1}
+                                                rows={1}
                                             >
                                                 <img
-                                                    {...srcset(message.images[1])}
+                                                    {...srcset(message.images[2])}
                                                     loading="lazy"
                                                     alt=""
                                                     style={{ borderRadius: "8px" }}
                                                 />
                                             </ImageListItem>
-                                            {message.images[2] &&
-                                                <ImageListItem
-                                                    cols={message.images.length === 3 ? 2 : 1}
-                                                    rows={1}
-                                                >
-                                                    <img
-                                                        {...srcset(message.images[2])}
-                                                        loading="lazy"
-                                                        alt=""
-                                                        style={{ borderRadius: "8px" }}
-                                                    />
-                                                </ImageListItem>
-                                            }
-                                            {message.images[3] &&
-                                                <ImageListItem cols={2} rows={1} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                                    <img
-                                                        {...srcset(message.images[3])}
-                                                        loading="lazy"
-                                                        alt=""
-                                                        style={{ borderRadius: "8px", position: "absolute" }}
-                                                    />
-                                                    {message.images.length > 4 &&
-                                                        <Flexbox
-                                                            sx={{ backgroundColor: "rgba(0,0,0,0.5)", position: "absolute", height: "100%", width: "100%", borderRadius: "8px" }}>
-                                                            <Typography sx={{ fontSize: "28px", color: "white", fontWeight: 200 }}>+ {message.images.length - 4}</Typography>
-                                                        </Flexbox>
-                                                    }
-                                                </ImageListItem>
-                                            }
-                                        </ImageList>
-                                    </ImageBox>
-                            }
-                            {message.senderId === user.id &&
+                                        }
+                                        {message.images[3] &&
+                                            <ImageListItem cols={2} rows={1} sx={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}>
+                                                <img
+                                                    {...srcset(message.images[3])}
+                                                    loading="lazy"
+                                                    alt=""
+                                                    style={{ borderRadius: "8px" }}
+                                                />
+                                                {message.images.length > 4 &&
+                                                    <Flexbox
+                                                        sx={{ backgroundColor: "rgba(0,0,0,0.5)", position: "absolute", height: "100%", width: "100%", borderRadius: "8px" }}>
+                                                        <Typography sx={{ fontSize: "28px", color: "white", fontWeight: 200 }}>+ {message.images.length - 4}</Typography>
+                                                    </Flexbox>
+                                                }
+                                            </ImageListItem>
+                                        }
+                                    </ImageList>
+                                }
+                                {message.senderId === user.id &&
+                                    <Box
+                                        component="img"
+                                        sx={{ width: "auto", height: "2vh", alignSelf: "flex-end", position: "absolute", top: "90%", right: "2%" }}
+                                        src={((chat.otherMembers.length + 1) === readBy.length) ? SeenIcon : DeliveredIcon}
+                                    />
+                                }
+
+
+                            </Box>
+                        </>
+                    }
+
+                    {/* Text */}
+                    {(message.content && message.type !== "info") &&
+                        <TextBox onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+                            <Flexbox>
+                                <Typography sx={{ fontSize: "16px" }}>{message.content}</Typography>
+                            </Flexbox>
+                            {
+                                message.senderId === user.id &&
                                 <Box
                                     component="img"
                                     sx={{ width: "auto", height: "2vh", alignSelf: "flex-end" }}
                                     src={((chat.otherMembers.length + 1) === readBy.length) ? SeenIcon : DeliveredIcon}
                                 />
                             }
-                        </Box>
-                    </>
-                }
+                        </TextBox>
+                    }
 
-                {/* Text */}
-                {
-                    message.content
-                    &&
-                    <TextBox sender={currentUserMessage ? 1 : 0} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                        <Flexbox>
-                            <Typography sx={{ fontSize: "16px" }}>{message.content}</Typography>
-                        </Flexbox>
-                        {
-                            message.senderId === user.id &&
-                            <Box
-                                component="img"
-                                sx={{ width: "auto", height: "2vh", alignSelf: "flex-end" }}
-                                src={((chat.otherMembers.length + 1) === readBy.length) ? SeenIcon : DeliveredIcon}
-                            />
-                        }
-                    </TextBox>
-                }
-
+                </Flexbox>
 
                 {hover &&
                     <Flexbox sx={{ backgroundColor: "gray", borderRadius: "10px", width: "auto", height: "2vh", opacity: 0.8, padding: "5px" }}>
@@ -219,6 +215,12 @@ const Message = ({ message, next }) => {
                 }
 
             </MessageContainer >
+
+            {message.type === "info" &&
+                <Typography sx={{ fontSize: "15px", fontWeight: 300, opacity: 1, color: "gray", textAlign: "center", margin: "1% 0" }}>
+                    {message.content}
+                </Typography>
+            }
 
             {
                 (duration > 2 && next)

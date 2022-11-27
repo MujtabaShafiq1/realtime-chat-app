@@ -4,6 +4,7 @@ import { Avatar, Box, TextField, Typography, Container } from '@mui/material'
 import { Flexbox, StlyedButton } from '../../misc/MUIComponents'
 
 import { userActions } from '../../store/userSlice';
+import { chatActions } from '../../store/chatSlice';
 import axios from 'axios';
 
 import RecentChats from '../Chat/RecentChats';
@@ -37,6 +38,7 @@ const Userbar = () => {
 
     const logoutHandler = async () => {
         await axios.get(`${process.env.REACT_APP_SERVER}/auth/logout`)
+        dispatch(chatActions.reset())
         dispatch(userActions.logout())
     }
 

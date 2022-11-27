@@ -16,11 +16,15 @@ const SearchedChats = ({ searchedUsers }) => {
         if (chat.otherMembers.includes(member)) return;
 
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/find/${userId}/${member._id}`)
+
         const activeChat = {
             chatId: response.data[0]?._id,
             isGroupChat: response.data[0]?.isGroupChat,
-            otherMembers: (response.data[0]?.members.filter(memberId => memberId._id !== userId) || [member])
+            groupAdmin: response.data[0]?.groupAdmin,
+            otherMembers: (response.data[0]?.members.filter(memberId => memberId._id !== userId) || [member]),
+            createdAt: response.data[0]?.createdAt,
         }
+
         dispatch(chatActions.conversation(activeChat))
     }
 

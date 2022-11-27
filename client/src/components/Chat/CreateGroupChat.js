@@ -32,9 +32,28 @@ const CreateGroupChat = ({ users, close }) => {
     // issue in recent user box after creating chat
     const createGroup = async () => {
         if (addedUsers.length > 1) {
-            const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, { senderId: user.id, receiverId: addedUsers.map(user => user._id), isGroupChat: true })
-            const { _id, isGroupChat } = response.data
-            dispatch(chatActions.conversation({ chatId: _id, isGroupChat, otherMembers: addedUsers }))
+
+            const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, {
+                senderId: user.id,
+                receiverId: addedUsers.map(user => user._id),
+                groupAdmin: user.id,
+                isGroupChat: true,
+            })
+
+            const { _id, isGroupChat, groupAdmin, createdAt } = response.data
+
+            const messageBody = {
+                chatId: _id,
+                senderId: user.id,
+                type: "info",
+                content: `Group created by ${user.username}`,
+                readBy: [user.id]
+            }
+
+            await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
+
+            dispatch(chatActions.conversation({ chatId: _id, isGroupChat, groupAdmin, otherMembers: addedUsers, createdAt }))
+
             close();
             return;
         }

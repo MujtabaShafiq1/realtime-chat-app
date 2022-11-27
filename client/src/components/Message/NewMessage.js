@@ -82,10 +82,15 @@ const NewMessage = () => {
             const imageList = await uploadImages()
 
             if (!chat.chatId) {
-                console.log("creating newChat")
-                const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, { senderId: user.id, receiverId: chat.otherMembers[0]._id })
-                const { _id, isGroupChat } = response.data
-                dispatch(chatActions.conversation({ chatId: _id, isGroupChat, otherMembers: chat.otherMembers }))
+
+                const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, {
+                    senderId: user.id,
+                    receiverId: chat.otherMmebers.map(member => member._id),
+                    groupAdmin: null
+                })
+
+                const { _id, isGroupChat, groupAdmin, createdAt } = response.data
+                dispatch(chatActions.conversation({ chatId: _id, isGroupChat, otherMembers: chat.otherMembers, groupAdmin, createdAt }))
                 newChat = response.data
             }
 
