@@ -19,8 +19,6 @@ const SearchedChats = ({ searchedUsers }) => {
 
         const activeChat = {
             chatId: response.data[0]?._id,
-            isGroupChat: response.data[0]?.isGroupChat,
-            groupAdmin: response.data[0]?.groupAdmin,
             otherMembers: (response.data[0]?.members.filter(memberId => memberId._id !== userId) || [member]),
             createdAt: response.data[0]?.createdAt,
         }

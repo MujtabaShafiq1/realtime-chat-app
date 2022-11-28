@@ -19,7 +19,7 @@ const getChat = asyncHandler(async (req, res) => {
 const findChat = asyncHandler(async (req, res) => {
 
     const { userId, memberId } = req.params;
-    const chat = await Chat.find({ members: { $all: [userId, memberId] } }).populate("members", "-password")
+    const chat = await Chat.find({ isGroupChat: { $ne: true }, members: { $all: [userId, memberId] } }).populate("members", "-password")
     res.status(200).json(chat);
 
 });
