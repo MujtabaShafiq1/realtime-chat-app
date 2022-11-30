@@ -6,6 +6,7 @@ const Userbox = ({ user }) => {
         <Box sx={{
             display: "flex",
             gap: 2,
+            justifyContent: "left",
             alignItems: "center",
             marginTop: "3%",
             '&:hover': {
