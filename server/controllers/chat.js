@@ -24,12 +24,12 @@ const updateLatestMessage = asyncHandler(async (req, res) => {
 });
 
 const addUser = asyncHandler(async (req, res) => {
-    const updatedChat = await Chat.findByIdAndUpdate(req.params.id, { $addToSet: { "members": req.body.userId } }, { new: true });
+    const updatedChat = await Chat.findByIdAndUpdate(req.params.id, { $addToSet: { "members": { $each: req.body.users } } }, { new: true });
     res.status(200).json(updatedChat)
 });
 
 const removeUser = asyncHandler(async (req, res) => {
-    const updatedChat = await Chat.findByIdAndUpdate(req.params.id, { $pull: { "members": req.body.userId } }, { new: true });
+    const updatedChat = await Chat.findByIdAndUpdate(req.params.id, { $pull: { "members": { $in: req.body.users } } }, { new: true });
     res.status(200).json(updatedChat)
 });
 

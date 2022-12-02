@@ -37,7 +37,7 @@ const Home = () => {
         <Flexbox>
             <Userbar users={users} />
             <Chat />
-            {chat.otherMembers.length > 0 &&
+            {chat.chatId &&
                 <Box sx={{ minHeight: "100vh", flex: 1.5, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
                     {chat.isGroupChat ? <GroupBar users={users} /> : <SingleChatbar />}
                 </Box>

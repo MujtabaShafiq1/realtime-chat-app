@@ -5,7 +5,7 @@ import axios from "axios"
 
 import { Box, Grid, Typography, InputAdornment, IconButton, Divider } from "@mui/material"
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Flexbox, StlyedButton, StyledField } from '../misc/MUIComponents';
+import { Flexbox, StyledButton, StyledField } from '../misc/MUIComponents';
 import { signupSchema } from '../utils/validationSchema';
 import CustomSnackbar from '../components/UI/CustomSnackbar';
 
@@ -179,18 +179,18 @@ const Login = () => {
                             />
 
                             <Box display="flex" alignItems="center" gap={2}>
-                                <StlyedButton variant="contained" component="label" sx={{ backgroundColor: "gray", width: "auto" }}>
+                                <StyledButton variant="contained" component="label" sx={{ backgroundColor: "gray", width: "auto" }}>
                                     <Typography sx={{ fontSize: "12px" }}>Upload Image</Typography>
                                     <input type="file" hidden onChange={(e) => imageHandler(e.target.files[0])} />
-                                </StlyedButton>
+                                </StyledButton>
                                 <Typography sx={{ fontSize: "11px" }}>{imageUploaded?.name}</Typography>
                             </Box>
 
 
                             <Flexbox sx={{ justifyContent: "left", gap: 2, width: "90%" }}>
-                                <StlyedButton type="submit" sx={{ backgroundColor: "rgba( 76,76,163, 1 )" }}>
+                                <StyledButton type="submit" sx={{ backgroundColor: "rgba( 76,76,163, 1 )" }}>
                                     Signup
-                                </StlyedButton>
+                                </StyledButton>
                                 <Flexbox sx={{ gap: 1 }}>
                                     <Typography sx={{ fontSize: "16px", display: { xs: "none", md: "block" } }}>Already have an account ? </Typography>
                                     <Typography sx={{ color: "green", cursor: "pointer", fontSize: "16px" }} onClick={() => navigate("/login")}>Login</Typography>

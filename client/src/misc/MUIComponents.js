@@ -16,7 +16,7 @@ const StyledField = styled(TextField)(({ error }) => ({
     textarea: { color: 'black' },
 }))
 
-const StlyedButton = styled(Button)(({ theme }) => ({
+const StyledButton = styled(Button)(({ theme }) => ({
     color: "white",
     padding: "10px",
     borderRadius: "20px",
@@ -85,4 +85,4 @@ const StyledStatusBadge = styled(Badge)(({ show }) => ({
 
 
 
-export { Flexbox, StyledField, StlyedButton, TextBox, MessageContainer, StyledStatusBadge }
+export { Flexbox, StyledField, StyledButton, TextBox, MessageContainer, StyledStatusBadge }

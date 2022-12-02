@@ -13,19 +13,17 @@ const chatSlice = createSlice({
     initialState,
     reducers: {
         conversation(state, action) {
-
             state.chatId = action.payload.chatId;
             state.isGroupChat = action.payload.isGroupChat || null;
             state.otherMembers = action.payload.otherMembers;
             state.groupAdmin = action.payload.groupAdmin || null;
             state.createdAt = action.payload.createdAt;
-
         },
         removeUser(state, action) {
-            state.otherMembers = state.otherMembers.filter(user => user._id !== action.payload);
+            state.otherMembers = state.otherMembers.filter(member => !JSON.stringify(action.payload).includes(member._id));
         },
         addUser(state, action) {
-            state.otherMembers.push(action.payload)
+            state.otherMembers.push(...action.payload)
         },
         reset: () => initialState
     },

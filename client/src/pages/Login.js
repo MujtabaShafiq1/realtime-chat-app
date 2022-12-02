@@ -6,7 +6,7 @@ import axios from "axios"
 
 import { Box, Grid, Typography, InputAdornment, IconButton, Divider } from "@mui/material"
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Flexbox, StlyedButton, StyledField } from '../misc/MUIComponents';
+import { Flexbox, StyledButton, StyledField } from '../misc/MUIComponents';
 import { loginSchema } from '../utils/validationSchema';
 
 import background from "../assets/auth.png"
@@ -145,9 +145,9 @@ const Login = () => {
 
 
 
-                            <StlyedButton type="submit" sx={{ width: "25%", backgroundColor: "rgba( 76,76,163, 1 )" }}>
+                            <StyledButton type="submit" sx={{ width: "25%", backgroundColor: "rgba( 76,76,163, 1 )" }}>
                                 login
-                            </StlyedButton>
+                            </StyledButton>
 
                             <Box display="flex" gap={2} flexDirection={{ xs: "column", md: "row" }}>
                                 <Typography sx={{ fontSize: "16px" }}>Dont have an account? </Typography>

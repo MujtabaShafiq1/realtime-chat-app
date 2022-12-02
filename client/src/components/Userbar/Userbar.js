@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Box, TextField, Typography, Container } from '@mui/material'
-import { Flexbox, StlyedButton } from '../../misc/MUIComponents'
+import { Flexbox, StyledButton } from '../../misc/MUIComponents'
 
 import { userActions } from '../../store/userSlice';
 import { chatActions } from '../../store/chatSlice';
@@ -50,9 +50,9 @@ const Userbar = ({ users }) => {
                 <Flexbox sx={{ justifyContent: "space-around", marginTop: "3%" }}>
                     <Avatar src={user.profilePicture || UserImage} sx={{ width: 50, height: 50 }} />
                     <Typography sx={{ fontSize: "22px" }}>{user.username}</Typography>
-                    <StlyedButton sx={{ backgroundColor: "black" }} onClick={logoutHandler}>
+                    <StyledButton sx={{ backgroundColor: "black" }} onClick={logoutHandler}>
                         Logout
-                    </StlyedButton>
+                    </StyledButton>
                 </Flexbox>
 
                 <Flexbox gap={3}>
