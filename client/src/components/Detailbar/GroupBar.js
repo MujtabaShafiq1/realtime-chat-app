@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography } from '@mui/material'
 import { Flexbox, StlyedButton } from '../../misc/MUIComponents'
 import { chatActions } from "../../store/chatSlice";
-import axios from 'axios';
+// import axios from 'axios';
 import moment from 'moment';
 
 import Userbox from '../Userbar/Userbox';
@@ -20,15 +20,19 @@ const GroupBar = ({ users }) => {
     const chat = useSelector((state) => state.chat)
     const loggedInUser = useSelector((state) => state.user.details)
 
+    console.log(users);
+
+    // console.log(users.filter(user => !chat.otherMembers.includes(user._id)))
+
     // add request for chat
     const addUserHandler = async (user) => {
-        await axios.put(`${process.env.REACT_APP_SERVER}/chat/add/${chat.chatId}`, { userId: user._id })
+        // await axios.put(`${process.env.REACT_APP_SERVER}/chat/add/${chat.chatId}`, { userId: user._id })
         dispatch(chatActions.addUser(user))
     }
 
     // delete request for chat
     const groupRemoveHandler = async (user) => {
-        await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { userId: user._id })
+        // await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { userId: user._id })
         dispatch(chatActions.removeUser(user._id))
     }
 

@@ -2,20 +2,21 @@ import { useState, useEffect, useContext, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { SocketContext } from '../context/Socket'
 import { Flexbox } from '../misc/MUIComponents'
+import { Box } from '@mui/material'
 import axios from "axios"
 
-import Userbar from '../components/Userbar/Userbar'
 import Chat from '../components/Chat/Chat'
-import Detailbar from '../components/Detailbar/Detailbar'
+import Userbar from '../components/Userbar/Userbar'
+import GroupBar from "../components/Detailbar/GroupBar";
+import SingleChatbar from '../components/Detailbar/SingleChatbar';
+
 
 const Home = () => {
 
     const [users, setUsers] = useState([])
-
-    const socket = useContext(SocketContext);
-
-    const members = useSelector((state) => state.chat.otherMembers)
+    const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
+    const socket = useContext(SocketContext)
 
     const fetchUsers = useCallback(async () => {
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/user/all`)
@@ -36,7 +37,11 @@ const Home = () => {
         <Flexbox>
             <Userbar users={users} />
             <Chat />
-            {members.length > 0 && <Detailbar users={users} />}
+            {chat.otherMembers.length > 0 &&
+                <Box sx={{ minHeight: "100vh", flex: 1.5, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
+                    {chat.isGroupChat ? <GroupBar users={users} /> : <SingleChatbar />}
+                </Box>
+            }
         </Flexbox>
     )
 }

@@ -25,8 +25,7 @@ const chatSlice = createSlice({
             state.otherMembers = state.otherMembers.filter(user => user._id !== action.payload);
         },
         addUser(state, action) {
-            console.log(action.payload)
-            // state.otherMembers.push(action.payload)
+            state.otherMembers.push(action.payload)
         },
         reset: () => initialState
     },
