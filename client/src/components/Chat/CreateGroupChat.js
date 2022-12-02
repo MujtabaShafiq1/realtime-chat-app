@@ -41,20 +41,12 @@ const CreateGroupChat = ({ users, close }) => {
             })
 
             const { _id, isGroupChat, groupAdmin, createdAt } = response.data
-
-            const messageBody = {
-                chatId: _id,
-                senderId: user.id,
-                type: "info",
-                content: `Group created by ${user.username}`,
-                readBy: [user.id]
-            }
-
+            const messageBody = { chatId: _id, senderId: user.id, type: "info", content: `Group created by ${user.username}`, readBy: [user.id] }
             await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
 
             dispatch(chatActions.conversation({ chatId: _id, isGroupChat, groupAdmin, otherMembers: addedUsers, createdAt }))
-
             close();
+
             return;
         }
         setSnackbar({ open: true, details: "Minimum 2 Users to create Group Chat" })

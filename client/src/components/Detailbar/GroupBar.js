@@ -24,14 +24,16 @@ const GroupBar = ({ users }) => {
     const loggedInUser = useSelector((state) => state.user.details)
 
     const nonGroupMembers = users.filter(user => !JSON.stringify(chat.otherMembers).includes(user._id));
-    const groupAdmin = chat.otherMembers.filter((member => member._id === chat.groupAdmin))[0]?.username || loggedInUser.username
+    const groupAdmin = (chat.otherMembers.filter((member => member._id === chat.groupAdmin))[0]?.username || loggedInUser.username)
 
     // add request for chat
     const addUserHandler = async () => {
         await axios.put(`${process.env.REACT_APP_SERVER}/chat/add/${chat.chatId}`, { users: userList })
 
-        const messageBody = { chatId: chat.chatId, senderId: loggedInUser.id, type: "info", content: `${groupAdmin} added ${user.username}`, readBy: [loggedInUser.id] }
-        await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
+        userList.map(async (user) => {
+            const messageBody = { chatId: chat.chatId, senderId: loggedInUser.id, type: "info", content: `${groupAdmin} added ${user.username}`, readBy: [loggedInUser.id] }
+            await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
+        })
 
         dispatch(chatActions.addUser(userList))
         closeHandler()
