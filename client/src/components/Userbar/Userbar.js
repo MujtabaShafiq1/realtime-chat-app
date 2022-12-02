@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Box, TextField, Typography, Container } from '@mui/material'
 import { Flexbox, StlyedButton } from '../../misc/MUIComponents'
@@ -15,26 +15,16 @@ import UserImage from "../../assets/user.jpg";
 import NewGroupIcon from "../../assets/group.png"
 
 
-const Userbar = () => {
+const Userbar = ({ users }) => {
 
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.details)
 
-    const [users, setUsers] = useState([])
     const [search, setSearch] = useState("")
     const [groupText, setGroupText] = useState(false)
     const [createGroup, setCreateGroup] = useState(false)
     const [searchedUsers, setSearchedUser] = useState([])
 
-    const fetchUsers = useCallback(async () => {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER}/user/all`)
-        const data = response.data.filter((person) => person._id !== user.id)
-        setUsers(data)
-    }, [user.id])
-
-    useEffect(() => {
-        fetchUsers();
-    }, [fetchUsers])
 
     const logoutHandler = async () => {
         await axios.get(`${process.env.REACT_APP_SERVER}/auth/logout`)

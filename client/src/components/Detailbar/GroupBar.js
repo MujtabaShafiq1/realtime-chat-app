@@ -1,7 +1,8 @@
-import { useState, useCallback, useEffect } from "react"
-import { useSelector } from 'react-redux'
+import { useState } from "react"
+import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography } from '@mui/material'
 import { Flexbox, StlyedButton } from '../../misc/MUIComponents'
+import { chatActions } from "../../store/chatSlice";
 import axios from 'axios';
 import moment from 'moment';
 
@@ -11,34 +12,25 @@ import AddIcon from "../../assets/add.png";
 import CloseIcon from "../../assets/close.png"
 
 
-const GroupBar = () => {
+const GroupBar = ({ users }) => {
 
+    const dispatch = useDispatch()
     const [addUser, setAddUser] = useState(false)
 
     const chat = useSelector((state) => state.chat)
     const loggedInUser = useSelector((state) => state.user.details)
 
-    // delete request for chat
-    const groupRemoveHandler = () => {
-        console.log("removing from group")
-    }
-
     // add request for chat
-    const addUserHandler = () => {
-        console.log("removing from group")
+    const addUserHandler = async (user) => {
+        await axios.put(`${process.env.REACT_APP_SERVER}/chat/add/${chat.chatId}`, { userId: user._id })
+        dispatch(chatActions.addUser(user))
     }
 
-    // fetch only those users who are not in group
-    const fetchUsers = useCallback(async () => {
-        // const response = await axios.get(`${process.env.REACT_APP_SERVER}/user/all`)
-        // const data = response.data.filter((person) => person._id !== user.id)
-        // setUsers(data)
-    }, [chat.id])
-
-    useEffect(() => {
-        fetchUsers();
-    }, [fetchUsers])
-
+    // delete request for chat
+    const groupRemoveHandler = async (user) => {
+        await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { userId: user._id })
+        dispatch(chatActions.removeUser(user._id))
+    }
 
     return (
         <>
@@ -63,7 +55,7 @@ const GroupBar = () => {
                                         <Userbox user={user} />
                                         {chat.groupAdmin === loggedInUser.id
                                             &&
-                                            <Box component="img" src={RemoveIcon} sx={{ height: 25, width: "auto", cursor: "pointer" }} onClick={groupRemoveHandler} />
+                                            <Box component="img" src={RemoveIcon} sx={{ height: 25, width: "auto", cursor: "pointer" }} onClick={() => groupRemoveHandler(user)} />
                                         }
                                     </Flexbox>
                                 )
@@ -90,7 +82,7 @@ const GroupBar = () => {
                                         <Userbox user={user} />
                                         {chat.groupAdmin === loggedInUser.id
                                             &&
-                                            <Box component="img" src={AddIcon} sx={{ height: 25, width: "auto", cursor: "pointer" }} onClick={addUserHandler} />
+                                            <Box component="img" src={AddIcon} sx={{ height: 25, width: "auto", cursor: "pointer" }} onClick={() => addUserHandler(user)} />
                                         }
                                     </Flexbox>
                                 )
