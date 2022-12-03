@@ -35,8 +35,6 @@ const GroupBar = ({ users }) => {
         userList.map(async (user) => {
             const messageBody = { chatId: chat.chatId, senderId: loggedInUser.id, type: "info", content: `${groupAdmin} added ${user.username}`, readBy: [loggedInUser.id] }
             const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
-
-            socket.emit("sendMessage", messageResponse.data);
             socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...userList, ...chat.otherMembers, user] });
         })
 

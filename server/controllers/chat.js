@@ -28,6 +28,7 @@ const addUser = asyncHandler(async (req, res) => {
     res.status(200).json(updatedChat)
 });
 
+// verify here
 const removeUser = asyncHandler(async (req, res) => {
     const updatedChat = await Chat.findByIdAndUpdate(req.params.id, { $pull: { "members": { $in: req.body.users } } }, { new: true });
     res.status(200).json(updatedChat)

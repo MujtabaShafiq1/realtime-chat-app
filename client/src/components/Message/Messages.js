@@ -28,7 +28,7 @@ const Messages = () => {
     }, [chat.chatId])
 
     const newMessageHandler = useCallback(() => {
-        socket.on("getMessage", (data) => setNewMessage(data));
+        socket.on("getLatestMessage", (data) => setNewMessage(data));
     }, [socket])
 
     const updateMessages = useCallback(async () => {
