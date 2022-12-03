@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography } from '@mui/material'
 import { Flexbox, StyledButton } from '../../misc/MUIComponents'
+import { SocketContext } from "../../context/Socket";
 import { chatActions } from "../../store/chatSlice";
 import moment from 'moment';
 import axios from 'axios';
@@ -17,6 +18,7 @@ import RemoveCircleIcon from "../../assets/remove-circle.png"
 const GroupBar = ({ users }) => {
 
     const dispatch = useDispatch()
+    const socket = useContext(SocketContext)
     const [addUser, setAddUser] = useState(false)
     const [userList, setUserList] = useState([])
 
@@ -26,20 +28,23 @@ const GroupBar = ({ users }) => {
     const nonGroupMembers = users.filter(user => !JSON.stringify(chat.otherMembers).includes(user._id));
     const groupAdmin = (chat.otherMembers.filter((member => member._id === chat.groupAdmin))[0]?.username || loggedInUser.username)
 
-    // add request for chat
+    // add member in chat
     const addUserHandler = async () => {
         await axios.put(`${process.env.REACT_APP_SERVER}/chat/add/${chat.chatId}`, { users: userList })
 
         userList.map(async (user) => {
             const messageBody = { chatId: chat.chatId, senderId: loggedInUser.id, type: "info", content: `${groupAdmin} added ${user.username}`, readBy: [loggedInUser.id] }
-            await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
+            const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
+
+            socket.emit("sendMessage", messageResponse.data);
+            socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...userList, ...chat.otherMembers, user] });
         })
 
         dispatch(chatActions.addUser(userList))
         closeHandler()
     }
 
-    // delete request for chat
+    // remove member from chat
     const groupRemoveHandler = async () => {
         await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { users: userList })
         // dispatch(chatActions.removeUser(userList))

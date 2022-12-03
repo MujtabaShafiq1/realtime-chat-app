@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { Box, Typography, Avatar } from "@mui/material"
 import { Flexbox } from "../../misc/MUIComponents"
+import { SocketContext } from "../../context/Socket";
 import { chatActions } from "../../store/chatSlice";
 import CustomSnackbar from "../UI/CustomSnackbar"
 import axios from "axios"
@@ -16,6 +17,7 @@ import RemoveCircleIcon from "../../assets/remove-circle.png"
 const CreateGroupChat = ({ users, close }) => {
 
     const dispatch = useDispatch();
+    const socket = useContext(SocketContext)
     const user = useSelector(state => state.user.details)
 
     const [addedUsers, setAddedUsers] = useState([])
@@ -29,7 +31,6 @@ const CreateGroupChat = ({ users, close }) => {
         setAddedUsers(prev => [...prev, user])
     }
 
-    // issue in recent user box after creating chat
     const createGroup = async () => {
         if (addedUsers.length > 1) {
 
@@ -41,10 +42,13 @@ const CreateGroupChat = ({ users, close }) => {
             })
 
             const { _id, isGroupChat, groupAdmin, createdAt } = response.data
+
             const messageBody = { chatId: _id, senderId: user.id, type: "info", content: `Group created by ${user.username}`, readBy: [user.id] }
-            await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
+            const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
+
 
             dispatch(chatActions.conversation({ chatId: _id, isGroupChat, groupAdmin, otherMembers: addedUsers, createdAt }))
+            socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...addedUsers, user.id] });
             close();
 
             return;

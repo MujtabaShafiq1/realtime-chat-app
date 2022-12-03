@@ -85,7 +85,7 @@ const NewMessage = () => {
 
                 const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, {
                     senderId: user.id,
-                    receiverId: chat.otherMmebers.map(member => member._id),
+                    receiverId: chat.otherMembers.map(member => member._id),
                     groupAdmin: null
                 })
 

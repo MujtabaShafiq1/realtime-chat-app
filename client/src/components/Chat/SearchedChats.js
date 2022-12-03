@@ -13,7 +13,7 @@ const SearchedChats = ({ searchedUsers }) => {
 
     const chatHandler = async (member) => {
 
-        if (chat.otherMembers.includes(member)) return;
+        if (chat.otherMembers.includes(member) && !chat.isGroupChat) return;
 
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/find/${userId}/${member._id}`)
 
