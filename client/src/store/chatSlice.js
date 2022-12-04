@@ -35,7 +35,10 @@ const chatSlice = createSlice({
         })
 
         builder.addCase(createChat.fulfilled, (state, action) => {
-            state = { ...action.payload };
+            state.chatId = action.payload._id
+            state.isGroupChat = action.payload.isGroupChat
+            state.groupAdmin = action.payload.groupAdmin
+            state.createdAt = action.payload.createdAt
         })
     }
 })

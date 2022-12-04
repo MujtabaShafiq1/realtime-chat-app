@@ -22,16 +22,15 @@ const Home = () => {
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/user/all`)
         const data = response.data.filter((person) => person._id !== userId)
         setUsers(data)
-    }, [userId])
+
+        console.log("connection established")
+        socket.emit("connection", userId);
+
+    }, [userId, socket])
 
     useEffect(() => {
         fetchUsers();
     }, [fetchUsers])
-
-    useEffect(() => {
-        socket.emit("connection", userId);
-        // console.clear()
-    })
 
     return (
         <Flexbox>

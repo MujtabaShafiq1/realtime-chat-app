@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 
 import { SocketContext } from '../../context/Socket'
-import { createChat } from "../../store/chatActions"
+import { createChat } from '../../store/chatActions'
 import { Flexbox } from '../../misc/MUIComponents'
 
 import { Box, Avatar, TextField, IconButton, InputAdornment, CircularProgress } from "@mui/material"
@@ -80,14 +80,16 @@ const NewMessage = () => {
     const messageHandler = async () => {
         if ((newMessage?.trim().length > 0 || files.length > 0)) {
 
+            let newChatId;
             const imageList = await uploadImages()
 
-            if (!chat.chatId) dispatch(createChat({ senderId: user.id, receivers: chat.otherMembers }))
-
-            console.log("Chat Id: " + chat.chatId)
+            if (!chat.chatId) {
+                const response = await dispatch(createChat({ senderId: user.id, receiverId: chat.otherMembers.map(user => user._id) })).unwrap()
+                newChatId = response._id;
+            }
 
             const messageBody = {
-                chatId: chat.chatId,
+                chatId: chat.chatId || newChatId,
                 senderId: user.id,
                 type: imageList ? "image" : "text",
                 images: imageList,
@@ -98,8 +100,8 @@ const NewMessage = () => {
             setNewMessage("")
             const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
 
-            // socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...chat.otherMembers, user.id] });
-            // socket.emit("stop typing", (chat.chatId));
+            socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...chat.otherMembers, user.id] });
+            socket.emit("stop typing", (chat.chatId || newChatId));
         }
     }
 
@@ -129,7 +131,6 @@ const NewMessage = () => {
                         })}
                     </Flexbox>
                 </Flexbox>
-
                 <h1>{chat.chatId}</h1>
                 <Flexbox sx={{ gap: 2 }}>
                     <TextField
