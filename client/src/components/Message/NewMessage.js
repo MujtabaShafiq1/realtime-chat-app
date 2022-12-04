@@ -1,15 +1,18 @@
 import { useState, useContext, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
+
 import { SocketContext } from '../../context/Socket'
-import { chatActions } from '../../store/chatSlice'
+import { createChat } from "../../store/chatActions"
 import { Flexbox } from '../../misc/MUIComponents'
+
 import { Box, Avatar, TextField, IconButton, InputAdornment, CircularProgress } from "@mui/material"
 import CustomSnackbar from '../UI/CustomSnackbar'
-import axios from 'axios'
 
 import SendIcon from "../../assets/send.png"
 import GalleryIcon from "../../assets/gallery.png"
 import RemoveCircleIcon from "../../assets/remove-circle.png"
+
 
 const NewMessage = () => {
 
@@ -75,27 +78,16 @@ const NewMessage = () => {
 
 
     const messageHandler = async () => {
-        if ((newMessage?.trim().length > 0 || files.length > 0) && !loading) {
-
-            let newChat
+        if ((newMessage?.trim().length > 0 || files.length > 0)) {
 
             const imageList = await uploadImages()
 
-            if (!chat.chatId) {
+            if (!chat.chatId) dispatch(createChat({ senderId: user.id, receivers: chat.otherMembers }))
 
-                const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, {
-                    senderId: user.id,
-                    receiverId: chat.otherMembers.map(member => member._id),
-                    groupAdmin: null
-                })
-
-                const { _id, isGroupChat, groupAdmin, createdAt } = response.data
-                dispatch(chatActions.conversation({ chatId: _id, isGroupChat, otherMembers: chat.otherMembers, groupAdmin, createdAt }))
-                newChat = response.data
-            }
+            console.log("Chat Id: " + chat.chatId)
 
             const messageBody = {
-                chatId: chat.chatId || newChat._id,
+                chatId: chat.chatId,
                 senderId: user.id,
                 type: imageList ? "image" : "text",
                 images: imageList,
@@ -104,12 +96,10 @@ const NewMessage = () => {
             }
 
             setNewMessage("")
-
             const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
 
-            socket.emit("latestMessage", { messageBody: messageResponse.data, users: (newChat?.members || [...chat.otherMembers, user.id]) });
-            socket.emit("stop typing", (chat.chatId || newChat._id));
-
+            // socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...chat.otherMembers, user.id] });
+            // socket.emit("stop typing", (chat.chatId));
         }
     }
 
@@ -140,8 +130,8 @@ const NewMessage = () => {
                     </Flexbox>
                 </Flexbox>
 
+                <h1>{chat.chatId}</h1>
                 <Flexbox sx={{ gap: 2 }}>
-
                     <TextField
                         variant="filled"
                         placeholder="Send Message"

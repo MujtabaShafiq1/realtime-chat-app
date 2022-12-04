@@ -14,31 +14,32 @@ const RecentChats = () => {
     const socket = useContext(SocketContext);
 
     const [chats, setChats] = useState([])
-    const [newChat, setNewChat] = useState(false)
     const [onlineUsers, setOnlineUsers] = useState([])
 
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
 
     // extra request in fetchUsers
-    const fetchUsers = useCallback(async () => {
-        socket.on("getLatestMessage", (data) => {
-            if (chats.some(chat => chat._id?.includes(data.chatId)) && data.senderId === userId) return;
-            setNewChat(true)
-        })
+    const fetchingChats = useCallback(async () => {
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/${userId}`)
         setChats(response.data)
-        console.log("refetching");
-        // eslint-disable-next-line
-    }, [socket, newChat, userId])
+        console.log("fetching chats");
+    }, [userId])
+
+
+    useEffect(() => {
+        fetchingChats();
+    }, [fetchingChats])
+
 
     useEffect(() => {
         socket.on("getUsers", (users) => setOnlineUsers(users))
+        socket.on("getChats", (data) => {
+            if (chats.some(chat => chat._id?.includes(data.chatId)) && data.senderId === userId) return;
+            // setChats[() => ...prev , ]
+        })
     })
 
-    useEffect(() => {
-        fetchUsers();
-    }, [fetchUsers])
 
     const clickHandler = async (selectedChat) => {
 
@@ -47,10 +48,7 @@ const RecentChats = () => {
         await axios.put(`${process.env.REACT_APP_SERVER}/message/${selectedChat._id}`, { userId: userId })
 
         const { _id, isGroupChat, members, groupAdmin, createdAt } = selectedChat;
-
-        const activeChat = {
-            chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId), groupAdmin, createdAt
-        }
+        const activeChat = { chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId), groupAdmin, createdAt }
 
         dispatch(chatActions.conversation(activeChat))
         socket.emit("readAllMessage", { chatId: _id, readByUser: userId, totalMembers: members.length })

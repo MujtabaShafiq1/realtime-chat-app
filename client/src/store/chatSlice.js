@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createChat } from "./chatActions";
 
 const initialState = {
     chatId: null,
@@ -27,6 +28,16 @@ const chatSlice = createSlice({
         },
         reset: () => initialState
     },
+    extraReducers: (builder) => {
+
+        builder.addCase(createChat.rejected, (state, action) => {
+            state = initialState
+        })
+
+        builder.addCase(createChat.fulfilled, (state, action) => {
+            state = { ...action.payload };
+        })
+    }
 })
 
 export const chatActions = chatSlice.actions;

@@ -32,7 +32,7 @@ const CreateGroupChat = ({ users, close }) => {
     }
 
     const createGroup = async () => {
-        if (addedUsers.length > 1) {
+        if (addedUsers.length <= 20) {
 
             const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, {
                 senderId: user.id,
@@ -46,14 +46,13 @@ const CreateGroupChat = ({ users, close }) => {
             const messageBody = { chatId: _id, senderId: user.id, type: "info", content: `Group created by ${user.username}`, readBy: [user.id] }
             const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
 
-
             dispatch(chatActions.conversation({ chatId: _id, isGroupChat, groupAdmin, otherMembers: addedUsers, createdAt }))
             socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...addedUsers, user.id] });
             close();
 
             return;
         }
-        setSnackbar({ open: true, details: "Minimum 2 Users to create Group Chat" })
+        setSnackbar({ open: true, details: "Group Chat Limit Max 20 Users" })
         setTimeout(() => {
             setSnackbar({ open: false, details: "" })
         }, 2000)

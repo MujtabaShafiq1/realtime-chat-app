@@ -45,7 +45,7 @@ const GroupBar = ({ users }) => {
     // remove member from chat
     const groupRemoveHandler = async () => {
         await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { users: userList })
-        // dispatch(chatActions.removeUser(userList))
+        dispatch(chatActions.removeUser(userList))
         closeHandler()
     }
 
