@@ -35,10 +35,9 @@ const Message = ({ message, next }) => {
     // to read message by logged in user
     const updateRecentMessage = useCallback(() => {
         if (message.senderId !== user.id && (chat.otherMembers + 1) !== readBy.length && !readBy.includes(user.id)) {
-            setTimeout(() => {
-                message.readBy.push(user.id)
-                socket.emit("readMessage", message)
-            }, 1000)
+            message.readBy.push(user.id)
+            console.log("emitting read by")         // request here for read by
+            socket.emit("readMessage", message)
         }
         // eslint-disable-next-line
     }, [socket, message._id])
@@ -47,10 +46,10 @@ const Message = ({ message, next }) => {
     const updateReadBy = useCallback(() => {
         socket.on("getMessageReadby", (details) => {
             if (details._id !== message._id) return;
+            console.log("updating read by")
             setReadBy(details.readBy)
         });
     }, [socket, message._id])
-
 
     // to update readby of new message of all users
     const latestMessageReadBy = useCallback(() => {

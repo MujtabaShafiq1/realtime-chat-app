@@ -13,38 +13,30 @@ const Messages = () => {
     const scrollRef = useRef()
     const socket = useContext(SocketContext)
 
-    const chat = useSelector((state) => state.chat)
-    const user = useSelector((state) => state.user.details)
+    const [newMessage, setNewMessage] = useState(null)
+    const chatId = useSelector((state) => state.chat.chatId)
 
     const [messages, setMessages] = useState([])
-    const [newMessage, setNewMessage] = useState()
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
 
     const getMessages = useCallback(async () => {
-        if (!chat.chatId) return setMessages([])
-
-        const response = await axios.get(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`)
+        if (!chatId) return setMessages([])
+        const response = await axios.get(`${process.env.REACT_APP_SERVER}/message/${chatId}`)
         console.log("fetching all message")
         setMessages(response.data)
-
-    }, [chat.chatId])
-
-    const updateMessages = useCallback(async () => {
-        if (newMessage?.chatId !== chat.chatId) return;
-
-        await axios.put(`${process.env.REACT_APP_SERVER}/message/${newMessage.chatId}`, { userId: user.id })
-        console.log("updating message");
-        setMessages(prev => [...prev, newMessage])
-
-    }, [user.id, newMessage, chat.chatId])
+    }, [chatId])
 
     useEffect(() => {
         getMessages()
     }, [getMessages])
 
+
     useEffect(() => {
-        updateMessages()
-    }, [updateMessages])
+        if (newMessage?.chatId !== chatId) return;
+        console.log("updating message");
+        setMessages(prev => [...prev, newMessage])
+    }, [chatId, newMessage])
+
 
     useEffect(() => {
         socket.on("getLatestMessage", (data) => setNewMessage(data))
@@ -52,6 +44,7 @@ const Messages = () => {
         socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [socket])
+
 
     return (
         <Box>
@@ -65,7 +58,7 @@ const Messages = () => {
                                 </Box>
                             )
                         })}
-                        {typingDetails.typing && typingDetails.chatId === chat.chatId && <Typing />}
+                        {typingDetails.typing && typingDetails.chatId === chatId && <Typing />}
                     </Box>
                 </>
                 :

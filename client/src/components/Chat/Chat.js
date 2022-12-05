@@ -1,9 +1,8 @@
-import { useEffect, useContext, useCallback } from 'react';
+import { useEffect, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { Avatar, Box, Typography, AvatarGroup } from '@mui/material'
 import { Flexbox } from '../../misc/MUIComponents'
 import { SocketContext } from '../../context/Socket';
-import axios from 'axios';
 
 import Messages from '../Message/Messages';
 import NewMessage from '../Message/NewMessage';
@@ -17,17 +16,9 @@ const Chat = () => {
     const chat = useSelector((state) => state.chat)
     const user = useSelector((state) => state.user.details)
 
-    const readAllMessages = useCallback(async () => {
-        if (chat.chatId) {
-            console.log("reading all message");
-            await axios.put(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`, { userId: user.id })
-            socket.emit("join chat", chat.chatId);
-        }
-    }, [chat.chatId, socket, user.id])
-
     useEffect(() => {
-        readAllMessages()
-    }, [readAllMessages])
+        if (chat.chatId) socket.emit("join chat", chat.chatId);
+    }, [chat.chatId, socket])
 
     return (
         <>

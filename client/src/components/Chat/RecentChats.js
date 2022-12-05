@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { chatActions } from "../../store/chatSlice"
 import { SocketContext } from "../../context/Socket"
 import { Box, Typography } from "@mui/material"
-import axios from "axios"
 
 import { Flexbox } from "../../misc/MUIComponents"
 import RecentUserbox from "../Userbar/RecentUserbox"
@@ -25,7 +24,6 @@ const RecentChats = ({ chats }) => {
 
         if (selectedChat._id === chat?.chatId) return;
 
-        await axios.put(`${process.env.REACT_APP_SERVER}/message/${selectedChat._id}`, { userId: userId })
         const { _id, isGroupChat, members, groupAdmin, createdAt } = selectedChat;
         const activeChat = { chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId), groupAdmin, createdAt }
 
