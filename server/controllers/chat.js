@@ -9,7 +9,8 @@ const createChat = asyncHandler(async (req, res) => {
         isGroupChat: req.body.isGroupChat
     });
     const savedChat = await newChat.save();
-    res.status(200).json(savedChat);
+    const chat = await savedChat.populate("members", "-password");
+    res.status(200).json(chat);
 
 });
 
