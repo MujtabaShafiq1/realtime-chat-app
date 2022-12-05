@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useCallback } from "react"
+import { useState, useEffect, useContext } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { chatActions } from "../../store/chatSlice"
 import { SocketContext } from "../../context/Socket"
@@ -8,45 +8,25 @@ import axios from "axios"
 import { Flexbox } from "../../misc/MUIComponents"
 import RecentUserbox from "../Userbar/RecentUserbox"
 
-const RecentChats = () => {
+const RecentChats = ({ chats }) => {
 
     const dispatch = useDispatch()
     const socket = useContext(SocketContext);
 
-    const [chats, setChats] = useState([])
-    const [onlineUsers, setOnlineUsers] = useState([])
-
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
-
-    // extra request in fetchUsers
-    const fetchingChats = useCallback(async () => {
-        console.log("fetching chats");
-        const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/${userId}`)
-        setChats(response.data)
-    }, [userId])
-
-
-    useEffect(() => {
-        fetchingChats();
-    }, [fetchingChats])
+    const [onlineUsers, setOnlineUsers] = useState([])
 
 
     useEffect(() => {
         socket.on("getUsers", (users) => setOnlineUsers(users))
-        // socket.on("getChats", (data) => {
-        //     if (chats.some(chat => chat._id?.includes(data.chatId)) && data.senderId === userId) return;
-        //     // setChats[() => ...prev , ]
-        // })
     })
-
 
     const clickHandler = async (selectedChat) => {
 
         if (selectedChat._id === chat?.chatId) return;
 
         await axios.put(`${process.env.REACT_APP_SERVER}/message/${selectedChat._id}`, { userId: userId })
-
         const { _id, isGroupChat, members, groupAdmin, createdAt } = selectedChat;
         const activeChat = { chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId), groupAdmin, createdAt }
 

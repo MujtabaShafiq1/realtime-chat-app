@@ -6,9 +6,9 @@ import { Flexbox, TextBox, MessageContainer } from "../../misc/MUIComponents"
 import { SocketContext } from '../../context/Socket';
 import moment from "moment"
 
-import SeenIcon from "../../assets/seen-image.png";
-import DeliveredIcon from "../../assets/delivered-image.png";
-import UserImage from "../../assets/user.jpg"
+import SeenIcon from "../../assets/Message/seen.png";
+import DeliveredIcon from "../../assets/Message/delivered.png";
+import UserImage from "../../assets/User/user.jpg"
 import ImageGallery from './ImageGallery';
 
 const Message = ({ message, next }) => {

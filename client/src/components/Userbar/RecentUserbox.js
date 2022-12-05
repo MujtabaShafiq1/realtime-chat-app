@@ -4,7 +4,7 @@ import { Box, Avatar, Typography, AvatarGroup } from '@mui/material';
 import { Flexbox, StyledStatusBadge } from '../../misc/MUIComponents';
 import { SocketContext } from '../../context/Socket';
 
-import UserImage from "../../assets/user.jpg";
+import UserImage from "../../assets/User/user.jpg";
 
 const RecentUserbox = ({ chat, onlineUsers }) => {
 

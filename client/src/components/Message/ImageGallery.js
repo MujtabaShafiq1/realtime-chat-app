@@ -2,10 +2,10 @@ import { useState } from "react"
 import { Box, Modal } from '@mui/material';
 import { Flexbox } from '../../misc/MUIComponents';
 
-import NextIcon from "../../assets/next.png"
-import CloseIcon from "../../assets/remove-circle.png"
-import WhiteCircleIcon from "../../assets/circle-white.png"
-import BlackCircleIcon from "../../assets/circle-black.png"
+import CloseIcon from "../../assets/Chat/remove-circle.png"
+import NextIcon from "../../assets/Message/next.png"
+import WhiteCircleIcon from "../../assets/Message/circle-white.png"
+import BlackCircleIcon from "../../assets/Message/circle-black.png"
 
 const ImageGallery = ({ images, close }) => {
 

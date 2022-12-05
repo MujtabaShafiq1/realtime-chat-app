@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Box, TextField, Typography, Container } from '@mui/material'
+import { SocketContext } from "../../context/Socket"
+import { Avatar, Box, TextField, Typography, Container, InputAdornment } from '@mui/material'
 import { Flexbox, StyledButton } from '../../misc/MUIComponents'
 
 import { userActions } from '../../store/userSlice';
@@ -11,20 +12,37 @@ import RecentChats from '../Chat/RecentChats';
 import SearchedChats from '../Chat/SearchedChats';
 import CreateGroupChat from '../Chat/CreateGroupChat';
 
-import UserImage from "../../assets/user.jpg";
-import NewGroupIcon from "../../assets/group.png"
+import UserImage from "../../assets/User/user.jpg";
+import NewGroupIcon from "../../assets/Chat/group.png"
+import SearchIcon from "../../assets/Chat/search.png"
 
 
 const Userbar = ({ users }) => {
 
     const dispatch = useDispatch();
+    const socket = useContext(SocketContext);
+
     const user = useSelector((state) => state.user.details)
 
+    const [chats, setChats] = useState([])
     const [search, setSearch] = useState("")
     const [groupText, setGroupText] = useState(false)
     const [createGroup, setCreateGroup] = useState(false)
     const [searchedUsers, setSearchedUser] = useState([])
 
+    const fetchingChats = useCallback(async () => {
+        console.log("fetching chats");
+        const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/${user.id}`)
+        setChats(response.data)
+    }, [user.id])
+
+    useEffect(() => {
+        fetchingChats();
+    }, [fetchingChats])
+
+    useEffect(() => {
+        socket.on("getChats", (data) => setChats((prev) => [...prev, data]))
+    })
 
     const logoutHandler = async () => {
         await axios.get(`${process.env.REACT_APP_SERVER}/auth/logout`)
@@ -36,10 +54,6 @@ const Userbar = ({ users }) => {
         setSearch(e.target.value)
         const filtered = users.filter((user) => user.username.toLowerCase().includes(e.target.value.toLowerCase()))
         setSearchedUser(filtered)
-    }
-
-    const closeCreateGroup = () => {
-        setCreateGroup(false)
     }
 
     return (
@@ -64,12 +78,17 @@ const Userbar = ({ users }) => {
                         size="small"
                         hiddenLabel
                         onChange={searchHandler}
-                        InputProps={{ disableUnderline: true, autoComplete: "off" }}
-                        sx={{
-                            margin: "4% 0%",
-                            width: "75%",
-                            border: "0.2px solid lightgray",
+                        value={search}
+                        InputProps={{
+                            disableUnderline: true,
+                            autoComplete: "off",
+                            endAdornment: (
+                                <InputAdornment position="end" sx={{ cursor: "pointer" }}>
+                                    <Box component="img" src={SearchIcon} sx={{ height: 30, width: 30, rotate: "270deg" }} />
+                                </InputAdornment>
+                            ),
                         }}
+                        sx={{ margin: "4% 0%", width: "75%", border: "0.2px solid lightgray" }}
                     />
 
                     <Flexbox>
@@ -92,8 +111,15 @@ const Userbar = ({ users }) => {
 
                 <Container maxWidth="sm">
                     {createGroup ?
-                        <CreateGroupChat users={search ? searchedUsers : users} close={closeCreateGroup} /> :
-                        <> {search ? <SearchedChats searchedUsers={searchedUsers} /> : <RecentChats />}</>
+                        <CreateGroupChat users={search ? searchedUsers : users} close={() => setCreateGroup(false)} />
+                        :
+                        <Box sx={{ position: "relative" }}>
+                            {search ?
+                                <SearchedChats searchedUsers={searchedUsers} clear={() => setSearch("")} />
+                                :
+                                <RecentChats chats={chats} clear={() => setSearch("")} />
+                            }
+                        </Box>
                     }
                 </Container>
 

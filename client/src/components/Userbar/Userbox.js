@@ -1,5 +1,5 @@
 import { Box, Avatar, Typography } from '@mui/material';
-import UserImage from "../../assets/user.jpg";
+import UserImage from "../../assets/User/user.jpg";
 
 const Userbox = ({ user }) => {
     return (

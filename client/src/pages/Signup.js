@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom"
+import { Box, Grid, Typography, InputAdornment, Divider } from "@mui/material"
 import { useFormik } from "formik"
 import axios from "axios"
 
-import { Box, Grid, Typography, InputAdornment, IconButton, Divider } from "@mui/material"
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Flexbox, StyledButton, StyledField } from '../misc/MUIComponents';
 import { signupSchema } from '../utils/validationSchema';
 import CustomSnackbar from '../components/UI/CustomSnackbar';
 
-import background from "../assets/auth.png"
-import WelcomeImage from "../assets/welcome3.jpg"
+import background from "../assets/background.png"
+import SignupImage from "../assets/Signup/signup.jpg"
+import ShowIcon from "../assets/Password/show.png"
+import HideIcon from "../assets/Password/hide.png"
 
 
 const styles = {
@@ -146,9 +147,12 @@ const Login = () => {
                                     disableUnderline: true,
                                     endAdornment: (
                                         <InputAdornment position="end" >
-                                            <IconButton onClick={() => setShowPassword((prev) => !prev)} >
-                                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                                            </IconButton>
+                                            <Box
+                                                component="img"
+                                                sx={{ height: 25, width: 25, cursor: "pointer" }}
+                                                src={showPassword ? ShowIcon : HideIcon}
+                                                onClick={() => setShowPassword((prev) => !prev)}
+                                            />
                                         </InputAdornment>
                                     ),
                                 }}
@@ -170,9 +174,12 @@ const Login = () => {
                                     disableUnderline: true,
                                     endAdornment: (
                                         <InputAdornment position="end" >
-                                            <IconButton onClick={() => setShowConfirmedPassword((prev) => !prev)} >
-                                                {showconfirmedPassword ? <VisibilityOff /> : <Visibility />}
-                                            </IconButton>
+                                            <Box
+                                                component="img"
+                                                sx={{ height: 25, width: 25, cursor: "pointer" }}
+                                                src={showPassword ? ShowIcon : HideIcon}
+                                                onClick={() => setShowConfirmedPassword((prev) => !prev)}
+                                            />
                                         </InputAdornment>
                                     ),
                                 }}
@@ -201,7 +208,7 @@ const Login = () => {
                     </Box>
 
                     <Divider orientation='vertical' sx={{ height: "35vh", bgcolor: "purple", opacity: "0.1" }} />
-                    <Box component="img" src={WelcomeImage} sx={{ height: "auto", width: "45%", display: { xs: "none", md: "none", lg: "block" } }} />
+                    <Box component="img" src={SignupImage} sx={{ height: "auto", width: "45%", display: { xs: "none", md: "none", lg: "block" } }} />
 
                 </Flexbox>
             </Grid >

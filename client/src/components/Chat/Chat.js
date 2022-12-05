@@ -7,7 +7,8 @@ import axios from 'axios';
 
 import Messages from '../Message/Messages';
 import NewMessage from '../Message/NewMessage';
-import UserImage from "../.././assets/user.jpg";
+
+import UserImage from "../.././assets/User/user.jpg";
 
 const Chat = () => {
 

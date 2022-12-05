@@ -5,15 +5,15 @@ import { Flexbox, StyledButton } from '../../misc/MUIComponents'
 import { SocketContext } from "../../context/Socket";
 import { chatActions } from "../../store/chatSlice";
 import CustomSnackbar from "../UI/CustomSnackbar"
+import Userbox from '../Userbar/Userbox';
 import moment from 'moment';
 import axios from 'axios';
 
-import Userbox from '../Userbar/Userbox';
-import RemoveIcon from "../../assets/remove.png";
-import AddIcon from "../../assets/add.png";
-import CloseIcon from "../../assets/close.png"
-import ConfirmIcon from "../../assets/check.png"
-import RemoveCircleIcon from "../../assets/remove-circle.png"
+import RemoveIcon from "../../assets/Chat/remove.png";
+import AddIcon from "../../assets/Chat/add.png";
+import CloseIcon from "../../assets/Chat/close.png"
+import ConfirmIcon from "../../assets/Chat/check.png"
+import RemoveCircleIcon from "../../assets/Chat/remove-circle.png"
 
 
 const GroupBar = ({ users }) => {

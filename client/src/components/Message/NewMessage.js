@@ -9,9 +9,9 @@ import { Flexbox } from '../../misc/MUIComponents'
 import { Box, Avatar, TextField, IconButton, InputAdornment, CircularProgress } from "@mui/material"
 import CustomSnackbar from '../UI/CustomSnackbar'
 
-import SendIcon from "../../assets/send.png"
-import GalleryIcon from "../../assets/gallery.png"
-import RemoveCircleIcon from "../../assets/remove-circle.png"
+import SendIcon from "../../assets/Chat/send.png"
+import RemoveCircleIcon from "../../assets/Chat/remove-circle.png"
+import GalleryIcon from "../../assets/Message/gallery.png"
 
 
 const NewMessage = () => {
@@ -86,6 +86,7 @@ const NewMessage = () => {
             if (!chat.chatId) {
                 const response = await dispatch(createChat({ senderId: user.id, receiverId: chat.otherMembers.map(user => user._id) })).unwrap()
                 newChatId = response._id;
+                response.members = chat.otherMembers;
                 socket.emit("new chat", response)
             }
 

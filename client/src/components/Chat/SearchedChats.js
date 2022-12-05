@@ -5,13 +5,14 @@ import { Box, Typography } from '@mui/material'
 import Userbox from '../Userbar/Userbox';
 import axios from "axios"
 
-const SearchedChats = ({ searchedUsers }) => {
+const SearchedChats = ({ searchedUsers, clear }) => {
 
     const dispatch = useDispatch();
     const userId = useSelector((state) => state.user.details.id)
     const chat = useSelector((state) => state.chat)
 
     const chatHandler = async (member) => {
+        clear()
 
         if (chat.otherMembers.includes(member) && !chat.isGroupChat) return;
 
@@ -23,7 +24,6 @@ const SearchedChats = ({ searchedUsers }) => {
             otherMembers: (response.data[0]?.members.filter(memberId => memberId._id !== userId) || [member]),
             createdAt: response.data[0]?.createdAt,
         }
-
         dispatch(chatActions.conversation(activeChat))
     }
 

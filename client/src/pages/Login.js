@@ -1,19 +1,19 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Box, Grid, Typography, InputAdornment, Divider } from "@mui/material"
 import { useDispatch } from 'react-redux';
 import { useFormik } from "formik";
 import axios from "axios"
 
-import { Box, Grid, Typography, InputAdornment, IconButton, Divider } from "@mui/material"
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { userActions } from '../store/userSlice';
 import { Flexbox, StyledButton, StyledField } from '../misc/MUIComponents';
+import CustomSnackbar from '../components/UI/CustomSnackbar';
 import { loginSchema } from '../utils/validationSchema';
 
-import background from "../assets/auth.png"
-import WelcomeImage from "../assets/welcome2.jpg"
-import CustomSnackbar from '../components/UI/CustomSnackbar';
-import { userActions } from '../store/userSlice';
-
+import background from "../assets/background.png"
+import LoginImage from "../assets/Login/login.jpg"
+import ShowIcon from "../assets/Password/show.png"
+import HideIcon from "../assets/Password/hide.png"
 
 const styles = {
     PaperStyles: {
@@ -84,7 +84,7 @@ const Login = () => {
                     }}
                 >
 
-                    <Box component="img" src={WelcomeImage} sx={{ height: "auto", width: "45%", flex: 1, display: { xs: "none", md: "block" } }} />
+                    <Box component="img" src={LoginImage} sx={{ height: "auto", width: "45%", flex: 1, display: { xs: "none", md: "block" } }} />
                     <Divider orientation='vertical' sx={{ height: "35vh", marginRight: "6%", bgcolor: "purple", opacity: "0.1" }} />
                     <Box
                         sx={{
@@ -135,9 +135,12 @@ const Login = () => {
                                     disableUnderline: true,
                                     endAdornment: (
                                         <InputAdornment position="end" >
-                                            <IconButton onClick={() => setShowPassword((prev) => !prev)} >
-                                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                                            </IconButton>
+                                            <Box
+                                                component="img"
+                                                sx={{ height: 25, width: 25, cursor: "pointer" }}
+                                                src={showPassword ? ShowIcon : HideIcon}
+                                                onClick={() => setShowPassword((prev) => !prev)}
+                                            />
                                         </InputAdornment>
                                     ),
                                 }}

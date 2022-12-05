@@ -2,9 +2,10 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Box, Typography, Container } from '@mui/material'
 import { Flexbox } from '../misc/MUIComponents'
-import Email from "../assets/email.jpg"
 import Loader from '../components/UI/Loader'
 import { useEffect } from 'react'
+
+import NotificationImage from "../assets/Email/notification.jpg"
 
 const EmailSent = () => {
 
@@ -24,7 +25,7 @@ const EmailSent = () => {
             :
             <>
                 <Flexbox sx={{ flexDirection: "column", gap: 2, minHeight: "80vh" }}>
-                    <Box component="img" src={Email} sx={{ width: { xs: "80%", md: "45%" }, display: "flex" }} />
+                    <Box component="img" src={NotificationImage} sx={{ width: { xs: "80%", md: "45%" }, display: "flex" }} />
                     <Container maxWidth="sm">
                         <Typography fontSize="22px" color="gray" textAlign="center">
                             We have sent email to : <span style={{ fontWeight: 600, color: "black" }}> {location.state?.email} </span>

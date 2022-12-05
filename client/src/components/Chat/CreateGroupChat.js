@@ -7,12 +7,12 @@ import { createChat } from "../../store/chatActions";
 import CustomSnackbar from "../UI/CustomSnackbar"
 import axios from "axios"
 
-import UserImage from "../../assets/user.jpg";
-import AddIcon from "../../assets/add.png"
-import RemoveIcon from "../../assets/remove.png"
-import CloseIcon from "../../assets/close.png"
-import ConfirmUsers from "../../assets/confirm.png"
-import RemoveCircleIcon from "../../assets/remove-circle.png"
+import UserImage from "../../assets/User/user.jpg";
+import AddIcon from "../../assets/Chat/add.png"
+import RemoveIcon from "../../assets/Chat/remove.png"
+import CloseIcon from "../../assets/Chat/close.png"
+import ConfirmUsers from "../../assets/Chat/confirm.png"
+import RemoveCircleIcon from "../../assets/Chat/remove-circle.png"
 
 const CreateGroupChat = ({ users, close }) => {
 

@@ -1,9 +1,11 @@
 import { Avatar } from "@mui/material";
-import Lottie from "react-lottie";
 import { useSelector } from "react-redux";
-import animationData from "../../animations/typing.json"
 import { Box } from "@mui/material";
-import UserImage from "../../assets/user.jpg"
+
+import animationData from "../../animations/typing.json"
+import Lottie from "react-lottie";
+
+import UserImage from "../../assets/User/user.jpg"
 
 const Typing = () => {
 
