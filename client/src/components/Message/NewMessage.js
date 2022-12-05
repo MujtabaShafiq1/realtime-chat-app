@@ -86,8 +86,7 @@ const NewMessage = () => {
             if (!chat.chatId) {
                 const response = await dispatch(createChat({ senderId: user.id, receiverId: chat.otherMembers.map(user => user._id) })).unwrap()
                 newChatId = response._id;
-                response.members = [...chat.otherMembers, user];
-                socket.emit("new chat", { chat: response })
+                socket.emit("new chat", response)
             }
 
             const messageBody = {

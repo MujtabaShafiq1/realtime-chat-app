@@ -14,8 +14,8 @@ const Chat = () => {
 
     const socket = useContext(SocketContext)
 
-    const user = useSelector((state) => state.user)
     const chat = useSelector((state) => state.chat)
+    const user = useSelector((state) => state.user.details)
 
     const readAllMessages = useCallback(async () => {
         if (chat.chatId) {
@@ -44,13 +44,13 @@ const Chat = () => {
                         >
                             {chat.isGroupChat ?
                                 <AvatarGroup total={chat.otherMembers.length} sx={{ margin: "1%" }}>
-                                    <Avatar src={chat.otherMembers[0].profilePicture || UserImage} />
-                                    <Avatar src={chat.otherMembers[1]?.profilePicture || UserImage} />
+                                    <Avatar src={user.profilePicture || UserImage} />
+                                    <Avatar src={chat.otherMembers[0]?.profilePicture || UserImage} />
                                 </AvatarGroup>
                                 :
-                                <Avatar sx={{ margin: "1%" }} src={chat.otherMembers[0].profilePicture || UserImage} />
+                                <Avatar sx={{ margin: "1%" }} src={chat.otherMembers[0]?.profilePicture || UserImage} />
                             }
-                            <Typography sx={{ fontSize: "18px" }}>{chat.otherMembers[0].username}</Typography>
+                            <Typography sx={{ fontSize: "18px" }}>{chat.otherMembers[0]?.username || user.username}</Typography>
                             {chat.isGroupChat && chat.otherMembers.length > 1
                                 && <Typography sx={{ fontSize: "18px", color: "gray" }}>and {chat.otherMembers.length - 1} others</Typography>}
                         </Flexbox>

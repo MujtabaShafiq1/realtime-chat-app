@@ -15,6 +15,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
     const [latestMessage, setLatestMessage] = useState(chat.latestMessage)
 
     const filteredUser = chat.members.filter(user => user._id !== userId)
+
     useEffect(() => {
         socket.on("getLatestMessage", (data) => {
             if (chat._id !== data.chatId) return;

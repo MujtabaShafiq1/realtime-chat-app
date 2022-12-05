@@ -8,8 +8,9 @@ import axios from "axios"
 const SearchedChats = ({ searchedUsers, clear }) => {
 
     const dispatch = useDispatch();
-    const userId = useSelector((state) => state.user.details.id)
+
     const chat = useSelector((state) => state.chat)
+    const userId = useSelector((state) => state.user.details.id)
 
     const chatHandler = async (member) => {
         clear()
@@ -21,7 +22,7 @@ const SearchedChats = ({ searchedUsers, clear }) => {
 
         const activeChat = {
             chatId: response.data[0]?._id,
-            otherMembers: (response.data[0]?.members.filter(memberId => memberId._id !== userId) || [member]),
+            otherMembers: (response.data[0]?.otherMembers.filter(memberId => memberId._id !== userId) || [member]),
             createdAt: response.data[0]?.createdAt,
         }
         dispatch(chatActions.conversation(activeChat))
