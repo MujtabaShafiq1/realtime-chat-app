@@ -86,6 +86,7 @@ const NewMessage = () => {
             if (!chat.chatId) {
                 const response = await dispatch(createChat({ senderId: user.id, receiverId: chat.otherMembers.map(user => user._id) })).unwrap()
                 newChatId = response._id;
+                socket.emit("new chat", response)
             }
 
             const messageBody = {
@@ -131,7 +132,7 @@ const NewMessage = () => {
                         })}
                     </Flexbox>
                 </Flexbox>
-                <h1>{chat.chatId}</h1>
+
                 <Flexbox sx={{ gap: 2 }}>
                     <TextField
                         variant="filled"

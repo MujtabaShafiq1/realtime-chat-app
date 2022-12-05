@@ -34,6 +34,10 @@ io.on("connect", (socket) => {
         socket.join(chatId)
     })
 
+    socket.on("new chat", (chat) => {
+        socket.to(userSockets).emit("getChats", chat.chatId)
+    })
+
     socket.on("latestMessage", (message) => {
         const userSockets = getUsersSocket(message.users)
         io.to(userSockets).emit('getLatestMessage', message.messageBody);

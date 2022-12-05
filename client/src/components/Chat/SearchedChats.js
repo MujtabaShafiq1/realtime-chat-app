@@ -15,6 +15,7 @@ const SearchedChats = ({ searchedUsers }) => {
 
         if (chat.otherMembers.includes(member) && !chat.isGroupChat) return;
 
+        console.log("opening searched chat");
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/find/${userId}/${member._id}`)
 
         const activeChat = {

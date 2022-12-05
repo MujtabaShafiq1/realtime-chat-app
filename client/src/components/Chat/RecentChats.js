@@ -21,9 +21,9 @@ const RecentChats = () => {
 
     // extra request in fetchUsers
     const fetchingChats = useCallback(async () => {
+        console.log("fetching chats");
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/chat/${userId}`)
         setChats(response.data)
-        console.log("fetching chats");
     }, [userId])
 
 
@@ -34,10 +34,10 @@ const RecentChats = () => {
 
     useEffect(() => {
         socket.on("getUsers", (users) => setOnlineUsers(users))
-        socket.on("getChats", (data) => {
-            if (chats.some(chat => chat._id?.includes(data.chatId)) && data.senderId === userId) return;
-            // setChats[() => ...prev , ]
-        })
+        // socket.on("getChats", (data) => {
+        //     if (chats.some(chat => chat._id?.includes(data.chatId)) && data.senderId === userId) return;
+        //     // setChats[() => ...prev , ]
+        // })
     })
 
 

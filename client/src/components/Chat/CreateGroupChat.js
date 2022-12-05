@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box, Typography, Avatar } from "@mui/material"
 import { Flexbox } from "../../misc/MUIComponents"
 import { SocketContext } from "../../context/Socket";
-import { chatActions } from "../../store/chatSlice";
+import { createChat } from "../../store/chatActions";
 import CustomSnackbar from "../UI/CustomSnackbar"
 import axios from "axios"
 
@@ -34,22 +34,11 @@ const CreateGroupChat = ({ users, close }) => {
     const createGroup = async () => {
         if (addedUsers.length <= 20) {
 
-            const response = await axios.post(`${process.env.REACT_APP_SERVER}/chat`, {
-                senderId: user.id,
-                receiverId: addedUsers.map(user => user._id),
-                groupAdmin: user.id,
-                isGroupChat: true,
-            })
-
-            const { _id, isGroupChat, groupAdmin, createdAt } = response.data
-
-            const messageBody = { chatId: _id, senderId: user.id, type: "info", content: `Group created by ${user.username}`, readBy: [user.id] }
+            const newChatId = await dispatch(createChat({ senderId: user.id, receiverId: addedUsers.map(user => user._id), isGroupChat: true })).unwrap()
+            const messageBody = { chatId: newChatId, senderId: user.id, type: "info", content: `Group created by ${user.username}`, readBy: [user.id] }
             const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
-
-            dispatch(chatActions.conversation({ chatId: _id, isGroupChat, groupAdmin, otherMembers: addedUsers, createdAt }))
             socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...addedUsers, user.id] });
             close();
-
             return;
         }
         setSnackbar({ open: true, details: "Group Chat Limit Max 20 Users" })

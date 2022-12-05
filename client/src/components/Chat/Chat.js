@@ -16,16 +16,17 @@ const Chat = () => {
     const user = useSelector((state) => state.user)
     const chat = useSelector((state) => state.chat)
 
-    const getMessages = useCallback(async () => {
+    const readAllMessages = useCallback(async () => {
         if (chat.chatId) {
+            console.log("reading all message");
             await axios.put(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`, { userId: user.id })
             socket.emit("join chat", chat.chatId);
         }
     }, [chat.chatId, socket, user.id])
 
     useEffect(() => {
-        getMessages()
-    }, [getMessages])
+        readAllMessages()
+    }, [readAllMessages])
 
     return (
         <>
@@ -43,13 +44,14 @@ const Chat = () => {
                             {chat.isGroupChat ?
                                 <AvatarGroup total={chat.otherMembers.length} sx={{ margin: "1%" }}>
                                     <Avatar src={chat.otherMembers[0].profilePicture || UserImage} />
-                                    <Avatar src={chat.otherMembers[1].profilePicture || UserImage} />
+                                    <Avatar src={chat.otherMembers[1]?.profilePicture || UserImage} />
                                 </AvatarGroup>
                                 :
                                 <Avatar sx={{ margin: "1%" }} src={chat.otherMembers[0].profilePicture || UserImage} />
                             }
                             <Typography sx={{ fontSize: "18px" }}>{chat.otherMembers[0].username}</Typography>
-                            {chat.isGroupChat && <Typography sx={{ fontSize: "18px", color: "gray" }}>and {chat.otherMembers.length - 1} others</Typography>}
+                            {chat.isGroupChat && chat.otherMembers.length > 1
+                                && <Typography sx={{ fontSize: "18px", color: "gray" }}>and {chat.otherMembers.length - 1} others</Typography>}
                         </Flexbox>
 
 

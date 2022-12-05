@@ -34,38 +34,32 @@ const Message = ({ message, next }) => {
 
     // to read message by logged in user
     const updateRecentMessage = useCallback(() => {
-
         if (message.senderId !== user.id && (chat.otherMembers + 1) !== readBy.length && !readBy.includes(user.id)) {
             setTimeout(() => {
                 message.readBy.push(user.id)
                 socket.emit("readMessage", message)
             }, 1000)
         }
-
         // eslint-disable-next-line
     }, [socket, message._id])
 
     // to update readby of all message of all users
     const updateReadBy = useCallback(() => {
-
         socket.on("getMessageReadby", (details) => {
             if (details._id !== message._id) return;
             setReadBy(details.readBy)
         });
-
     }, [socket, message._id])
 
 
     // to update readby of new message of all users
     const latestMessageReadBy = useCallback(() => {
-
         socket.on("getMessageReadbyAll", (data) => {
             if (data.chatId === message.chatId && data.totalMembers !== readBy.length && !readBy.includes(data.readByUser)) {
                 const updatedReadby = [...readBy, data.readByUser]
                 setReadBy(updatedReadby)
             }
         })
-
     }, [socket, message.chatId, readBy])
 
     useEffect(() => {

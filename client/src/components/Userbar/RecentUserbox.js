@@ -44,41 +44,29 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
             }
         }}
         >
-            {
-                chat.isGroupChat ?
-                    <AvatarGroup total={filteredUser.length} sx={{ marginLeft: "3%" }}>
-                        <StyledStatusBadge
-                            overlap="circular"
-                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                            variant="dot"
-                            show={(onlineUsers.some(r => r.includes(filteredUser[0]._id)) ? 1 : 0)}
-                        >
-                            <Avatar
-                                sx={{ width: 50, height: 50 }}
-                                src={filteredUser[0].profilePicture || UserImage}
-                            />
-                        </StyledStatusBadge>
-                    </AvatarGroup>
-                    :
-                    <StyledStatusBadge
-                        overlap="circular"
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                        variant="dot"
-                        show={(onlineUsers.some(r => r.includes(filteredUser[0]._id)) ? 1 : 0)}
-                        sx={{ marginLeft: "3%" }}
-                    >
-                        <Avatar
-                            sx={{ width: 50, height: 50 }}
-                            src={filteredUser[0].profilePicture || UserImage}
-                        />
-                    </StyledStatusBadge>
-            }
+
+            <AvatarGroup total={filteredUser.length} sx={{ marginLeft: "3%" }}>
+                <StyledStatusBadge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    variant="dot"
+                    show={(onlineUsers.some(r => r.includes(filteredUser[0]._id)) ? 1 : 0)}
+                >
+                    <Avatar
+                        sx={{ width: 50, height: 50 }}
+                        src={filteredUser[0]?.profilePicture || UserImage}
+                    />
+                </StyledStatusBadge>
+                {chat.isGroupChat && <Avatar sx={{ width: 50, height: 50 }} src={filteredUser[1]?.profilePicture || UserImage} />}
+            </AvatarGroup>
+
 
             <Box>
                 <Flexbox sx={{ justifyContent: "flex-start", gap: 2 }}>
                     <Flexbox gap={1}>
                         <Typography sx={{ fontSize: "18px" }}>{filteredUser[0].username}</Typography>
-                        {chat.isGroupChat && <Typography sx={{ fontSize: "18px", color: "gray" }}>and {filteredUser.length - 1} others</Typography>}
+                        {chat.isGroupChat && filteredUser.length > 1 &&
+                            <Typography sx={{ fontSize: "18px", color: "gray" }}>and {filteredUser.length - 1} others</Typography>}
                     </Flexbox>
                     {typingDetails.typing && typingDetails.chatId === chat._id && <Typography sx={{ fontSize: "16px" }} color="green">typing... </Typography>}
                 </Flexbox>
@@ -88,7 +76,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
                     <Flexbox sx={{ justifyContent: "flex-start", gap: 1 }}>
                         {/* fix username and read issue */}
                         {/* <Typography color={(chat.members.every(val => latestMessage.readBy.includes(val._id))) ? "lightgray" : "black"}> */}
-                        <Typography color="lightgray" sx={{ fontSize: "16px", fontWeight: 500 }}>
+                        <Typography color="lightgray">
                             {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
                             {
                                 (chat._id === latestMessage.chatId)
@@ -104,7 +92,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
                         </Typography>
                     </Flexbox>
                 }
-            </Box>
+            </Box >
 
         </Box >
     )

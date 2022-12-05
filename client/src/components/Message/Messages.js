@@ -20,22 +20,26 @@ const Messages = () => {
     const [newMessage, setNewMessage] = useState()
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
 
-    const getMessages = useCallback(async () => {
-        if (!chat.chatId) return setMessages([])
-        const response = await axios.get(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`)
-        console.log("fetching all message")
-        setMessages(response.data)
-    }, [chat.chatId])
-
     const newMessageHandler = useCallback(() => {
         socket.on("getLatestMessage", (data) => setNewMessage(data));
     }, [socket])
 
+    const getMessages = useCallback(async () => {
+        if (!chat.chatId) return setMessages([])
+
+        const response = await axios.get(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`)
+        console.log("fetching all message")
+        setMessages(response.data)
+
+    }, [chat.chatId])
+
     const updateMessages = useCallback(async () => {
         if (newMessage?.chatId !== chat.chatId) return;
+
         await axios.put(`${process.env.REACT_APP_SERVER}/message/${newMessage.chatId}`, { userId: user.id })
         console.log("updating message");
         setMessages(prev => [...prev, newMessage])
+
         // eslint-disable-next-line
     }, [user.id, newMessage])
 
@@ -56,7 +60,6 @@ const Messages = () => {
         socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     })
-
 
     return (
         <Box>

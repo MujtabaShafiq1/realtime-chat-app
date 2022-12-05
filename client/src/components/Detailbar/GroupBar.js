@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material'
 import { Flexbox, StyledButton } from '../../misc/MUIComponents'
 import { SocketContext } from "../../context/Socket";
 import { chatActions } from "../../store/chatSlice";
+import CustomSnackbar from "../UI/CustomSnackbar"
 import moment from 'moment';
 import axios from 'axios';
 
@@ -21,6 +22,7 @@ const GroupBar = ({ users }) => {
     const socket = useContext(SocketContext)
     const [addUser, setAddUser] = useState(false)
     const [userList, setUserList] = useState([])
+    const [snackbar, setSnackbar] = useState({ open: false, details: "" })
 
     const chat = useSelector((state) => state.chat)
     const loggedInUser = useSelector((state) => state.user.details)
@@ -30,23 +32,35 @@ const GroupBar = ({ users }) => {
 
     // add member in chat
     const addUserHandler = async () => {
-        await axios.put(`${process.env.REACT_APP_SERVER}/chat/add/${chat.chatId}`, { users: userList })
-
-        userList.map(async (user) => {
-            const messageBody = { chatId: chat.chatId, senderId: loggedInUser.id, type: "info", content: `${groupAdmin} added ${user.username}`, readBy: [loggedInUser.id] }
-            const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
-            socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...userList, ...chat.otherMembers, user] });
-        })
-
-        dispatch(chatActions.addUser(userList))
-        closeHandler()
+        if ((userList.length + chat.otherMembers) <= 20) {
+            await axios.put(`${process.env.REACT_APP_SERVER}/chat/add/${chat.chatId}`, { users: userList })
+            userList.map(async (user) => {
+                const messageBody = { chatId: chat.chatId, senderId: loggedInUser.id, type: "info", content: `${groupAdmin} added ${user.username}`, readBy: [loggedInUser.id] }
+                const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
+                socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...userList, ...chat.otherMembers, user] });
+            })
+            dispatch(chatActions.addUser(userList))
+            closeHandler()
+            return;
+        }
+        setSnackbar({ open: true, details: "Maximum user limit reached" })
+        setTimeout(() => {
+            setSnackbar({ open: false, details: "" })
+        }, 2000)
     }
 
     // remove member from chat
     const groupRemoveHandler = async () => {
-        await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { users: userList })
-        dispatch(chatActions.removeUser(userList))
-        closeHandler()
+        if (chat.otherMembers.length > 1) {
+            await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { users: userList })
+            dispatch(chatActions.removeUser(userList))
+            closeHandler()
+            return;
+        }
+        setSnackbar({ open: true, details: "Minimum user limit reached" })
+        setTimeout(() => {
+            setSnackbar({ open: false, details: "" })
+        }, 2000)
     }
 
     const clickHandler = (user) => {
@@ -69,6 +83,9 @@ const GroupBar = ({ users }) => {
 
     return (
         <>
+
+            {snackbar.open && <CustomSnackbar type="error" details={snackbar.details} />}
+
             <Flexbox sx={{ flexDirection: "column", minHeight: "20vh", gap: 2 }}>
 
                 <Typography sx={{ fontSize: "24px", fontWeight: 500 }}>
