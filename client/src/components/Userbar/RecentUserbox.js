@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useCallback } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Avatar, Typography, AvatarGroup } from '@mui/material';
 import { Flexbox, StyledStatusBadge } from '../../misc/MUIComponents';
@@ -15,8 +15,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
     const [latestMessage, setLatestMessage] = useState(chat.latestMessage)
 
     const filteredUser = chat.members.filter(user => user._id !== userId)
-
-    const fetchLatestMessage = useCallback(() => {
+    useEffect(() => {
         socket.on("getLatestMessage", (data) => {
             if (chat._id !== data.chatId) return;
             setLatestMessage(data);
@@ -24,13 +23,9 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
     }, [socket, chat._id])
 
     useEffect(() => {
-        fetchLatestMessage()
-    }, [fetchLatestMessage])
-
-    useEffect(() => {
-        socket.on("typing", (chatId) => setTypingDetails({ typing: true, chatId: chatId }));
+        socket.on("typing", (chatId) => setTypingDetails({ typing: true, chatId: chatId }))
         socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
-    })
+    }, [socket])
 
     return (
         <Box sx={{
@@ -74,8 +69,6 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
 
                 {latestMessage &&
                     <Flexbox sx={{ justifyContent: "flex-start", gap: 1 }}>
-                        {/* fix username and read issue */}
-                        {/* <Typography color={(chat.members.every(val => latestMessage.readBy.includes(val._id))) ? "lightgray" : "black"}> */}
                         <Typography color="lightgray">
                             {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
                             {

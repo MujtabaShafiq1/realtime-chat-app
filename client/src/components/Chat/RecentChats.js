@@ -17,10 +17,9 @@ const RecentChats = ({ chats }) => {
     const userId = useSelector((state) => state.user.details.id)
     const [onlineUsers, setOnlineUsers] = useState([])
 
-
     useEffect(() => {
         socket.on("getUsers", (users) => setOnlineUsers(users))
-    })
+    }, [socket])
 
     const clickHandler = async (selectedChat) => {
 
@@ -33,7 +32,6 @@ const RecentChats = ({ chats }) => {
         dispatch(chatActions.conversation(activeChat))
         socket.emit("readAllMessage", { chatId: _id, readByUser: userId, totalMembers: members.length })
     }
-
 
     return (
         <Box sx={{ height: "80vh", overflow: "auto" }}>

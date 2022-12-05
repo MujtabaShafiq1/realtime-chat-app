@@ -20,10 +20,6 @@ const Messages = () => {
     const [newMessage, setNewMessage] = useState()
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
 
-    const newMessageHandler = useCallback(() => {
-        socket.on("getLatestMessage", (data) => setNewMessage(data));
-    }, [socket])
-
     const getMessages = useCallback(async () => {
         if (!chat.chatId) return setMessages([])
 
@@ -40,26 +36,22 @@ const Messages = () => {
         console.log("updating message");
         setMessages(prev => [...prev, newMessage])
 
-        // eslint-disable-next-line
-    }, [user.id, newMessage])
+    }, [user.id, newMessage, chat.chatId])
 
     useEffect(() => {
         getMessages()
     }, [getMessages])
 
     useEffect(() => {
-        newMessageHandler()
-    }, [newMessageHandler])
-
-    useEffect(() => {
         updateMessages()
     }, [updateMessages])
 
     useEffect(() => {
+        socket.on("getLatestMessage", (data) => setNewMessage(data))
         socket.on("typing", (chatId) => setTypingDetails({ typing: true, chatId: chatId }));
         socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
-    })
+    }, [socket])
 
     return (
         <Box>

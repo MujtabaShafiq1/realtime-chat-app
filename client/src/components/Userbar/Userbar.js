@@ -40,15 +40,21 @@ const Userbar = ({ users }) => {
         fetchingChats();
     }, [fetchingChats])
 
+
     useEffect(() => {
-        socket.on("getChats", (data) => setChats((prev) => [...prev, data]))
-    })
+        socket.on("getChats", (data) => {
+            console.log(`Updating chats`)
+            setChats((prev) => [...prev, data])
+        })
+    }, [socket])
+
 
     const logoutHandler = async () => {
         await axios.get(`${process.env.REACT_APP_SERVER}/auth/logout`)
         dispatch(chatActions.reset())
         dispatch(userActions.logout())
     }
+
 
     const searchHandler = (e) => {
         setSearch(e.target.value)

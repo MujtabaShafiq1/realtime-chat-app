@@ -25,6 +25,7 @@ const Home = () => {
 
         console.log("connection established")
         socket.emit("connection", userId);
+        console.clear()
 
     }, [userId, socket])
 
