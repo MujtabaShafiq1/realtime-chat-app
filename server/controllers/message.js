@@ -15,7 +15,8 @@ const getAllChatMessage = asyncHandler(async (req, res) => {
 });
 
 const updateReadby = asyncHandler(async (req, res) => {
-    await Message.findByIdAndUpdate(req.body.messageId, { $addToSet: { "readBy": req.body.userId } }, { new: true });
+
+    await Message.findByIdAndUpdate(req.params.messageId, { $addToSet: { "readBy": req.body.userId } }, { new: true });
     res.status(200).json(`Updated`)
 });
 

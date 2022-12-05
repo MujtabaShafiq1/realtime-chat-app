@@ -26,16 +26,20 @@ const Messages = () => {
         setMessages(response.data)
     }, [chatId])
 
+    const updateMessages = useCallback(() => {
+        if (newMessage?.chatId !== chatId) return;
+        console.log("updating message");
+        setMessages(prev => [...prev, newMessage])
+    }, [chatId, newMessage])
+
     useEffect(() => {
         getMessages()
     }, [getMessages])
 
 
     useEffect(() => {
-        if (newMessage?.chatId !== chatId) return;
-        console.log("updating message");
-        setMessages(prev => [...prev, newMessage])
-    }, [chatId, newMessage])
+        updateMessages()
+    }, [updateMessages])
 
 
     useEffect(() => {

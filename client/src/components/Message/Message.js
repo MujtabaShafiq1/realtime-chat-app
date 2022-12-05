@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useCallback } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useSelector } from 'react-redux';
 import { Avatar, Box, Typography } from '@mui/material'
 import { ImageListItem, ImageList } from '@mui/material'
@@ -10,6 +10,7 @@ import SeenIcon from "../../assets/Message/seen.png";
 import DeliveredIcon from "../../assets/Message/delivered.png";
 import UserImage from "../../assets/User/user.jpg"
 import ImageGallery from './ImageGallery';
+import axios from 'axios';
 
 const Message = ({ message, next }) => {
 
@@ -22,56 +23,39 @@ const Message = ({ message, next }) => {
     const [gallery, setGallery] = useState(false)
     const [readBy, setReadBy] = useState(message.readBy)
 
-    // back to back message
     const consecutiveMessage = !(message.senderId === next?.senderId)
     const currentUserMessage = (user.id === message.senderId)
 
-    // message interval
     const dateFormat = "YYYY-MM-DD HH:mm:ss"
     const start = moment(message.createdAt).format(dateFormat)
     const end = moment(next?.createdAt).format(dateFormat)
     const duration = moment(end).diff(start, 'hours');
 
+
     // to read message by logged in user
-    const updateRecentMessage = useCallback(() => {
-        if (message.senderId !== user.id && (chat.otherMembers + 1) !== readBy.length && !readBy.includes(user.id)) {
-            message.readBy.push(user.id)
-            console.log("emitting read by")         // request here for read by
-            socket.emit("readMessage", message)
+    useEffect(() => {
+        const updateMessage = async () => {
+            if (!readBy.includes(user.id)) {
+                console.log("emitting read by")
+                await axios.put(`${process.env.REACT_APP_SERVER}/message/${message._id}`, { userId: user.id })
+                socket.emit("readMessage", message)
+            }
         }
-        // eslint-disable-next-line
-    }, [socket, message._id])
+        updateMessage()
+    }, [socket, message, readBy, user.id])
+
 
     // to update readby of all message of all users
-    const updateReadBy = useCallback(() => {
+    useEffect(() => {
         socket.on("getMessageReadby", (details) => {
             if (details._id !== message._id) return;
-            console.log("updating read by")
-            setReadBy(details.readBy)
+            setTimeout(() => {
+                console.log("on read by");
+                console.log([...readBy, ...details.readBy]);
+                setReadBy((prev) => [...prev, ...details.readBy])
+            }, 1000)
         });
     }, [socket, message._id])
-
-    // to update readby of new message of all users
-    const latestMessageReadBy = useCallback(() => {
-        socket.on("getMessageReadbyAll", (data) => {
-            if (data.chatId === message.chatId && data.totalMembers !== readBy.length && !readBy.includes(data.readByUser)) {
-                const updatedReadby = [...readBy, data.readByUser]
-                setReadBy(updatedReadby)
-            }
-        })
-    }, [socket, message.chatId, readBy])
-
-    useEffect(() => {
-        updateRecentMessage()
-    }, [updateRecentMessage])
-
-    useEffect(() => {
-        updateReadBy()
-    }, [updateReadBy])
-
-    useEffect(() => {
-        latestMessageReadBy()
-    }, [latestMessageReadBy])
 
 
     function srcset(image, size = 148, rows = 1, cols = 1) {
