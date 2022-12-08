@@ -36,8 +36,9 @@ const Message = ({ message, next }) => {
     useEffect(() => {
         const updateMessage = async () => {
             if (!readBy.includes(user.id)) {
-                console.log("emitting read by")
                 await axios.put(`${process.env.REACT_APP_SERVER}/message/${message._id}`, { userId: user.id })
+                console.log("Before read")
+                message.readBy.push(user.id)
                 socket.emit("readMessage", message)
             }
         }
@@ -49,11 +50,8 @@ const Message = ({ message, next }) => {
     useEffect(() => {
         socket.on("getMessageReadby", (details) => {
             if (details._id !== message._id) return;
-            setTimeout(() => {
-                console.log("on read by");
-                console.log([...readBy, ...details.readBy]);
-                setReadBy((prev) => [...prev, ...details.readBy])
-            }, 1000)
+            console.log("on read by")
+            setReadBy(details.readBy)
         });
     }, [socket, message._id])
 

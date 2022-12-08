@@ -28,7 +28,6 @@ const Messages = () => {
 
     const updateMessages = useCallback(() => {
         if (newMessage?.chatId !== chatId) return;
-        console.log("updating message");
         setMessages(prev => [...prev, newMessage])
     }, [chatId, newMessage])
 
