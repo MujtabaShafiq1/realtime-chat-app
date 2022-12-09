@@ -29,8 +29,8 @@ const Confirmation = () => {
     return (
         <>
             {error &&
-                <Flexbox sx={{ flexDirection: "column", gap: 2 }}>
-                    <Box component="img" src={ErrorImage} sx={{ width: "40%", height: "auto", display: "flex" }} />
+                <Flexbox sx={{ flexDirection: "column", gap: 2, minHeight: "80vh" }}>
+                    <Box component="img" src={ErrorImage} sx={{ width: { xs: "80%", md: "45%" }, display: "flex" }} />
                     <Container maxWidth="sm">
                         <Typography variant="h5" color="gray" textAlign="center">
                             Seems like your link is expired due to time expiration or duplicated details, Sign-up and verify account in 1 day

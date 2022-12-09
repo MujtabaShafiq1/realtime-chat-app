@@ -28,7 +28,7 @@ const EmailSent = () => {
                     <Box component="img" src={NotificationImage} sx={{ width: { xs: "80%", md: "45%" }, display: "flex" }} />
                     <Container maxWidth="sm">
                         <Typography fontSize="22px" color="gray" textAlign="center">
-                            We have sent email to : <span style={{ fontWeight: 600, color: "black" }}> {location.state?.email} </span>
+                            We have sent email to : <span style={{ fontWeight: 600, color: "black", wordBreak: "break-word" }}> {location.state?.email} </span>
                             to confirm the validity of your email address. After receiving follow the link provided to complete the registration
                         </Typography>
                     </Container>
