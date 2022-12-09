@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Grid, Typography, InputAdornment, Divider } from "@mui/material"
+import { Box, Grid, Typography, InputAdornment, Divider, CircularProgress } from "@mui/material"
 import { useDispatch } from 'react-redux';
 import { useFormik } from "formik";
 import axios from "axios"
@@ -32,6 +32,7 @@ const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [snackbar, setSnackbar] = useState({ open: false, details: "" })
 
@@ -48,9 +49,11 @@ const Login = () => {
 
     const loginHandler = async (data) => {
         try {
+            setLoading(true)
             const response = await axios.post(`${process.env.REACT_APP_SERVER}/auth/login`, data)
             const user = response.data.details;
             dispatch(userActions.login(user))
+            setLoading(false)
             navigate("/")
         } catch (e) {
             console.clear()
@@ -85,16 +88,16 @@ const Login = () => {
                 >
 
                     <Box component="img" src={LoginImage} sx={{ height: "auto", width: "45%", flex: 1, display: { xs: "none", md: "block" } }} />
-                    <Divider orientation='vertical' sx={{ height: "35vh", marginRight: "6%", bgcolor: "purple", opacity: "0.1" }} />
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 2,
-                            flex: 4,
 
-                        }}
-                    >
+                    <Divider orientation='vertical' sx={{ height: "35vh", marginRight: "6%", bgcolor: "purple", opacity: "0.1" }} />
+
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 2,
+                        flex: 4,
+                        padding: "10px"
+                    }}>
 
                         <Box>
                             <Typography sx={{ fontSize: "30px" }} fontWeight={500}>Welcome Back</Typography>
@@ -117,7 +120,6 @@ const Login = () => {
                                 error={formik.touched.email && Boolean(formik.errors.email)}
                                 InputProps={{ disableUnderline: true }}
                             />
-
 
                             <StyledField
                                 variant="filled"
@@ -146,19 +148,16 @@ const Login = () => {
                                 }}
                             />
 
-
-
-                            <StyledButton type="submit" sx={{ width: "25%", backgroundColor: "rgba( 76,76,163, 1 )" }}>
-                                login
+                            <StyledButton type="submit" disabled={loading} sx={{ width: "25%", backgroundColor: "rgba( 76,76,163, 1 )" }}>
+                                {loading ? <CircularProgress size="26px" /> : <Typography>login</Typography>}
                             </StyledButton>
 
                             <Box display="flex" gap={2} flexDirection={{ xs: "column", md: "row" }}>
                                 <Typography sx={{ fontSize: "16px" }}>Dont have an account? </Typography>
                                 <Typography sx={{ color: "green", cursor: "pointer", fontSize: "16px" }} onClick={() => navigate("/signup")}>
-                                    Signup now !
+                                    Signup now
                                 </Typography>
                             </Box>
-
 
                         </form>
                     </Box>
