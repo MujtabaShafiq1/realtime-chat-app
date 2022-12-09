@@ -6,14 +6,25 @@ const Flexbox = styled(Box)({
     alignItems: "center",
 })
 
-const StyledField = styled(TextField)(({ error }) => ({
-    width: "80%",
-    backgroundColor: "rgba( 232, 240, 254, 0.75 )",
-    borderBottom: !error && "0.5px solid #4c4ca3",
+const StyledField = styled(TextField)(({ auth, error }) => ({
+    width: "90%",
     input: {
-        borderBottom: error && "0.5px solid red"
+        color: "black",
+        borderBottom: auth && error && "0.5px solid red",
+        background: auth && "rgb(223, 235, 251, 0.5)",
     },
-    textarea: { color: 'black' },
+    [`& fieldset`]: {
+        borderRadius: "30px",
+    },
+    "& .MuiOutlinedInput-notchedOutline": {
+        border: "1px solid lightgray",
+        background: "rgb(180, 180, 180, 0.3)",
+    },
+    "& .Mui-focused": {
+        "& .MuiOutlinedInput-notchedOutline": {
+            border: error ? "0.5px solid red" : "1px solid lightgray",
+        }
+    },
 }))
 
 const StyledButton = styled(Button)(({ theme }) => ({

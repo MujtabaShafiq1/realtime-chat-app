@@ -4,9 +4,9 @@ import axios from 'axios'
 
 import { SocketContext } from '../../context/Socket'
 import { createChat } from '../../store/chatActions'
-import { Flexbox } from '../../misc/MUIComponents'
+import { Flexbox, StyledField } from '../../misc/MUIComponents'
 
-import { Box, Avatar, TextField, IconButton, InputAdornment, CircularProgress } from "@mui/material"
+import { Box, Avatar, IconButton, InputAdornment, CircularProgress } from "@mui/material"
 import CustomSnackbar from '../UI/CustomSnackbar'
 
 import SendIcon from "../../assets/Chat/send.png"
@@ -134,8 +134,8 @@ const NewMessage = () => {
                 </Flexbox>
 
                 <Flexbox sx={{ gap: 2 }}>
-                    <TextField
-                        variant="filled"
+                    <StyledField
+                        variant="outlined"
                         placeholder="Send Message"
                         type="text"
                         size="large"
@@ -153,10 +153,6 @@ const NewMessage = () => {
                                     </IconButton>
                                 </InputAdornment>
                             ),
-                        }}
-                        sx={{
-                            width: "90%",
-                            border: "0.3px solid lightgray",
                         }}
                     />
 

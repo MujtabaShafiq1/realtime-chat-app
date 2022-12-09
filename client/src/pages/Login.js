@@ -57,6 +57,7 @@ const Login = () => {
             navigate("/")
         } catch (e) {
             console.clear()
+            setLoading(false)
             setSnackbar({ open: true, details: e.response.data.message })
             setTimeout(() => {
                 setSnackbar({ open: false, details: "" })
@@ -114,6 +115,7 @@ const Login = () => {
                                 type="email"
                                 size="small"
                                 hiddenLabel
+                                auth={true}
                                 value={formik.values.email}
                                 onChange={formik.handleChange}
                                 helperText={formik.touched.email && formik.errors.email}
@@ -126,9 +128,10 @@ const Login = () => {
                                 placeholder="Enter Password"
                                 id="password"
                                 name="password"
-                                type={showPassword ? "text" : "password"}
                                 size="small"
                                 hiddenLabel
+                                auth={true}
+                                type={showPassword ? "text" : "password"}
                                 value={formik.values.password}
                                 onChange={formik.handleChange}
                                 helperText={formik.touched.password && formik.errors.password}
@@ -136,7 +139,7 @@ const Login = () => {
                                 InputProps={{
                                     disableUnderline: true,
                                     endAdornment: (
-                                        <InputAdornment position="end" >
+                                        <InputAdornment position="end">
                                             <Box
                                                 component="img"
                                                 sx={{ height: 25, width: 25, cursor: "pointer" }}

@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { SocketContext } from "../../context/Socket"
-import { Avatar, Box, TextField, Typography, Container, InputAdornment, Divider } from '@mui/material'
-import { Flexbox, StyledButton } from '../../misc/MUIComponents'
+import { Avatar, Box, Typography, Container, InputAdornment, Divider } from '@mui/material'
+import { Flexbox, StyledButton, StyledField } from '../../misc/MUIComponents'
 
 import { userActions } from '../../store/userSlice';
 import { chatActions } from '../../store/chatSlice';
@@ -76,14 +76,14 @@ const Userbar = ({ users }) => {
 
                 <Flexbox sx={{ gap: 3, padding: "10px", flexDirection: { xs: "column", md: "row" } }} >
 
-                    <TextField
-                        variant="filled"
+                    <StyledField
+                        variant="outlined"
                         placeholder="Search user"
                         type="text"
                         size="small"
                         hiddenLabel
-                        onChange={searchHandler}
                         value={search}
+                        onChange={searchHandler}
                         InputProps={{
                             disableUnderline: true,
                             autoComplete: "off",
@@ -93,7 +93,7 @@ const Userbar = ({ users }) => {
                                 </InputAdornment>
                             ),
                         }}
-                        sx={{ margin: "4% 0%", width: "75%", border: "0.2px solid lightgray" }}
+                        sx={{ margin: "4% 0%", width: "75%" }}
                     />
 
                     <Flexbox sx={{ flexDirection: { xs: "row", md: "column" }, gap: { xs: 2, md: 0 } }}>

@@ -49,12 +49,14 @@ const Home = () => {
                     </Box>
                     <SwipeableDrawer
                         open={drawer}
+                        onOpen={() => setDrawer(true)}
+                        onClose={() => setDrawer(false)}
                         anchor="right"
                         disableSwipeToOpen
                         PaperProps={{
                             sx: {
                                 zIndex: 1,
-                                width: "30%",
+                                width: { xs: "40%", sm: "30%" },
                                 minHeight: "100vh",
                             }
                         }}>

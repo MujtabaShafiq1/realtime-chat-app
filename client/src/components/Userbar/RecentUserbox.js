@@ -33,6 +33,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
         <Box sx={{
             display: "flex",
             gap: 2,
+            justifyContent: { xs: "center", sm: "left" },
             alignItems: "center",
             marginTop: "5%",
             '&:hover': {
@@ -58,7 +59,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
             </AvatarGroup>
 
 
-            <Box>
+            <Box sx={{ display: { xs: "none", sm: "inline-block" } }}>
                 <Flexbox sx={{ justifyContent: "flex-start", gap: 2 }}>
                     <Flexbox gap={1}>
                         <Typography sx={{ fontSize: "18px" }}>{filteredUser[0].username}</Typography>
@@ -70,7 +71,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
 
 
                 {latestMessage &&
-                    <Typography sx={{ color: "lightgray", display: { xs: "none", lg: "block" } }}>
+                    <Typography sx={theme => ({ [theme.breakpoints.down(750)]: { display: 'none' }, color: "lightgray" })} >
                         {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
                         {
                             (chat._id === latestMessage.chatId)

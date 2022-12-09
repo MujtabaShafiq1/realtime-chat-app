@@ -61,7 +61,6 @@ const Login = () => {
     const signupHandler = async (data) => {
         try {
             setLoading(true)
-
             imageHandler()
             const { email, username, password } = data;
             const user = { email, username, password, file };
@@ -72,6 +71,7 @@ const Login = () => {
 
         } catch (e) {
             console.clear()
+            setLoading(false)
             const error = e.response.data.message.split('"')[1];
             setSnackbar({ open: true, details: `${error} is already taken` })
             setTimeout(() => {
@@ -119,6 +119,7 @@ const Login = () => {
                                 type="email"
                                 size="small"
                                 hiddenLabel
+                                auth={true}
                                 value={formik.values.email}
                                 onChange={formik.handleChange}
                                 helperText={formik.touched.email && formik.errors.email}
@@ -134,6 +135,7 @@ const Login = () => {
                                 name="username"
                                 size="small"
                                 hiddenLabel
+                                auth={true}
                                 value={formik.values.username}
                                 onChange={formik.handleChange}
                                 helperText={formik.touched.username && formik.errors.username}
@@ -151,6 +153,7 @@ const Login = () => {
                                 type={showPassword ? "text" : "password"}
                                 size="small"
                                 hiddenLabel
+                                auth={true}
                                 value={formik.values.password}
                                 onChange={formik.handleChange}
                                 helperText={formik.touched.password && formik.errors.password}
@@ -178,6 +181,7 @@ const Login = () => {
                                 type={showconfirmedPassword ? "text" : "password"}
                                 size="small"
                                 hiddenLabel
+                                auth={true}
                                 value={formik.values.confirmedPassword}
                                 onChange={formik.handleChange}
                                 helperText={formik.touched.confirmedPassword && formik.errors.confirmedPassword}
