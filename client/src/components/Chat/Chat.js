@@ -64,7 +64,7 @@ const Chat = ({ open }) => {
                     </Box>
                     :
                     <Flexbox sx={{ minHeight: "50vh" }}>
-                        <Typography sx={{ fontSize: "32px", color: "gray", opacity: 0.4 }}>
+                        <Typography sx={{ fontSize: "32px", color: "gray", opacity: 0.4, textAlign: "center" }}>
                             Please select a conversation to start
                         </Typography>
                     </Flexbox>

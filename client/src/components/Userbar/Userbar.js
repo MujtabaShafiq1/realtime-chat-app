@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { SocketContext } from "../../context/Socket"
-import { Avatar, Box, TextField, Typography, Container, InputAdornment } from '@mui/material'
+import { Avatar, Box, TextField, Typography, Container, InputAdornment, Divider } from '@mui/material'
 import { Flexbox, StyledButton } from '../../misc/MUIComponents'
 
 import { userActions } from '../../store/userSlice';
@@ -26,7 +26,6 @@ const Userbar = ({ users }) => {
 
     const [chats, setChats] = useState([])
     const [search, setSearch] = useState("")
-    const [groupText, setGroupText] = useState(false)
     const [createGroup, setCreateGroup] = useState(false)
     const [searchedUsers, setSearchedUser] = useState([])
 
@@ -65,17 +64,17 @@ const Userbar = ({ users }) => {
     return (
         <>
 
-            <Box sx={{ minHeight: "100vh", width: { xs: "30%", lg: "22%" }, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
+            <Box sx={{ height: "100vh", width: { xs: "30%", lg: "22%" }, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
 
                 <Flexbox sx={{ justifyContent: "space-around", gap: 1, padding: "10px" }}>
                     <Avatar src={user.profilePicture || UserImage} sx={{ width: 50, height: 50 }} />
-                    <Typography sx={{ fontSize: "22px" }}>{user.username}</Typography>
+                    <Typography sx={{ fontSize: "20px", display: { xs: "none", md: "block" } }}>{user.username}</Typography>
                     <StyledButton sx={{ backgroundColor: "black" }} onClick={logoutHandler}>
                         Logout
                     </StyledButton>
                 </Flexbox>
 
-                <Flexbox sx={{ gap: 3, padding: "10px" }} >
+                <Flexbox sx={{ gap: 3, padding: "10px", flexDirection: { xs: "column", md: "row" } }} >
 
                     <TextField
                         variant="filled"
@@ -97,19 +96,15 @@ const Userbar = ({ users }) => {
                         sx={{ margin: "4% 0%", width: "75%", border: "0.2px solid lightgray" }}
                     />
 
-                    <Flexbox>
-                        {groupText &&
-                            <Flexbox sx={{ padding: "5px", borderRadius: "20px", backgroundColor: "rgba(191,191,191,1)", position: "absolute", top: "7%" }}>
-                                <Typography sx={{ color: "black", fontSize: "12px" }}>Create Group</Typography>
-                            </Flexbox>
-                        }
+                    <Flexbox sx={{ flexDirection: { xs: "row", md: "column" }, gap: { xs: 2, md: 0 } }}>
+                        <Typography sx={{ color: "black", fontSize: { xs: "14px", md: "12px" }, fontWeight: 500, textAlign: "center" }}>
+                            New Group
+                        </Typography>
                         <Box
                             component="img"
                             src={NewGroupIcon}
                             sx={{ width: 50, height: "auto", cursor: "pointer" }}
                             onClick={() => setCreateGroup(true)}
-                            onMouseOver={() => setGroupText(true)}
-                            onMouseOut={() => setGroupText(false)}
                         />
                     </Flexbox>
 
@@ -120,6 +115,7 @@ const Userbar = ({ users }) => {
                         <CreateGroupChat users={search ? searchedUsers : users} close={() => setCreateGroup(false)} />
                         :
                         <Box>
+                            <Divider orientation='horizontal' sx={{ m: "1% 0%", bgcolor: "gray", opacity: "0.3" }} />
                             {search ?
                                 <SearchedChats searchedUsers={searchedUsers} clear={() => setSearch("")} />
                                 :

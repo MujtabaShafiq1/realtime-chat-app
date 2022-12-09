@@ -86,7 +86,7 @@ const GroupBar = ({ users }) => {
 
             {snackbar.open && <CustomSnackbar type="error" details={snackbar.details} />}
 
-            <Flexbox sx={{ flexDirection: "column", minHeight: "35vh", gap: 2 }}>
+            <Flexbox sx={{ flexDirection: "column", minHeight: "30vh", gap: 2 }}>
 
                 <Typography sx={{ fontSize: "24px", fontWeight: 500 }}>
                     Group Admin: {groupAdmin}

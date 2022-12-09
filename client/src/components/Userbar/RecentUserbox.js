@@ -11,8 +11,8 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
     const socket = useContext(SocketContext)
     const userId = useSelector((state) => state.user.details.id)
 
-    const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
     const [latestMessage, setLatestMessage] = useState(chat.latestMessage)
+    const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
 
     const filteredUser = chat.members.filter(user => user._id !== userId)
 
@@ -27,6 +27,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
         socket.on("typing", (chatId) => setTypingDetails({ typing: true, chatId: chatId }))
         socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
     }, [socket])
+
 
     return (
         <Box sx={{
@@ -69,22 +70,20 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
 
 
                 {latestMessage &&
-                    <Flexbox sx={{ justifyContent: "flex-start", gap: 1 }}>
-                        <Typography color="lightgray">
-                            {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
-                            {
-                                (chat._id === latestMessage.chatId)
-                                    &&
-                                    latestMessage.type === "image" ?
-                                    `Sent an Image`
+                    <Typography sx={{ color: "lightgray", display: { xs: "none", lg: "block" } }}>
+                        {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
+                        {
+                            (chat._id === latestMessage.chatId)
+                                &&
+                                latestMessage.type === "image" ?
+                                `Sent an Image`
+                                :
+                                latestMessage.content.length > 25 ?
+                                    latestMessage.content.substring(0, 25) + `...`
                                     :
-                                    latestMessage.content.length > 25 ?
-                                        latestMessage.content.substring(0, 25) + `...`
-                                        :
-                                        latestMessage.content
-                            }
-                        </Typography>
-                    </Flexbox>
+                                    latestMessage.content
+                        }
+                    </Typography>
                 }
             </Box >
 

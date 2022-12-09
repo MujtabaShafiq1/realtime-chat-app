@@ -32,7 +32,7 @@ const RecentChats = ({ chats }) => {
     }
 
     return (
-        <Box sx={{ height: "80vh", overflow: "auto" }}>
+        <Box sx={{ height: "65vh", overflow: "auto" }}>
             {chats.length > 0 ?
                 <>
                     <Typography sx={{ fontSize: "22px", textAlign: "center", m: "3% 0%" }}>Recent Chats</Typography>
