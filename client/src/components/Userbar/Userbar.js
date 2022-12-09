@@ -65,9 +65,9 @@ const Userbar = ({ users }) => {
     return (
         <>
 
-            <Box sx={{ minHeight: "100vh", flex: 1.5, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
+            <Box sx={{ minHeight: "100vh", width: { xs: "30%", lg: "22%" }, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
 
-                <Flexbox sx={{ justifyContent: "space-around", marginTop: "3%" }}>
+                <Flexbox sx={{ justifyContent: "space-around", gap: 1, padding: "10px" }}>
                     <Avatar src={user.profilePicture || UserImage} sx={{ width: 50, height: 50 }} />
                     <Typography sx={{ fontSize: "22px" }}>{user.username}</Typography>
                     <StyledButton sx={{ backgroundColor: "black" }} onClick={logoutHandler}>
@@ -75,7 +75,7 @@ const Userbar = ({ users }) => {
                     </StyledButton>
                 </Flexbox>
 
-                <Flexbox gap={3}>
+                <Flexbox sx={{ gap: 3, padding: "10px" }} >
 
                     <TextField
                         variant="filled"
@@ -119,7 +119,7 @@ const Userbar = ({ users }) => {
                     {createGroup ?
                         <CreateGroupChat users={search ? searchedUsers : users} close={() => setCreateGroup(false)} />
                         :
-                        <Box sx={{ position: "relative" }}>
+                        <Box>
                             {search ?
                                 <SearchedChats searchedUsers={searchedUsers} clear={() => setSearch("")} />
                                 :

@@ -86,10 +86,10 @@ const GroupBar = ({ users }) => {
 
             {snackbar.open && <CustomSnackbar type="error" details={snackbar.details} />}
 
-            <Flexbox sx={{ flexDirection: "column", minHeight: "20vh", gap: 2 }}>
+            <Flexbox sx={{ flexDirection: "column", minHeight: "35vh", gap: 2 }}>
 
                 <Typography sx={{ fontSize: "24px", fontWeight: 500 }}>
-                    Group Admin: { }
+                    Group Admin: {groupAdmin}
                 </Typography>
 
                 <Typography sx={{ fontSize: "20px", fontWeight: 300 }}>Created {moment(chat.createdAt, "YYYYMMDD").fromNow()}</Typography>
