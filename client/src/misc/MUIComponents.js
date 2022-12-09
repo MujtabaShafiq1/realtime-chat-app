@@ -1,10 +1,39 @@
-import { Box, TextField, Button, styled, Badge } from "@mui/material"
+import { Box, TextField, Button, styled, Badge, Typography } from "@mui/material"
 
 const Flexbox = styled(Box)({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
 })
+
+const LatestText = styled(Typography)(({ all, theme }) => ({
+    fontWeight: 300,
+    color: all ? "lightgray" : "black",
+    [theme.breakpoints.down(750)]: {
+        display: 'none'
+    },
+    [theme.breakpoints.down("sm")]: {
+        display: "block",
+    },
+}))
+
+const UserContainer = styled(Typography)(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    [theme.breakpoints.up(750)]: {
+        flexDirection: 'row',
+        gap: 10,
+    },
+    [theme.breakpoints.down(750)]: {
+        flexDirection: 'column',
+        gap: 0,
+    },
+    [theme.breakpoints.down("sm")]: {
+        flexDirection: 'row',
+        gap: 10,
+    },
+}))
 
 const StyledField = styled(TextField)(({ auth, error }) => ({
     width: "90%",
@@ -96,4 +125,4 @@ const StyledStatusBadge = styled(Badge)(({ show }) => ({
 
 
 
-export { Flexbox, StyledField, StyledButton, TextBox, MessageContainer, StyledStatusBadge }
+export { Flexbox, StyledField, StyledButton, TextBox, LatestText, UserContainer, MessageContainer, StyledStatusBadge }

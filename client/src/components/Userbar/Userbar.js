@@ -22,6 +22,7 @@ const Userbar = ({ users }) => {
     const dispatch = useDispatch();
     const socket = useContext(SocketContext);
 
+    const chat = useSelector((state) => state.chat)
     const user = useSelector((state) => state.user.details)
 
     const [chats, setChats] = useState([])
@@ -54,7 +55,6 @@ const Userbar = ({ users }) => {
         dispatch(userActions.logout())
     }
 
-
     const searchHandler = (e) => {
         setSearch(e.target.value)
         const filtered = users.filter((user) => user.username.toLowerCase().includes(e.target.value.toLowerCase()))
@@ -64,17 +64,24 @@ const Userbar = ({ users }) => {
     return (
         <>
 
-            <Box sx={{ height: "100vh", width: { xs: "30%", lg: "22%" }, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
+            <Box
+                sx={{
+                    height: "100vh",
+                    width: { xs: "100%", sm: "33%", lg: "22%" },
+                    display: { xs: (chat.chatId && "none"), sm: "block" },
+                    borderRight: "0.5px solid rgba(102, 51, 153, 0.1)"
+                }}
+            >
 
                 <Flexbox sx={{ justifyContent: "space-around", gap: 1, padding: "10px" }}>
                     <Avatar src={user.profilePicture || UserImage} sx={{ width: 50, height: 50 }} />
-                    <Typography sx={{ fontSize: "20px", display: { xs: "none", md: "block" } }}>{user.username}</Typography>
+                    <Typography sx={{ fontSize: "20px", display: { xs: "block", sm: "none", md: "block" } }}>{user.username}</Typography>
                     <StyledButton sx={{ backgroundColor: "black" }} onClick={logoutHandler}>
                         Logout
                     </StyledButton>
                 </Flexbox>
 
-                <Flexbox sx={{ gap: 3, padding: "10px", flexDirection: { xs: "column", md: "row" } }} >
+                <Flexbox sx={{ gap: 3, padding: "10px", flexDirection: { xs: "row", sm: "column", md: "row" } }} >
 
                     <StyledField
                         variant="outlined"
@@ -82,8 +89,8 @@ const Userbar = ({ users }) => {
                         type="text"
                         size="small"
                         hiddenLabel
-                        value={search}
                         onChange={searchHandler}
+                        value={search}
                         InputProps={{
                             disableUnderline: true,
                             autoComplete: "off",
@@ -93,7 +100,7 @@ const Userbar = ({ users }) => {
                                 </InputAdornment>
                             ),
                         }}
-                        sx={{ margin: "4% 0%", width: "75%" }}
+                        sx={{ margin: "4% 0%", width: { xs: "50%", sm: "75%" } }}
                     />
 
                     <Flexbox sx={{ flexDirection: { xs: "row", md: "column" }, gap: { xs: 2, md: 0 } }}>
@@ -114,7 +121,7 @@ const Userbar = ({ users }) => {
                     {createGroup ?
                         <CreateGroupChat users={search ? searchedUsers : users} close={() => setCreateGroup(false)} />
                         :
-                        <Box>
+                        <Box sx={{ height: { xs: "75vh", sm: "70vh", md: "75vh" }, overflow: "auto" }}>
                             <Divider orientation='horizontal' sx={{ m: "1% 0%", bgcolor: "gray", opacity: "0.3" }} />
                             {search ?
                                 <SearchedChats searchedUsers={searchedUsers} clear={() => setSearch("")} />

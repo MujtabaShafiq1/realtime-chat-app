@@ -18,10 +18,10 @@ const Home = () => {
     const userId = useSelector((state) => state.user.details.id)
 
     const [users, setUsers] = useState([])
+    const [back, setBack] = useState(false)
     const [drawer, setDrawer] = useState(false)
 
     const socket = useContext(SocketContext)
-
 
     const fetchUsers = useCallback(async () => {
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/user/all`)
@@ -39,7 +39,7 @@ const Home = () => {
     }, [fetchUsers])
 
     return (
-        <Flexbox>
+        <Flexbox >
             <Userbar users={users} />
             <Chat open={() => setDrawer(true)} />
             {chat.chatId &&
@@ -56,7 +56,7 @@ const Home = () => {
                         PaperProps={{
                             sx: {
                                 zIndex: 1,
-                                width: { xs: "40%", sm: "30%" },
+                                width: { xs: "50%", md: "30%" },
                                 minHeight: "100vh",
                             }
                         }}>
