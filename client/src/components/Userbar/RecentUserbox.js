@@ -72,7 +72,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
 
 
                 {latestMessage &&
-                    <LatestText all={chat.members.every(val => latestMessage.readBy.includes(val._id).toString())}>
+                    <LatestText all={(chat.members.every(val => latestMessage.readBy.includes(val._id)) ? 1 : 0)}>
                         {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
                         {
                             (chat._id === latestMessage.chatId)

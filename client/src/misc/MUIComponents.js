@@ -17,7 +17,7 @@ const LatestText = styled(Typography)(({ all, theme }) => ({
     },
 }))
 
-const UserContainer = styled(Typography)(({ theme }) => ({
+const UserContainer = styled(Box)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-start",

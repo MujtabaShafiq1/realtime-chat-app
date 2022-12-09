@@ -4,12 +4,12 @@ import { Avatar, Box, Typography } from '@mui/material'
 import { ImageListItem, ImageList } from '@mui/material'
 import { Flexbox, TextBox, MessageContainer } from "../../misc/MUIComponents"
 import { SocketContext } from '../../context/Socket';
+import ImageGallery from './ImageGallery';
 import moment from "moment"
 
 import SeenIcon from "../../assets/Message/seen.png";
 import DeliveredIcon from "../../assets/Message/delivered.png";
 import UserImage from "../../assets/User/user.jpg"
-import ImageGallery from './ImageGallery';
 import axios from 'axios';
 
 const Message = ({ message, next }) => {
@@ -69,10 +69,18 @@ const Message = ({ message, next }) => {
             <MessageContainer sender={currentUserMessage ? 1 : 0} consecutive={consecutiveMessage ? 1 : 0} >
 
                 {(consecutiveMessage && currentUserMessage && message.type !== "info") &&
-                    < Avatar src={user.profilePicture || UserImage} sx={{ alignSelf: "flex-end" }} />}
+                    <Avatar
+                        src={user.profilePicture || UserImage}
+                        sx={{ alignSelf: "flex-end", display: { xs: "none", sm: "block" } }}
+                    />
+                }
 
                 {(consecutiveMessage && !currentUserMessage && message.type !== "info") &&
-                    < Avatar src={chat.otherMembers.filter(member => (member._id === message.senderId))[0]?.profilePicture || UserImage} sx={{ alignSelf: "flex-end" }} />}
+                    <Avatar
+                        src={chat.otherMembers.filter(member => (member._id === message.senderId))[0]?.profilePicture || UserImage}
+                        sx={{ alignSelf: "flex-end" }}
+                    />
+                }
 
                 <Flexbox sx={{ flexDirection: "column", alignItems: currentUserMessage ? "flex-end" : "flex-start", maxWidth: "50%" }}>
 
@@ -166,7 +174,7 @@ const Message = ({ message, next }) => {
                     {(message.content && message.type !== "info") &&
                         <TextBox onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
                             <Flexbox>
-                                <Typography sx={{ fontSize: "16px" }}>{message.content}</Typography>
+                                <Typography sx={{ fontSize: { xs: "14px", sm: "16px" } }}>{message.content}</Typography>
                             </Flexbox>
                             {
                                 message.senderId === user.id &&
@@ -182,8 +190,8 @@ const Message = ({ message, next }) => {
                 </Flexbox>
 
                 {hover &&
-                    <Flexbox sx={{ backgroundColor: "gray", borderRadius: "10px", width: "auto", height: "2vh", opacity: 0.8, padding: "5px" }}>
-                        <Typography sx={{ fontSize: "11px", fontWeight: 300, opacity: 1, color: "white" }}>
+                    <Flexbox sx={{ backgroundColor: "gray", borderRadius: "30px", width: "auto", height: "auto", opacity: 0.8, padding: "4px" }}>
+                        <Typography sx={{ fontSize: "11px", fontWeight: 300, opacity: 1, color: "white", textAlign: "center" }}>
                             {moment(message.createdAt).calendar()}
                         </Typography>
                     </Flexbox>

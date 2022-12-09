@@ -18,7 +18,6 @@ const Home = () => {
     const userId = useSelector((state) => state.user.details.id)
 
     const [users, setUsers] = useState([])
-    const [back, setBack] = useState(false)
     const [drawer, setDrawer] = useState(false)
 
     const socket = useContext(SocketContext)
@@ -56,7 +55,7 @@ const Home = () => {
                         PaperProps={{
                             sx: {
                                 zIndex: 1,
-                                width: { xs: "50%", md: "30%" },
+                                width: { xs: "70%", sm: "50%", md: "30%" },
                                 minHeight: "100vh",
                             }
                         }}>
