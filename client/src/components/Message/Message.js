@@ -102,10 +102,12 @@ const Message = ({ message, next }) => {
                                     />
                                     :
                                     <ImageList
-                                        sx={{ width: 450, height: 300, }}
+                                        sx={{
+                                            width: { xs: 300, sm: 500 },
+                                            height: { xs: 250, sm: 300 },
+                                        }}
                                         variant="quilted"
                                         cols={4}
-                                        rowHeight={148}
                                     >
                                         <ImageListItem cols={2} rows={2} >
                                             <img
@@ -150,7 +152,9 @@ const Message = ({ message, next }) => {
                                                 {message.images.length > 4 &&
                                                     <Flexbox
                                                         sx={{ backgroundColor: "rgba(0,0,0,0.5)", position: "absolute", height: "100%", width: "100%", borderRadius: "8px" }}>
-                                                        <Typography sx={{ fontSize: "28px", color: "white", fontWeight: 200 }}>+ {message.images.length - 4}</Typography>
+                                                        <Typography sx={{ fontSize: "28px", color: "white", fontWeight: 400, opacity: 0.7 }}>
+                                                            + {message.images.length - 4}
+                                                        </Typography>
                                                     </Flexbox>
                                                 }
                                             </ImageListItem>
@@ -199,7 +203,8 @@ const Message = ({ message, next }) => {
 
             </MessageContainer >
 
-            {message.type === "info" &&
+            {
+                message.type === "info" &&
                 <Typography sx={{ fontSize: "15px", fontWeight: 300, opacity: 1, color: "gray", textAlign: "center", margin: "1% 0" }}>
                     {message.content}
                 </Typography>

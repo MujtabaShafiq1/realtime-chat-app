@@ -50,7 +50,7 @@ const Messages = () => {
 
 
     return (
-        <Box sx={{ height: { xs: "75vh", sm: "78vh" }, overflow: "auto" }}>
+        <Box sx={{ height: "86vh", overflow: "auto" }}>
             {messages.length > 0 ?
                 <>
                     <Box sx={{ padding: "15px 15px 0px 15px" }}>

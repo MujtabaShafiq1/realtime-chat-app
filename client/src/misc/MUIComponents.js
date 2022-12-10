@@ -86,14 +86,20 @@ const TextBox = styled(Box)(({ sender }) => ({
 }))
 
 
-const MessageContainer = styled(Box)(({ sender, consecutive }) => ({
+const MessageContainer = styled(Box)(({ sender, consecutive, theme }) => ({
     display: "flex",
     flexDirection: sender && "row-reverse",
     gap: 15,
-    margin: sender ? (!consecutive ? "0 6% 0.5% 0" : "0 1% 0.4% 0") : (!consecutive && "0 0 0.4% 5%"),
     alignItems: "center",
-    justifyContent: sender ? "flex-between" : "flex-start"
+    justifyContent: sender ? "flex-between" : "flex-start",
+    [theme.breakpoints.down("sm")]: {
+        margin: sender ? "0 1% 0.5% 0" : "0 0 0.5% 1%",
+    },
+    [theme.breakpoints.up("sm")]: {
+        margin: sender ? (!consecutive ? "0 6% 0.5% 0" : "0 1% 0.4% 0") : (!consecutive && "0 0 0.4% 5%"),
+    },
 }))
+
 
 const StyledStatusBadge = styled(Badge)(({ show }) => ({
     '& .MuiBadge-badge': {

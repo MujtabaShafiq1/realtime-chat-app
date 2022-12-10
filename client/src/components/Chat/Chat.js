@@ -26,7 +26,15 @@ const Chat = ({ open }) => {
 
     return (
         <>
-            <Box sx={{ flex: 4, minHeight: "100vh", backgroundColor: "rgba(239, 239, 240, 0.4)", display: { xs: (!chat.chatId && "none"), sm: "block" } }}>
+            <Box
+                sx={{
+                    flex: 4,
+                    height: "100vh",
+                    backgroundColor: "rgba(239, 239, 240, 0.4)",
+                    borderRight: "0.5px solid rgba(180, 180, 180, 0.3)",
+                    display: { xs: (!chat.chatId && "none"), sm: "block" }
+                }}
+            >
 
                 {chat.otherMembers.length > 0 ?
 

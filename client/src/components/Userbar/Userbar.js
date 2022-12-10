@@ -69,7 +69,7 @@ const Userbar = ({ users }) => {
                     height: "100vh",
                     width: { xs: "100%", sm: "33%", lg: "22%" },
                     display: { xs: (chat.chatId && "none"), sm: "block" },
-                    borderRight: "0.5px solid rgba(102, 51, 153, 0.1)"
+                    borderRight: "0.5px solid rgba(180, 180, 180, 0.3)"
                 }}
             >
 
