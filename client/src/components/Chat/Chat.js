@@ -48,18 +48,24 @@ const Chat = ({ open }) => {
                         }}
                         >
                             <Box component="img" src={BackIcon} sx={{ height: 25, display: { xs: "block", sm: "none" } }} onClick={() => dispatch(chatActions.reset())} />
+
                             <Flexbox gap={1}>
+
+                                <AvatarGroup total={chat.otherMembers.length.length + (chat.isGroupChat && 1)}>
+                                    <Avatar sx={{ width: 50, height: 50 }} src={chat.otherMembers[0]?.profilePicture || UserImage} />
+                                    {chat.isGroupChat && <Avatar sx={{ width: 35, height: 35 }} src={user?.profilePicture || UserImage} />}
+                                </AvatarGroup>
+
                                 {chat.isGroupChat ?
-                                    <AvatarGroup total={chat.otherMembers.length}>
-                                        <Avatar src={user.profilePicture || UserImage} />
-                                        <Avatar src={chat.otherMembers[0]?.profilePicture || UserImage} />
-                                    </AvatarGroup>
+                                    <Typography sx={{ fontSize: "18px" }}>
+                                        You
+                                        {chat.otherMembers.length >= 1 && <span style={{ fontSize: "18px" }}> and {chat.otherMembers[0].username}</span>}
+                                        {chat.otherMembers.length > 1 && <span style={{ fontSize: "18px" }}> + {chat.otherMembers[0].length} others</span>}
+                                    </Typography>
                                     :
-                                    <Avatar src={chat.otherMembers[0]?.profilePicture || UserImage} />
+                                    <Typography sx={{ fontSize: "18px" }}>{chat.otherMembers[0].username}</Typography>
                                 }
-                                <Typography sx={{ fontSize: "18px" }}>{chat.otherMembers[0]?.username || user.username}</Typography>
-                                {chat.isGroupChat && chat.otherMembers.length > 1
-                                    && <Typography sx={{ fontSize: "18px", color: "gray" }}>and {chat.otherMembers.length - 1} others</Typography>}
+
                             </Flexbox>
 
                             <Flexbox sx={{ gap: 0.2, flexDirection: "column", cursor: "pointer", display: { md: "flex", lg: "none" } }} onClick={open}>

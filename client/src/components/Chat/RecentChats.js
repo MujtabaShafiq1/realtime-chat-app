@@ -26,7 +26,6 @@ const RecentChats = ({ chats }) => {
 
         const { _id, isGroupChat, members, groupAdmin, createdAt } = selectedChat;
         const activeChat = { chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId), groupAdmin, createdAt }
-
         dispatch(chatActions.conversation(activeChat))
         socket.emit("readAllMessage", { chatId: _id, readByUser: userId, totalMembers: members.length })
     }

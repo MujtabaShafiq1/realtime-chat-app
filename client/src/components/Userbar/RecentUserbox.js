@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Avatar, Typography, AvatarGroup } from '@mui/material';
-import { Flexbox, LatestText, StyledStatusBadge, UserContainer } from '../../misc/MUIComponents';
+import { LatestText, StyledStatusBadge, UserContainer } from '../../misc/MUIComponents';
 import { SocketContext } from '../../context/Socket';
 
 import UserImage from "../../assets/User/user.jpg";
@@ -9,12 +9,12 @@ import UserImage from "../../assets/User/user.jpg";
 const RecentUserbox = ({ chat, onlineUsers }) => {
 
     const socket = useContext(SocketContext)
-    const userId = useSelector((state) => state.user.details.id)
+    const user = useSelector((state) => state.user.details)
 
     const [latestMessage, setLatestMessage] = useState(chat.latestMessage)
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
 
-    const filteredUser = chat.members.filter(user => user._id !== userId)
+    const filteredUser = chat.members.filter(member => member._id !== user.id)
 
     useEffect(() => {
         socket.on("getLatestMessage", (data) => {
@@ -43,7 +43,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
         }}
         >
 
-            <AvatarGroup total={filteredUser.length} sx={{ marginLeft: "3%" }}>
+            <AvatarGroup total={filteredUser.length + (chat.isGroupChat && 1)} sx={{ marginLeft: "3%" }}>
                 <StyledStatusBadge
                     overlap="circular"
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -55,25 +55,29 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
                         src={filteredUser[0]?.profilePicture || UserImage}
                     />
                 </StyledStatusBadge>
-                {chat.isGroupChat && <Avatar sx={{ width: 50, height: 50 }} src={filteredUser[1]?.profilePicture || UserImage} />}
+                {chat.isGroupChat && <Avatar sx={{ width: 35, height: 35 }} src={user?.profilePicture || UserImage} />}
             </AvatarGroup>
 
 
             <Box>
 
                 <UserContainer>
-                    <Flexbox sx={{ gap: 1 }}>
-                        <Typography sx={{ fontSize: "18px" }}>{filteredUser[0].username}</Typography>
-                        {chat.isGroupChat && filteredUser.length > 1 &&
-                            <Typography sx={{ fontSize: "18px", color: "gray" }}>and {filteredUser.length - 1} others</Typography>}
-                    </Flexbox>
+                    <Box sx={{ gap: 1, display: "flex" }}>
+                        {chat.isGroupChat ?
+                            <Typography sx={{ fontSize: "18px" }}>
+                                You {filteredUser.length >= 1 && <span sx={{ fontSize: "18px" }}>and {filteredUser.length} others</span>}
+                            </Typography>
+                            :
+                            <Typography sx={{ fontSize: "18px" }}>{filteredUser[0].username}</Typography>
+                        }
+                    </Box>
                     {typingDetails.typing && typingDetails.chatId === chat._id && <Typography sx={{ fontSize: "16px" }} color="green">typing... </Typography>}
                 </UserContainer>
 
 
                 {latestMessage &&
                     <LatestText all={+(chat.members.every(val => latestMessage.readBy.includes(val._id)))}>
-                        {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
+                        {(user.id === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
                         {
                             (chat._id === latestMessage.chatId)
                                 &&

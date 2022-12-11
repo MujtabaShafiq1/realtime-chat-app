@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box, Typography, Avatar } from "@mui/material"
 import { Flexbox } from "../../misc/MUIComponents"
 import { SocketContext } from "../../context/Socket";
+import { chatActions } from "../../store/chatSlice";
 import { createChat } from "../../store/chatActions";
 import CustomSnackbar from "../UI/CustomSnackbar"
 import axios from "axios"
@@ -33,11 +34,12 @@ const CreateGroupChat = ({ users, close }) => {
 
     const createGroup = async () => {
         if (addedUsers.length <= 20) {
-
-            const newChatId = await dispatch(createChat({ senderId: user.id, receiverId: addedUsers.map(user => user._id), isGroupChat: true })).unwrap()
-            const messageBody = { chatId: newChatId, senderId: user.id, type: "info", content: `Group created by ${user.username}`, readBy: [user.id] }
+            dispatch(chatActions.conversation({ otherMembers: [...addedUsers] }))
+            const response = await dispatch(createChat({ senderId: user.id, receiverId: addedUsers.map(user => user._id), isGroupChat: true })).unwrap()
+            const messageBody = { chatId: response._id, senderId: user.id, type: "info", content: `Group created by ${user.username}`, readBy: [user.id] }
             const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
-            socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...addedUsers, user.id] });
+            socket.emit("new chat", response)
+            socket.emit("latestMessage", messageResponse)
             close();
             return;
         }

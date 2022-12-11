@@ -49,7 +49,7 @@ const Messages = () => {
     }, [socket])
 
     return (
-        <Box sx={{ height: "87%", minHeight: "80%", overflow: "auto", backgroundColor: "rgba(239, 239, 240, 0.4)", }}>
+        <Box sx={{ height: "80%", overflow: "auto", backgroundColor: "rgba(239, 239, 240, 0.4)", }}>
             {messages.length > 0 ?
                 <>
                     <Box sx={{ padding: "15px 15px 0px 15px" }}>
