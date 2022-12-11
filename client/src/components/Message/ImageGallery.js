@@ -48,8 +48,8 @@ const ImageGallery = ({ images, close }) => {
                     <Flexbox
                         sx={{
                             height: "100%",
-                            width: "10%",
-                            right: "90%",
+                            width: { xs: "5%", md: "10%", },
+                            right: "92%",
                             position: "absolute",
                             bgcolor: "rgba(0,0,0,0.01)",
                         }}
@@ -58,8 +58,7 @@ const ImageGallery = ({ images, close }) => {
                             component="img"
                             src={NextIcon}
                             sx={{
-                                height: 50,
-                                width: 50,
+                                width: { xs: 20, md: 50 },
                                 cursor: "pointer",
                                 transform: "rotate(180deg)"
                             }}
@@ -72,19 +71,20 @@ const ImageGallery = ({ images, close }) => {
                 <Box
                     component="img"
                     src={CloseIcon}
-                    sx={{ height: 50, width: 50, cursor: "pointer", position: "absolute", left: "90%", top: "2%", zIndex: 1 }}
+                    sx={{ width: { xs: 30, md: 50 }, cursor: "pointer", position: "absolute", left: "90%", top: "2%", zIndex: 1 }}
                     onClick={close}
                 />
 
                 {/* Image */}
                 <Flexbox sx={{ height: "80%", width: "auto" }}>
-                    <img
+                    <Box
+                        component="img"
                         loading="lazy"
                         alt=""
                         src={images[slider]}
-                        style={{
-                            maxWidth: "90%",
-                            maxHeight: "90%",
+                        sx={{
+                            maxWidth: { xs: "80%", md: "90%" },
+                            maxHeight: { xs: "80%", md: "90%" },
                         }}
                     />
                 </Flexbox>
@@ -95,8 +95,8 @@ const ImageGallery = ({ images, close }) => {
                     <Flexbox
                         sx={{
                             height: "100%",
-                            width: "10%",
-                            left: "90%",
+                            width: { xs: "5%", md: "10%", },
+                            left: "92%",
                             position: "absolute",
                             bgcolor: "rgba(0,0,0,0.01)",
                         }}
@@ -105,8 +105,7 @@ const ImageGallery = ({ images, close }) => {
                             component="img"
                             src={NextIcon}
                             sx={{
-                                height: 50,
-                                width: 50,
+                                width: { xs: 20, md: 50 },
                                 cursor: "pointer",
                             }}
                             onClick={nextImageHandler}
@@ -115,20 +114,20 @@ const ImageGallery = ({ images, close }) => {
                 }
 
                 {/* Slider button */}
-                <Flexbox sx={{ position: "absolute", top: "90%", gap: 3 }}>
+                <Flexbox sx={{ position: "absolute", top: "90%", gap: { xs: 1, md: 3 } }}>
                     {images.map((image, index) => {
                         return (
                             <Box
                                 component="img"
                                 src={slider === index ? WhiteCircleIcon : BlackCircleIcon}
-                                sx={{ height: 20, width: 20, cursor: "pointer" }}
+                                sx={{ width: { xs: 10, md: 20 }, cursor: "pointer" }}
                                 onClick={() => { if (index !== slider) setSlider(index) }}
                             />
                         )
                     })}
                 </Flexbox>
             </>
-        </Modal>
+        </Modal >
     );
 }
 

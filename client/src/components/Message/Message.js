@@ -27,9 +27,7 @@ const Message = ({ message, next }) => {
     const currentUserMessage = (user.id === message.senderId)
 
     const dateFormat = "YYYY-MM-DD HH:mm:ss"
-    const start = moment(message.createdAt).format(dateFormat)
-    const end = moment(next?.createdAt).format(dateFormat)
-    const duration = moment(end).diff(start, 'hours');
+    const duration = moment(moment(next?.createdAt).format(dateFormat)).diff(moment(message.createdAt).format(dateFormat), 'hours');
 
 
     // to read message by logged in user
@@ -59,8 +57,7 @@ const Message = ({ message, next }) => {
     function srcset(image, size = 148, rows = 1, cols = 1) {
         return {
             src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-            srcSet: `${image}?w=${size * cols}&h=${size * rows
-                }&fit=crop&auto=format&dpr=2 2x`,
+            srcSet: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format&dpr=2 2x`,
         };
     }
 
@@ -97,14 +94,14 @@ const Message = ({ message, next }) => {
                                 {message.images.length === 1 ?
                                     <Box
                                         component="img"
-                                        sx={{ maxWidth: 300, maxHeight: 300, borderRadius: "8px" }}
+                                        sx={{ maxWidth: { xs: 250, md: 300 }, maxHeight: { xs: 200, md: 300 }, borderRadius: "8px" }}
                                         src={message.images[0]}
                                     />
                                     :
                                     <ImageList
                                         sx={{
-                                            width: { xs: 300, sm: 500 },
-                                            height: { xs: 250, sm: 300 },
+                                            width: { xs: 250, md: 500 },
+                                            height: { xs: 200, md: 300 },
                                         }}
                                         variant="quilted"
                                         cols={4}

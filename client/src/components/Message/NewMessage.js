@@ -13,7 +13,6 @@ import SendIcon from "../../assets/Chat/send.png"
 import RemoveCircleIcon from "../../assets/Chat/remove-circle.png"
 import GalleryIcon from "../../assets/Message/gallery.png"
 
-
 const NewMessage = () => {
 
     const dispatch = useDispatch();
@@ -90,12 +89,8 @@ const NewMessage = () => {
             }
 
             const messageBody = {
-                chatId: chat.chatId || newChatId,
-                senderId: user.id,
-                type: imageList ? "image" : "text",
-                images: imageList,
-                content: newMessage,
-                readBy: [user.id]
+                chatId: chat.chatId || newChatId, senderId: user.id, type: imageList ? "image" : "text",
+                images: imageList, content: newMessage, readBy: [user.id]
             }
 
             setNewMessage("")
@@ -109,41 +104,40 @@ const NewMessage = () => {
     return (
         <>
             {snackbar.open && <CustomSnackbar type="error" details={snackbar.details} />}
-            <Box
+            <Flexbox
                 sx={{
+                    padding: "11px",
                     position: "sticky",
-                    overflow: "auto",
-                    padding: "16px 10px",
+                    flexDirection: "column",
                     backgroundColor: "rgba(180, 180, 180, 0.3)",
-                    boxShadow: "0px -10px 10px rgba(180, 180, 180, 0.4)",
-                    borderTop: "0.5px solid rgba(102, 51, 153, 0.1)"
+                    boxShadow: "0px -10px 20px rgba(180, 180, 180, 0.4)",
+                    borderTop: "0.5px solid rgba(102, 51, 153, 0.1)",
                 }}
             >
 
-                <Flexbox sx={{ height: "9vh", overflow: "auto", position: "relative", display: (!(files.length > 0) && "none") }}>
-                    <Flexbox sx={{ justifyContent: "flex-start", width: "94%", gap: 1, position: "absolute" }}>
-                        {Object.values(files).map((file) => {
-                            return (
-                                <Box key={file.name} sx={{ position: "relative" }}>
-                                    <Box
-                                        component="img"
-                                        sx={{ width: 60, height: 60, border: "2px solid rgba(180,180,180,0.5)", borderRadius: "10px" }}
-                                        src={URL.createObjectURL(file)}
-                                    />
-                                    <Box
-                                        key={file.name}
-                                        component="img"
-                                        sx={{ width: 13, height: 13, position: "absolute", right: "0.4%", cursor: "pointer" }}
-                                        src={RemoveCircleIcon}
-                                        onClick={() => setFiles(prev => Object.values(prev).filter(data => data !== file))}
-                                    />
-                                </Box>
-                            )
-                        })}
-                    </Flexbox>
+                <Flexbox sx={{ display: (!(files.length > 0) && "none"), overflow: "auto", justifyContent: "flex-start", width: "94%", gap: 1 }} >
+
+                    {Object.values(files).map((file) => {
+                        return (
+                            <Box key={file.name} sx={{ position: "relative" }}>
+                                <Box
+                                    component="img"
+                                    sx={{ width: 60, height: 60, border: "2px solid rgba(180,180,180,0.5)", borderRadius: "10px" }}
+                                    src={URL.createObjectURL(file)}
+                                />
+                                <Box
+                                    key={file.name}
+                                    component="img"
+                                    sx={{ width: 13, height: 13, position: "absolute", right: "0.4%", cursor: "pointer" }}
+                                    src={RemoveCircleIcon}
+                                    onClick={() => { setFiles(prev => Object.values(prev).filter(data => data !== file)) }}
+                                />
+                            </Box>
+                        )
+                    })}
                 </Flexbox>
 
-                <Flexbox sx={{ gap: 2 }}>
+                <Flexbox sx={{ gap: 2, width: "100%" }}>
                     <StyledField
                         variant="outlined"
                         placeholder="Send Message"
@@ -153,7 +147,6 @@ const NewMessage = () => {
                         value={newMessage}
                         onChange={newMessageHandler}
                         InputProps={{
-                            disableUnderline: true,
                             autoComplete: "off",
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -175,8 +168,10 @@ const NewMessage = () => {
                             </Avatar>
                         }
                     </Flexbox>
+
                 </Flexbox>
-            </Box>
+
+            </Flexbox>
         </>
     )
 }

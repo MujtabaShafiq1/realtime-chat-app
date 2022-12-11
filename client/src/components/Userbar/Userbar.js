@@ -92,7 +92,6 @@ const Userbar = ({ users }) => {
                         onChange={searchHandler}
                         value={search}
                         InputProps={{
-                            disableUnderline: true,
                             autoComplete: "off",
                             endAdornment: (
                                 <InputAdornment position="end" sx={{ cursor: "pointer" }}>

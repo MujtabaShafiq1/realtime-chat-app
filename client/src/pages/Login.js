@@ -120,7 +120,6 @@ const Login = () => {
                                 onChange={formik.handleChange}
                                 helperText={formik.touched.email && formik.errors.email}
                                 error={formik.touched.email && Boolean(formik.errors.email)}
-                                InputProps={{ disableUnderline: true }}
                             />
 
                             <StyledField
@@ -137,7 +136,6 @@ const Login = () => {
                                 helperText={formik.touched.password && formik.errors.password}
                                 error={formik.touched.password && Boolean(formik.errors.password)}
                                 InputProps={{
-                                    disableUnderline: true,
                                     endAdornment: (
                                         <InputAdornment position="end">
                                             <Box

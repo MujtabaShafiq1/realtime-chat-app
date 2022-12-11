@@ -24,26 +24,25 @@ const Chat = ({ open }) => {
         if (chat.chatId) socket.emit("join chat", chat.chatId);
     }, [chat.chatId, socket])
 
+
     return (
         <>
             <Box
                 sx={{
                     flex: 4,
-                    height: "100vh",
-                    backgroundColor: "rgba(239, 239, 240, 0.4)",
-                    borderRight: "0.5px solid rgba(180, 180, 180, 0.3)",
+                    borderRight: "0.5px solid rgba(180, 180, 180, 0.1)",
                     display: { xs: (!chat.chatId && "none"), sm: "block" }
                 }}
             >
 
                 {chat.otherMembers.length > 0 ?
 
-                    <Box>
+                    <Box sx={{ height: "100vh" }}>
 
                         <Flexbox sx={{
-                            justifyContent: "space-between",
                             padding: "1% 2%",
-                            backgroundColor: "rgba(180, 180, 180, 0.3)",
+                            justifyContent: "space-between",
+                            backgroundColor: "rgba(180, 180, 180, 0.4)",
                             boxShadow: "0px 10px 10px rgba(180, 180, 180, 0.4)",
                             borderBottom: "0.5px solid rgba(102, 51, 153, 0.1)"
                         }}
