@@ -48,7 +48,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
                     overlap="circular"
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                     variant="dot"
-                    show={(onlineUsers.some(r => r.includes(filteredUser[0]._id)) ? 1 : 0)}
+                    show={+(onlineUsers.some(r => r.includes(filteredUser[0]._id)))}
                 >
                     <Avatar
                         sx={{ width: 50, height: 50 }}
@@ -72,7 +72,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
 
 
                 {latestMessage &&
-                    <LatestText all={(chat.members.every(val => latestMessage.readBy.includes(val._id)) ? 1 : 0)}>
+                    <LatestText all={+(chat.members.every(val => latestMessage.readBy.includes(val._id)))}>
                         {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
                         {
                             (chat._id === latestMessage.chatId)

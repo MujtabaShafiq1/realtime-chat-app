@@ -63,7 +63,7 @@ const Message = ({ message, next }) => {
 
     return (
         <>
-            <MessageContainer sender={currentUserMessage ? 1 : 0} consecutive={consecutiveMessage ? 1 : 0} >
+            <MessageContainer sender={+currentUserMessage} consecutive={+consecutiveMessage} >
 
                 {(consecutiveMessage && currentUserMessage && message.type !== "info") &&
                     <Avatar

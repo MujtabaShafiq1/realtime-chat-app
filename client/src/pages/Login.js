@@ -115,11 +115,12 @@ const Login = () => {
                                 type="email"
                                 size="small"
                                 hiddenLabel
-                                auth={true}
+                                auth={+true}
                                 value={formik.values.email}
                                 onChange={formik.handleChange}
                                 helperText={formik.touched.email && formik.errors.email}
                                 error={formik.touched.email && Boolean(formik.errors.email)}
+                                InputProps={{ disableUnderline: true }}
                             />
 
                             <StyledField
@@ -129,13 +130,14 @@ const Login = () => {
                                 name="password"
                                 size="small"
                                 hiddenLabel
-                                auth={true}
+                                auth={+true}
                                 type={showPassword ? "text" : "password"}
                                 value={formik.values.password}
                                 onChange={formik.handleChange}
                                 helperText={formik.touched.password && formik.errors.password}
                                 error={formik.touched.password && Boolean(formik.errors.password)}
                                 InputProps={{
+                                    disableUnderline: true,
                                     endAdornment: (
                                         <InputAdornment position="end">
                                             <Box
