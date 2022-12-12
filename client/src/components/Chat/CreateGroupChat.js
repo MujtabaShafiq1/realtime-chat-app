@@ -35,11 +35,14 @@ const CreateGroupChat = ({ users, close }) => {
     const createGroup = async () => {
         if (addedUsers.length <= 20) {
             dispatch(chatActions.conversation({ otherMembers: [...addedUsers] }))
+
             const response = await dispatch(createChat({ senderId: user.id, receiverId: addedUsers.map(user => user._id), isGroupChat: true })).unwrap()
+            socket.emit("new chat", response)
+
             const messageBody = { chatId: response._id, senderId: user.id, type: "info", content: `Group created by ${user.username}`, readBy: [user.id] }
             const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
-            socket.emit("new chat", response)
-            socket.emit("latestMessage", messageResponse)
+            socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...addedUsers.map(user => user._id), user.id] });
+
             close();
             return;
         }
@@ -100,7 +103,7 @@ const CreateGroupChat = ({ users, close }) => {
                     }}
                     >
                         <Flexbox gap={2}>
-                            <Avatar sx={{ width: 50, height: 50, marginLeft: "3%", }} src={user.profilePicture || UserImage} />
+                            <Avatar sx={{ marginLeft: "3%", }} src={user.profilePicture || UserImage} />
                             <Typography sx={{ fontSize: "18px" }}>{user.username}</Typography>
                         </Flexbox>
                         <Box

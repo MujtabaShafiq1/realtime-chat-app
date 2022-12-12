@@ -1,6 +1,6 @@
 import { useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Box, Typography, AvatarGroup } from '@mui/material'
+import { Box, Typography, Avatar, AvatarGroup } from '@mui/material'
 import { Flexbox } from '../../misc/MUIComponents'
 import { SocketContext } from '../../context/Socket';
 import { chatActions } from '../../store/chatSlice';
@@ -52,7 +52,7 @@ const Chat = ({ open }) => {
                             <Flexbox gap={1}>
 
                                 <AvatarGroup total={chat.otherMembers.length.length + (chat.isGroupChat && 1)}>
-                                    <Avatar sx={{ width: 50, height: 50 }} src={chat.otherMembers[0]?.profilePicture || UserImage} />
+                                    <Avatar src={chat.otherMembers[0]?.profilePicture || UserImage} />
                                     {chat.isGroupChat && <Avatar sx={{ width: 35, height: 35 }} src={user?.profilePicture || UserImage} />}
                                 </AvatarGroup>
 

@@ -17,17 +17,13 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
     const filteredUser = chat.members.filter(member => member._id !== user.id)
 
     useEffect(() => {
-        socket.on("getLatestMessage", (data) => {
-            if (chat._id !== data.chatId) return;
-            setLatestMessage(data);
-        })
+        socket.on("getLatestMessage", (data) => { if (chat._id === data.chatId) setLatestMessage(data) })
     }, [socket, chat._id])
 
     useEffect(() => {
         socket.on("typing", (chatId) => setTypingDetails({ typing: true, chatId: chatId }))
         socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
     }, [socket])
-
 
     return (
         <Box sx={{

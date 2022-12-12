@@ -1,6 +1,5 @@
-import { Avatar } from "@mui/material";
+import { Box, Avatar } from "@mui/material";
 import { useSelector } from "react-redux";
-import { Box } from "@mui/material";
 
 import animationData from "../../animations/typing.json"
 import Lottie from "react-lottie";

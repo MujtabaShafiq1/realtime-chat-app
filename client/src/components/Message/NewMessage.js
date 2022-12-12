@@ -93,12 +93,11 @@ const NewMessage = () => {
                 images: imageList, content: newMessage, readBy: [user.id]
             }
 
-            setNewMessage("")
             const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
-
             socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...chat.otherMembers, user.id] });
             socket.emit("stop typing", (chat.chatId || newChatId));
         }
+        setNewMessage("")
     }
 
     return (

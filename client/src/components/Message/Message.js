@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import { useSelector } from 'react-redux';
-import { Avatar, Box, Typography } from '@mui/material'
-import { ImageListItem, ImageList } from '@mui/material'
+import { Box, Typography, Avatar, ImageListItem, ImageList } from '@mui/material'
 import { Flexbox, TextBox, MessageContainer } from "../../misc/MUIComponents"
 import { SocketContext } from '../../context/Socket';
 import ImageGallery from './ImageGallery';
@@ -75,7 +74,7 @@ const Message = ({ message, next }) => {
                 {(consecutiveMessage && !currentUserMessage && message.type !== "info") &&
                     <Avatar
                         src={chat.otherMembers.filter(member => (member._id === message.senderId))[0]?.profilePicture || UserImage}
-                        sx={{ alignSelf: "flex-end" }}
+                        sx={{ alignSelf: "flex-end", width: { xs: 20, sm: 50 }, height: { xs: 20, sm: 50 }, }}
                     />
                 }
 
