@@ -35,14 +35,13 @@ const Messages = () => {
         getMessages()
     }, [getMessages])
 
-
     useEffect(() => {
         updateMessages()
     }, [updateMessages])
 
 
     useEffect(() => {
-        socket.on("getLatestMessage", (data) => setNewMessage(data))
+        socket.on("getLatestMessage", (data) => setNewMessage(data.messageBody))
         socket.on("typing", (chatId) => setTypingDetails({ typing: true, chatId: chatId }));
         socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })

@@ -1,9 +1,8 @@
 import { useState, useContext } from "react"
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Box, Typography } from '@mui/material'
 import { Flexbox, StyledButton } from '../../misc/MUIComponents'
 import { SocketContext } from "../../context/Socket";
-import { chatActions } from "../../store/chatSlice";
 import CustomSnackbar from "../UI/CustomSnackbar"
 import Userbox from '../Userbar/Userbox';
 import moment from 'moment';
@@ -18,7 +17,6 @@ import RemoveCircleIcon from "../../assets/Chat/remove-circle.png"
 
 const GroupBar = ({ users }) => {
 
-    const dispatch = useDispatch()
     const socket = useContext(SocketContext)
     const [addUser, setAddUser] = useState(false)
     const [userList, setUserList] = useState([])
@@ -32,14 +30,18 @@ const GroupBar = ({ users }) => {
 
     // add member in chat
     const addUserHandler = async () => {
-        if ((userList.length + chat.otherMembers) <= 20) {
-            await axios.put(`${process.env.REACT_APP_SERVER}/chat/add/${chat.chatId}`, { users: userList })
-            userList.map(async (user) => {
-                const messageBody = { chatId: chat.chatId, senderId: loggedInUser.id, type: "info", content: `${groupAdmin} added ${user.username}`, readBy: [loggedInUser.id] }
+        if ((userList.length + chat.otherMembers.length) <= 20) {
+
+            const response = await axios.put(`${process.env.REACT_APP_SERVER}/chat/add/${chat.chatId}`, { users: userList })
+
+            userList.map(async (newUser) => {
+                const messageBody = { chatId: chat.chatId, senderId: loggedInUser.id, type: "info", content: `${groupAdmin} added ${newUser.username}`, readBy: [loggedInUser.id] }
                 const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
-                socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...userList, ...chat.otherMembers, user] });
+
+                response.data.latestMessage = messageResponse.data;
+                socket.emit("new chat", { members: newUser, updatedChat: response.data })
+                socket.emit("latestMessage", { messageBody: messageResponse.data, users: [loggedInUser.id, ...chat.otherMembers], newUser });
             })
-            dispatch(chatActions.addUser(userList))
             closeHandler()
             return;
         }
@@ -52,9 +54,8 @@ const GroupBar = ({ users }) => {
     // remove member from chat
     const groupRemoveHandler = async () => {
         if (chat.otherMembers.length > 1) {
-            await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { users: userList })
-            dispatch(chatActions.removeUser(userList))
             closeHandler()
+            // await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { users: userList })
             return;
         }
         setSnackbar({ open: true, details: "Minimum user limit reached" })
@@ -88,12 +89,8 @@ const GroupBar = ({ users }) => {
 
             <Flexbox sx={{ flexDirection: "column", minHeight: "30vh", gap: 2 }}>
 
-                <Typography sx={{ fontSize: "24px", fontWeight: 500 }}>
-                    Group Admin: {groupAdmin}
-                </Typography>
-
-                <Typography sx={{ fontSize: "20px", fontWeight: 300 }}>Created {moment(chat.createdAt, "YYYYMMDD").fromNow()}</Typography>
-
+                <Typography sx={{ fontSize: "24px", fontWeight: 500 }}>Group Admin: {groupAdmin}</Typography>
+                <Typography sx={{ fontSize: "20px", fontWeight: 300 }}>Created {moment(chat.createdAt).calendar()}</Typography>
                 {chat.groupAdmin === loggedInUser.id && !addUser &&
                     <StyledButton sx={{ backgroundColor: "black", alignSelf: "center" }} onClick={AddHandler}>Add User</StyledButton>
                 }

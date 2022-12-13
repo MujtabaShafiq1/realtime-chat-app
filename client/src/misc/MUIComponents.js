@@ -7,8 +7,9 @@ const Flexbox = styled(Box)({
 })
 
 const LatestText = styled(Typography)(({ all, theme }) => ({
-    fontWeight: 500,
-    color: all ? "lightgray" : "black",
+    fontWeight: 400,
+    // color: all ? "lightgray" : "black",
+    color: "lightgray",
     [theme.breakpoints.down(750)]: {
         display: 'none'
     },

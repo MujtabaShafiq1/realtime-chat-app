@@ -17,13 +17,27 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
     const filteredUser = chat.members.filter(member => member._id !== user.id)
 
     useEffect(() => {
-        socket.on("getLatestMessage", (data) => { if (chat._id === data.chatId) setLatestMessage(data) })
-    }, [socket, chat._id])
+        socket.on("getLatestMessage", (data) => {
+
+            if (chat._id === data.messageBody.chatId) {
+                console.log("updating latest message");
+
+                if (!(chat.members.some(val => val._id === data.newUser._id))) {
+                    console.log("updating members of latest message");
+                    chat.members.push(data.newUser)
+                }
+
+                setLatestMessage(data.messageBody)
+            }
+        })
+    }, [socket, chat._id, chat.members])
+
 
     useEffect(() => {
         socket.on("typing", (chatId) => setTypingDetails({ typing: true, chatId: chatId }))
         socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
     }, [socket])
+
 
     return (
         <Box sx={{
@@ -51,9 +65,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
                         src={filteredUser[0]?.profilePicture || UserImage}
                     />
                 </StyledStatusBadge>
-                {chat.isGroupChat && <Avatar sx={{ width: 35, height: 35 }} src={user?.profilePicture || UserImage} />}
             </AvatarGroup>
-
 
             <Box>
 

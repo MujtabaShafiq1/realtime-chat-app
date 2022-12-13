@@ -24,7 +24,6 @@ const Chat = ({ open }) => {
         if (chat.chatId) socket.emit("join chat", chat.chatId);
     }, [chat.chatId, socket])
 
-
     return (
         <>
             <Box
@@ -60,7 +59,7 @@ const Chat = ({ open }) => {
                                     <Typography sx={{ fontSize: "18px" }}>
                                         You
                                         {chat.otherMembers.length >= 1 && <span style={{ fontSize: "18px" }}> and {chat.otherMembers[0].username}</span>}
-                                        {chat.otherMembers.length > 1 && <span style={{ fontSize: "18px" }}> + {chat.otherMembers[0].length} others</span>}
+                                        {chat.otherMembers.length > 1 && <span style={{ fontSize: "18px" }}> + {chat.otherMembers.length - 1} others</span>}
                                     </Typography>
                                     :
                                     <Typography sx={{ fontSize: "18px" }}>{chat.otherMembers[0].username}</Typography>

@@ -36,12 +36,17 @@ io.on("connect", (socket) => {
 
     socket.on("new chat", (chat) => {
         const userSockets = getUsersSocket(chat.members)
-        io.to(userSockets).emit("getChats", chat)
+        io.to(userSockets).emit("getChats", (chat.updatedChat || chat))
+    })
+
+    socket.on("remove member", (chat) => {
+        // const userSockets = getUsersSocket(chat.members)
+        // io.to(userSockets).emit("getChats", chat)
     })
 
     socket.on("latestMessage", (message) => {
         const userSockets = getUsersSocket(message.users)
-        io.to(userSockets).emit('getLatestMessage', message.messageBody);
+        io.to(userSockets).emit('getLatestMessage', message);
     });
 
     socket.on("readMessage", (details) => {
