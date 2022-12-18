@@ -32,6 +32,7 @@ const CreateGroupChat = ({ users, close }) => {
         setAddedUsers(prev => [...prev, user])
     }
 
+    // new message when creating group chat issue
     const createGroup = async () => {
         if (addedUsers.length <= 20) {
             dispatch(chatActions.conversation({ otherMembers: [...addedUsers] }))

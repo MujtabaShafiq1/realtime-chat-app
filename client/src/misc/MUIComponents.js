@@ -65,14 +65,14 @@ const StyledButton = styled(Button)(({ theme }) => ({
         backgroundColor: "blue",
         opacity: "0.5"
     },
+    [theme.breakpoints.up('md')]: {
+        width: "30%"
+    },
     [theme.breakpoints.down('md')]: {
         width: "35%"
     },
     [theme.breakpoints.down('sm')]: {
-        width: "43%"
-    },
-    [theme.breakpoints.up('md')]: {
-        width: "30%"
+        width: "25%"
     },
 }))
 

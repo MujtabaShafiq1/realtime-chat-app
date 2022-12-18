@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Box, Avatar, Typography, AvatarGroup } from '@mui/material';
 import { LatestText, StyledStatusBadge, UserContainer } from '../../misc/MUIComponents';
 import { SocketContext } from '../../context/Socket';
@@ -8,29 +8,37 @@ import UserImage from "../../assets/User/user.jpg";
 
 const RecentUserbox = ({ chat, onlineUsers }) => {
 
+    const dispatch = useDispatch()
+
     const socket = useContext(SocketContext)
     const user = useSelector((state) => state.user.details)
 
     const [latestMessage, setLatestMessage] = useState(chat.latestMessage)
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
+    const [filteredUser, setFilteredUser] = useState(chat.members.filter(member => member._id !== user.id))
 
-    const filteredUser = chat.members.filter(member => member._id !== user.id)
 
+    //latest message user update
     useEffect(() => {
         socket.on("getLatestMessage", (data) => {
-
             if (chat._id === data.messageBody.chatId) {
                 console.log("updating latest message");
-
-                if (!(chat.members.some(val => val._id === data.newUser._id))) {
-                    console.log("updating members of latest message");
-                    chat.members.push(data.newUser)
-                }
-
                 setLatestMessage(data.messageBody)
             }
         })
-    }, [socket, chat._id, chat.members])
+    }, [socket, chat._id])
+
+
+    // adding new user in group chat
+    useEffect(() => {
+        socket.on("getNewuser", (data) => {
+            if (chat._id === data.chatId) {
+                chat.members.push(data.newUser)
+                setFilteredUser(prev => [...prev, data.newUser])
+            }
+        })
+        // eslint-disable-next-line
+    }, [dispatch, socket])
 
 
     useEffect(() => {

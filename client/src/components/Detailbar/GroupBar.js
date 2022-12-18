@@ -40,6 +40,7 @@ const GroupBar = ({ users }) => {
 
                 response.data.latestMessage = messageResponse.data;
                 socket.emit("new chat", { members: newUser, updatedChat: response.data })
+                socket.emit("add user", { newUser, chatId: chat.chatId, users: [...chat.otherMembers, loggedInUser] })
                 socket.emit("latestMessage", { messageBody: messageResponse.data, users: [loggedInUser.id, ...chat.otherMembers], newUser });
             })
             closeHandler()

@@ -31,6 +31,7 @@ const Messages = () => {
         setMessages(prev => [...prev, newMessage])
     }, [chatId, newMessage])
 
+
     useEffect(() => {
         getMessages()
     }, [getMessages])
@@ -39,13 +40,13 @@ const Messages = () => {
         updateMessages()
     }, [updateMessages])
 
-
     useEffect(() => {
         socket.on("getLatestMessage", (data) => setNewMessage(data.messageBody))
         socket.on("typing", (chatId) => setTypingDetails({ typing: true, chatId: chatId }));
         socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [socket])
+
 
     return (
         <Box sx={{ height: "80%", overflow: "auto", backgroundColor: "rgba(239, 239, 240, 0.4)", }}>

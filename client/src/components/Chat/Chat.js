@@ -24,6 +24,16 @@ const Chat = ({ open }) => {
         if (chat.chatId) socket.emit("join chat", chat.chatId);
     }, [chat.chatId, socket])
 
+
+    useEffect(() => {
+        socket.on("getNewuser", (data) => {
+            if (chat.chatId === data.chatId) {
+                console.log("adding new user")
+                dispatch(chatActions.addUser(data.newUser))
+            }
+        })
+    }, [dispatch, socket, chat.chatId])
+
     return (
         <>
             <Box

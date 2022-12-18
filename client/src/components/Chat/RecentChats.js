@@ -14,7 +14,7 @@ const RecentChats = ({ chats }) => {
 
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
-    const [onlineUsers, setOnlineUsers] = useState([])
+    const [onlineUsers, setOnlineUsers] = useState([])      //work later
 
     useEffect(() => {
         socket.on("getUsers", (users) => setOnlineUsers(users))

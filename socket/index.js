@@ -39,9 +39,15 @@ io.on("connect", (socket) => {
         io.to(userSockets).emit("getChats", (chat.updatedChat || chat))
     })
 
+    socket.on("add user", (data) => {
+        const userSocket = getUsersSocket(data.users)
+        io.to(userSocket).emit("getNewuser", { newUser: data.newUser, chatId: data.chatId })
+    })
+
+    // working required
     socket.on("remove member", (chat) => {
-        // const userSockets = getUsersSocket(chat.members)
-        // io.to(userSockets).emit("getChats", chat)
+        const userSockets = getUsersSocket(chat.members)
+        io.to(userSockets).emit("getChats", chat)
     })
 
     socket.on("latestMessage", (message) => {
