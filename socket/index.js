@@ -36,6 +36,7 @@ io.on("connect", (socket) => {
 
     socket.on("new chat", (chat) => {
         const userSockets = getUsersSocket(chat.members)
+        if (userSockets.length === 0) return;
         io.to(userSockets).emit("getChats", (chat.updatedChat || chat))
     })
 
