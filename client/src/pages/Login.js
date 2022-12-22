@@ -12,8 +12,9 @@ import { loginSchema } from '../utils/validationSchema';
 
 import background from "../assets/background.png"
 import LoginImage from "../assets/Login/login.jpg"
-import ShowIcon from "../assets/Password/show.png"
-import HideIcon from "../assets/Password/hide.png"
+import ShowIcon from '@mui/icons-material/Visibility';
+import HideIcon from '@mui/icons-material/VisibilityOff';
+
 
 const styles = {
     PaperStyles: {
@@ -140,12 +141,9 @@ const Login = () => {
                                     disableUnderline: true,
                                     endAdornment: (
                                         <InputAdornment position="end">
-                                            <Box
-                                                component="img"
-                                                sx={{ height: 25, width: 25, cursor: "pointer" }}
-                                                src={showPassword ? ShowIcon : HideIcon}
-                                                onClick={() => setShowPassword((prev) => !prev)}
-                                            />
+                                            <Box sx={{ height: 25, width: 25, cursor: "pointer" }} onClick={() => setShowPassword((prev) => !prev)}>
+                                                {showPassword ? <HideIcon sx={{ color: "black" }} /> : <ShowIcon sx={{ color: "black" }} />}
+                                            </Box>
                                         </InputAdornment>
                                     ),
                                 }}

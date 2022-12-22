@@ -9,7 +9,7 @@ const Flexbox = styled(Box)({
 const LatestText = styled(Typography)(({ all, theme }) => ({
     fontWeight: 400,
     // color: all ? "lightgray" : "black",
-    color: "lightgray",
+    color: theme.palette.text.secondary,
     [theme.breakpoints.down(750)]: {
         display: 'none'
     },
@@ -36,10 +36,10 @@ const UserContainer = styled(Box)(({ theme }) => ({
     },
 }))
 
-const StyledField = styled(TextField)(({ auth, error }) => ({
+const StyledField = styled(TextField)(({ auth, error, theme }) => ({
     width: "90%",
     input: {
-        color: "black",
+        color: theme.palette.text.primary,
         borderBottom: auth && error && "0.5px solid red",
         background: auth && "rgb(223, 235, 251, 0.5)",
     },
@@ -47,7 +47,7 @@ const StyledField = styled(TextField)(({ auth, error }) => ({
         borderRadius: "30px",
     },
     "& .MuiOutlinedInput-notchedOutline": {
-        border: "1px solid lightgray",
+        border: "1px solid rgb(0, 0, 0, 0.1)",
         background: "rgb(180, 180, 180, 0.3)",
     },
     "& .Mui-focused": {
@@ -58,12 +58,13 @@ const StyledField = styled(TextField)(({ auth, error }) => ({
 }))
 
 const StyledButton = styled(Button)(({ theme }) => ({
-    color: "white",
     padding: "10px",
     borderRadius: "20px",
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.other,
     "&:hover": {
-        backgroundColor: "blue",
-        opacity: "0.5"
+        backgroundColor: theme.palette.primary.other,
+        opacity: "0.8"
     },
     [theme.breakpoints.up('md')]: {
         width: "30%"

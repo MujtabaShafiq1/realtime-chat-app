@@ -1,4 +1,3 @@
-
 const theme = (mode) => ({
     typography: {
         allVariants: {
@@ -11,24 +10,26 @@ const theme = (mode) => ({
         ...(mode === 'light'
             ? {
                 // palette values for light mode
-                // primary: amber,
-                // divider: amber[200],
-                // text: {
-                //     primary: grey[900],
-                //     secondary: grey[800],
-                // },
+                primary: {
+                    main: "rgb(255, 255, 255)",
+                    light: "rgba(239, 239, 240, 0.8)",
+                    other: "rgb(0, 0, 0)",
+                },
+                text: {
+                    primary: "rgb(0, 0, 0)",
+                    secondary: "rgba(128, 128, 128, 1)"
+                },
             } : {
                 // palette values for dark mode
-                // primary: deepOrange,
-                // divider: deepOrange[700],
-                // background: {
-                //     default: deepOrange[900],
-                //     paper: deepOrange[900],
-                // },
-                // text: {
-                //     primary: '#fff',
-                //     secondary: grey[500],
-                // },
+                primary: {
+                    main: "rgb(0, 0, 0)",
+                    light: "rgba(128, 128, 128, 0.3)",
+                    other: "rgb(255, 255, 255)",
+                },
+                text: {
+                    primary: "rgb(255, 255, 255)",
+                    secondary: "rgba(128, 128, 128, 0.6)"
+                },
             })
     },
 });

@@ -10,8 +10,8 @@ import { Box, Avatar, IconButton, InputAdornment, CircularProgress } from "@mui/
 import CustomSnackbar from '../UI/CustomSnackbar'
 
 import SendIcon from "../../assets/Chat/send.png"
-import RemoveCircleIcon from "../../assets/Chat/remove-circle.png"
-import GalleryIcon from "../../assets/Message/gallery.png"
+import RemoveCircleIcon from '@mui/icons-material/CancelRounded';
+import GalleryIcon from '@mui/icons-material/AddPhotoAlternate';
 
 const NewMessage = () => {
 
@@ -124,11 +124,9 @@ const NewMessage = () => {
                                     sx={{ width: 60, height: 60, border: "2px solid rgba(180,180,180,0.5)", borderRadius: "10px" }}
                                     src={URL.createObjectURL(file)}
                                 />
-                                <Box
+                                <RemoveCircleIcon
                                     key={file.name}
-                                    component="img"
-                                    sx={{ width: 13, height: 13, position: "absolute", right: "0.4%", cursor: "pointer" }}
-                                    src={RemoveCircleIcon}
+                                    sx={{ fontSize: "18px", position: "absolute", right: "0.5%", cursor: "pointer", color: "red" }}
                                     onClick={() => { setFiles(prev => Object.values(prev).filter(data => data !== file)) }}
                                 />
                             </Box>
@@ -150,7 +148,7 @@ const NewMessage = () => {
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <IconButton component="label" >
-                                        <Box component="img" src={GalleryIcon} sx={{ height: 30, width: 30 }} />
+                                        <GalleryIcon sx={{ fontSize: "26px", color: "text.primary" }} />
                                         <input type="file" hidden multiple onChange={(e) => selectImage(e.target.files)} />
                                     </IconButton>
                                 </InputAdornment>

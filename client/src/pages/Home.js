@@ -10,7 +10,7 @@ import Userbar from '../components/Userbar/Userbar'
 import GroupBar from "../components/Detailbar/GroupBar";
 import SingleChatbar from '../components/Detailbar/SingleChatbar';
 
-import CloseIcon from "../assets/Chat/close.png"
+import CloseIcon from '@mui/icons-material/CancelRounded';
 
 const Home = () => {
 
@@ -38,10 +38,11 @@ const Home = () => {
     }, [fetchUsers])
 
     return (
-        <Flexbox >
-            <Userbar users={users} />
+        <Flexbox bgcolor={"primary.main"} color={"text.primary"}>
+            < Userbar users={users} />
             <Chat open={() => setDrawer(true)} />
-            {chat.chatId &&
+            {
+                chat.chatId &&
                 <>
                     <Box sx={{ minHeight: "100vh", width: "22%", display: { xs: "none", lg: "block" }, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
                         {chat.isGroupChat ? <GroupBar users={users} /> : <SingleChatbar />}
@@ -52,19 +53,16 @@ const Home = () => {
                         onClose={() => setDrawer(false)}
                         anchor="right"
                         disableSwipeToOpen
-                        PaperProps={{
-                            sx: {
-                                zIndex: 1,
-                                width: { xs: "70%", sm: "50%", md: "30%" },
-                                minHeight: "100vh",
-                            }
-                        }}>
-                        <Box component="img" src={CloseIcon} sx={{ mt: "1% ", height: 35, position: "absolute", left: "85%" }} onClick={() => setDrawer(false)} />
+                        PaperProps={{ sx: { zIndex: 1, width: { xs: "70%", sm: "50%", md: "30%" }, minHeight: "100vh" } }}>
+                        <CloseIcon
+                            sx={{ fontSize: "28px", mt: "1% ", color: "red", cursor: "pointer", position: "absolute", left: "85%" }}
+                            onClick={() => setDrawer(false)}
+                        />
                         {chat.isGroupChat ? <GroupBar users={users} /> : <SingleChatbar />}
                     </SwipeableDrawer>
                 </>
             }
-        </Flexbox>
+        </Flexbox >
     )
 }
 

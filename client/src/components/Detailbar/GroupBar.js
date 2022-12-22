@@ -8,12 +8,10 @@ import Userbox from '../Userbar/Userbox';
 import moment from 'moment';
 import axios from 'axios';
 
-import RemoveIcon from "../../assets/Chat/remove.png";
-import AddIcon from "../../assets/Chat/add.png";
-import CloseIcon from "../../assets/Chat/close.png"
-import ConfirmIcon from "../../assets/Chat/check.png"
-import RemoveCircleIcon from "../../assets/Chat/remove-circle.png"
-
+import RemoveIcon from '@mui/icons-material/PersonRemoveRounded';
+import AddIcon from '@mui/icons-material/PersonAddAltRounded';
+import ConfirmIcon from '@mui/icons-material/CheckCircleRounded';
+import RemoveCircleIcon from '@mui/icons-material/CancelRounded';
 
 const GroupBar = ({ users }) => {
 
@@ -93,7 +91,7 @@ const GroupBar = ({ users }) => {
                 <Typography sx={{ fontSize: "24px", fontWeight: 500 }}>Group Admin: {groupAdmin}</Typography>
                 <Typography sx={{ fontSize: "20px", fontWeight: 300 }}>Created {moment(chat.createdAt).calendar()}</Typography>
                 {chat.groupAdmin === loggedInUser.id && !addUser &&
-                    <StyledButton sx={{ backgroundColor: "black", alignSelf: "center" }} onClick={AddHandler}>Add User</StyledButton>
+                    <StyledButton sx={{ alignSelf: "center" }} onClick={AddHandler}>Add User</StyledButton>
                 }
 
                 {userList.length > 0 &&
@@ -104,19 +102,12 @@ const GroupBar = ({ users }) => {
                                 return (
                                     <Flexbox key={user._id} sx={{ padding: "5px 10px", borderRadius: "20px", backgroundColor: "rgba(191,191,191,1)", gap: 0.5 }}>
                                         <Typography sx={{ color: "black", fontSize: "12px" }}>{user.username}</Typography>
-                                        <Box
-                                            component="img"
-                                            sx={{ width: 15, height: "auto", cursor: "pointer" }}
-                                            src={RemoveCircleIcon}
-                                            onClick={() => clickHandler(user)}
-                                        />
+                                        <RemoveCircleIcon sx={{ fontSize: "24px", height: "auto", cursor: "pointer", color: "red" }} onClick={() => clickHandler(user)} />
                                     </Flexbox>
                                 )
                             })}
-                            <Box
-                                component="img"
-                                sx={{ width: 25, height: "auto", cursor: "pointer" }}
-                                src={ConfirmIcon}
+                            <ConfirmIcon
+                                sx={{ fontSize: "28px", color: "text.primary", cursor: "pointer" }}
                                 onClick={addUser ? addUserHandler : groupRemoveHandler}
                             />
                         </Flexbox>
@@ -133,9 +124,8 @@ const GroupBar = ({ users }) => {
                                 return (
                                     <Flexbox key={user._id} sx={{ justifyContent: "space-around" }}>
                                         <Userbox user={user} />
-                                        {chat.groupAdmin === loggedInUser.id
-                                            &&
-                                            <Box component="img" src={RemoveIcon} sx={{ height: 25, width: "auto", cursor: "pointer" }} onClick={() => clickHandler(user)} />
+                                        {chat.groupAdmin === loggedInUser.id &&
+                                            <RemoveIcon sx={{ fontSize: "28px", color: "red", cursor: "pointer" }} onClick={() => clickHandler(user)} />
                                         }
                                     </Flexbox>
                                 )
@@ -147,12 +137,7 @@ const GroupBar = ({ users }) => {
                 <>
                     <Flexbox sx={{ justifyContent: "space-around" }}>
                         <Typography sx={{ fontSize: "24px", m: "3% 0%", textAlign: "center" }}>Add new members</Typography>
-                        <Box
-                            component="img"
-                            sx={{ width: 30, height: "auto", cursor: "pointer" }}
-                            src={CloseIcon}
-                            onClick={closeHandler}
-                        />
+                        <RemoveCircleIcon sx={{ fontSize: "24px", height: "auto", cursor: "pointer", color: "red" }} onClick={closeHandler} />
                     </Flexbox>
                     <Box sx={{ height: "50vh", overflow: "auto" }}>
                         {nonGroupMembers.length > 0
@@ -161,9 +146,8 @@ const GroupBar = ({ users }) => {
                                 return (
                                     <Flexbox key={user._id} sx={{ justifyContent: "space-around" }}>
                                         <Userbox user={user} />
-                                        {chat.groupAdmin === loggedInUser.id
-                                            &&
-                                            <Box component="img" src={AddIcon} sx={{ height: 25, width: "auto", cursor: "pointer" }} onClick={() => clickHandler(user)} />
+                                        {chat.groupAdmin === loggedInUser.id &&
+                                            <AddIcon sx={{ fontSize: "28px", color: "text.primary", cursor: "pointer" }} onClick={() => clickHandler(user)} />
                                         }
                                     </Flexbox>
                                 )

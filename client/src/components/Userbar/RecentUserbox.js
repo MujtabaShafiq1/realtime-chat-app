@@ -49,19 +49,16 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
 
     return (
         <Box sx={{
-            display: "flex",
             gap: 2,
+            display: "flex",
             justifyContent: "left",
             alignItems: "center",
-            marginTop: "5%",
-            '&:hover': {
-                cursor: "pointer",
-                backgroundColor: "rgba(239, 239, 240, 0.8)",
-            }
+            padding: "10px",
+            '&:hover': { cursor: "pointer", backgroundColor: "primary.light" }
         }}
         >
 
-            <AvatarGroup total={filteredUser.length + (chat.isGroupChat && 1)} sx={{ marginLeft: "3%" }}>
+            <AvatarGroup total={filteredUser.length + (chat.isGroupChat && 1)} >
                 <StyledStatusBadge
                     overlap="circular"
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

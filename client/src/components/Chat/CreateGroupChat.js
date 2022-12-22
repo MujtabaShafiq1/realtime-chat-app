@@ -9,11 +9,11 @@ import CustomSnackbar from "../UI/CustomSnackbar"
 import axios from "axios"
 
 import UserImage from "../../assets/User/user.jpg";
-import AddIcon from "../../assets/Chat/add.png"
-import RemoveIcon from "../../assets/Chat/remove.png"
-import CloseIcon from "../../assets/Chat/close.png"
-import ConfirmUsers from "../../assets/Chat/confirm.png"
-import RemoveCircleIcon from "../../assets/Chat/remove-circle.png"
+import AddIcon from '@mui/icons-material/PersonAddAltRounded';
+import RemoveIcon from '@mui/icons-material/PersonRemoveRounded';
+import ConfirmIcon from '@mui/icons-material/CheckCircleRounded';
+import RemoveCircleIcon from '@mui/icons-material/CancelRounded';
+
 
 const CreateGroupChat = ({ users, close }) => {
 
@@ -58,12 +58,7 @@ const CreateGroupChat = ({ users, close }) => {
             {snackbar.open && <CustomSnackbar type="error" details={snackbar.details} />}
             <Flexbox sx={{ justifyContent: "space-around" }}>
                 <Typography sx={{ fontSize: "22px", m: "3% 0%" }}>Create New Group</Typography>
-                <Box
-                    component="img"
-                    sx={{ width: 30, height: "auto", cursor: "pointer" }}
-                    src={CloseIcon}
-                    onClick={close}
-                />
+                <RemoveCircleIcon sx={{ fontSize: "24px", cursor: "pointer", color: "red" }} onClick={close} />
             </Flexbox>
             {addedUsers.length > 0
                 &&
@@ -73,22 +68,12 @@ const CreateGroupChat = ({ users, close }) => {
                             return (
                                 <Flexbox key={user._id} sx={{ padding: "5px 10px", borderRadius: "20px", backgroundColor: "rgba(191,191,191,1)", gap: 0.5 }}>
                                     <Typography sx={{ color: "black", fontSize: "12px" }}>{user.username}</Typography>
-                                    <Box
-                                        component="img"
-                                        sx={{ width: 15, height: "auto", cursor: "pointer" }}
-                                        src={RemoveCircleIcon}
-                                        onClick={() => clickHandler(user)}
-                                    />
+                                    <RemoveCircleIcon sx={{ fontSize: "24px", cursor: "pointer", color: "red" }} onClick={() => clickHandler(user)} />
                                 </Flexbox>
                             )
                         })}
                     </Flexbox>
-                    <Box
-                        component="img"
-                        sx={{ width: 30, height: "auto", cursor: "pointer" }}
-                        src={ConfirmUsers}
-                        onClick={createGroup}
-                    />
+                    <ConfirmIcon sx={{ fontSize: "28px", color: "text.primary", cursor: "pointer" }} onClick={createGroup} />
                 </Flexbox>
             }
 
@@ -107,12 +92,11 @@ const CreateGroupChat = ({ users, close }) => {
                             <Avatar sx={{ marginLeft: "3%", }} src={user.profilePicture || UserImage} />
                             <Typography sx={{ fontSize: "18px" }}>{user.username}</Typography>
                         </Flexbox>
-                        <Box
-                            component="img"
-                            sx={{ width: 20, height: "auto", cursor: "pointer" }}
-                            src={addedUsers.some(member => member._id.includes(user._id)) ? RemoveIcon : AddIcon}
-                            onClick={() => clickHandler(user)}
-                        />
+                        <Box sx={{ cursor: "pointer" }} onClick={() => clickHandler(user)}>
+                            {addedUsers.some(member => member._id.includes(user._id)) ?
+                                <RemoveIcon sx={{ fontSize: "28px", color: "red" }} />
+                                : <AddIcon sx={{ fontSize: "28px", color: "text.primary" }} />}
+                        </Box>
                     </Flexbox>
                 )
             }

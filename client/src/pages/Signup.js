@@ -10,8 +10,8 @@ import CustomSnackbar from '../components/UI/CustomSnackbar';
 
 import background from "../assets/background.png"
 import SignupImage from "../assets/Signup/signup.jpg"
-import ShowIcon from "../assets/Password/show.png"
-import HideIcon from "../assets/Password/hide.png"
+import ShowIcon from '@mui/icons-material/Visibility';
+import HideIcon from '@mui/icons-material/VisibilityOff';
 
 
 const styles = {
@@ -159,13 +159,10 @@ const Login = () => {
                                 InputProps={{
                                     disableUnderline: true,
                                     endAdornment: (
-                                        <InputAdornment position="end" >
-                                            <Box
-                                                component="img"
-                                                sx={{ height: 25, width: 25, cursor: "pointer" }}
-                                                src={showPassword ? ShowIcon : HideIcon}
-                                                onClick={() => setShowPassword((prev) => !prev)}
-                                            />
+                                        <InputAdornment position="end">
+                                            <Box sx={{ height: 25, width: 25, cursor: "pointer" }} onClick={() => setShowPassword((prev) => !prev)}>
+                                                {showPassword ? <HideIcon sx={{ color: "black" }} /> : <ShowIcon sx={{ color: "black" }} />}
+                                            </Box>
                                         </InputAdornment>
                                     ),
                                 }}
@@ -187,13 +184,10 @@ const Login = () => {
                                 InputProps={{
                                     disableUnderline: true,
                                     endAdornment: (
-                                        <InputAdornment position="end" >
-                                            <Box
-                                                component="img"
-                                                sx={{ height: 25, width: 25, cursor: "pointer" }}
-                                                src={showPassword ? ShowIcon : HideIcon}
-                                                onClick={() => setShowConfirmedPassword((prev) => !prev)}
-                                            />
+                                        <InputAdornment position="end">
+                                            <Box sx={{ height: 25, width: 25, cursor: "pointer" }} onClick={() => setShowConfirmedPassword((prev) => !prev)}>
+                                                {showconfirmedPassword ? <HideIcon sx={{ color: "black" }} /> : <ShowIcon sx={{ color: "black" }} />}
+                                            </Box>
                                         </InputAdornment>
                                     ),
                                 }}

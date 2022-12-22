@@ -6,6 +6,7 @@ import { Flexbox, StyledButton, StyledField } from '../../misc/MUIComponents'
 
 import { userActions } from '../../store/userSlice';
 import { chatActions } from '../../store/chatSlice';
+import { ThemeContext } from '../../context/ThemeProvider';
 import axios from 'axios';
 
 import RecentChats from '../Chat/RecentChats';
@@ -13,12 +14,10 @@ import SearchedChats from '../Chat/SearchedChats';
 import CreateGroupChat from '../Chat/CreateGroupChat';
 
 import UserImage from "../../assets/User/user.jpg";
-import NewGroupIcon from "../../assets/Chat/group.png"
-import SearchIcon from "../../assets/Chat/search.png"
-
-import LightIcon from "../../assets/Theme/light.png"
-import DarkIcon from "../../assets/Theme/dark.png"
-import { ThemeContext } from '../../context/ThemeProvider';
+import NewGroupIcon from '@mui/icons-material/GroupAddRounded';
+import SearchIcon from '@mui/icons-material/PersonSearchRounded';
+import DarkIcon from '@mui/icons-material/Brightness4';
+import LightIcon from '@mui/icons-material/Brightness7';
 
 const Userbar = ({ users }) => {
 
@@ -78,15 +77,10 @@ const Userbar = ({ users }) => {
                 <Flexbox sx={{ justifyContent: "space-around", gap: 1, padding: "10px" }}>
                     <Avatar src={user.profilePicture || UserImage} sx={{ width: 50, height: 50 }} />
                     <Typography sx={{ fontSize: "20px", display: { xs: "block", sm: "none", md: "block" } }}>{user.username}</Typography>
-                    <StyledButton sx={{ backgroundColor: "black" }} onClick={logoutHandler}>
-                        Logout
-                    </StyledButton>
-                    <Box
-                        component="img"
-                        src={mode === "light" ? DarkIcon : LightIcon}
-                        onClick={toggleColorMode}
-                        sx={{ height: 30, width: 30, cursor: "pointer" }}
-                    />
+                    <StyledButton onClick={logoutHandler}>Logout</StyledButton>
+                    <Box onClick={toggleColorMode} sx={{ height: 30, width: 30, cursor: "pointer" }}>
+                        {mode === "light" ? <DarkIcon /> : <LightIcon />}
+                    </Box>
                 </Flexbox>
 
                 <Flexbox sx={{ gap: 3, padding: "10px", flexDirection: { xs: "row", sm: "column", md: "row" } }} >
@@ -102,8 +96,8 @@ const Userbar = ({ users }) => {
                         InputProps={{
                             autoComplete: "off",
                             endAdornment: (
-                                <InputAdornment position="end" sx={{ cursor: "pointer" }}>
-                                    <Box component="img" src={SearchIcon} sx={{ height: 30, width: 30, rotate: "270deg" }} />
+                                <InputAdornment position="end">
+                                    <SearchIcon sx={{ fontSize: "38px", cursor: "pointer", color: "text.primary" }} />
                                 </InputAdornment>
                             ),
                         }}
@@ -111,15 +105,10 @@ const Userbar = ({ users }) => {
                     />
 
                     <Flexbox sx={{ flexDirection: { xs: "row", md: "column" }, gap: { xs: 2, md: 0 } }}>
-                        <Typography sx={{ color: "black", fontSize: { xs: "14px", md: "12px" }, fontWeight: 500, textAlign: "center" }}>
+                        <Typography sx={{ fontSize: { xs: "14px", md: "12px" }, fontWeight: 500, textAlign: "center" }}>
                             New Group
                         </Typography>
-                        <Box
-                            component="img"
-                            src={NewGroupIcon}
-                            sx={{ width: 50, height: "auto", cursor: "pointer" }}
-                            onClick={() => setCreateGroup(true)}
-                        />
+                        <NewGroupIcon sx={{ fontSize: "36px", color: "text.primary", cursor: "pointer" }} onClick={() => setCreateGroup(true)} />
                     </Flexbox>
 
                 </Flexbox>
@@ -129,7 +118,7 @@ const Userbar = ({ users }) => {
                         <CreateGroupChat users={search ? searchedUsers : users} close={() => setCreateGroup(false)} />
                         :
                         <Box sx={{ height: { xs: "75vh", sm: "70vh", md: "75vh" }, overflow: "auto" }}>
-                            <Divider orientation='horizontal' sx={{ m: "1% 0%", bgcolor: "gray", opacity: "0.3" }} />
+                            <Divider orientation='horizontal' sx={{ m: "1% 0%", background: "rgba(128, 128, 128, 0.1)" }} />
                             {search ?
                                 <SearchedChats searchedUsers={searchedUsers} clear={() => setSearch("")} />
                                 :

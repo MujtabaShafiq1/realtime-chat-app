@@ -45,7 +45,7 @@ const RecentChats = ({ chats }) => {
                     </>
                     :
                     <Flexbox sx={{ minHeight: "50vh" }}>
-                        <Typography sx={{ color: "gray", opacity: 0.8, textAlign: "center", fontSize: "20px" }}>
+                        <Typography sx={{ color: "text.secondary", opacity: 0.8, textAlign: "center", fontSize: "20px" }}>
                             Your recent Chat box is empty
                         </Typography>
                     </Flexbox>

@@ -8,14 +8,11 @@ const Userbox = ({ user }) => {
             gap: 2,
             justifyContent: "left",
             alignItems: "center",
-            marginTop: "3%",
-            '&:hover': {
-                cursor: "pointer",
-                backgroundColor: "rgba(239, 239, 240, 0.8)",
-            }
+            padding: "10px",
+            '&:hover': { cursor: "pointer", backgroundColor: "primary.light" }
         }}
         >
-            <Avatar sx={{ width: 50, height: 50, marginLeft: "3%", }} src={user.profilePicture || UserImage} />
+            <Avatar sx={{ width: 50, height: 50 }} src={user.profilePicture || UserImage} />
             <Typography sx={{ fontSize: "18px" }}>{user.username}</Typography>
         </Box>
     )

@@ -8,9 +8,9 @@ import { chatActions } from '../../store/chatSlice';
 import Messages from '../Message/Messages';
 import NewMessage from '../Message/NewMessage';
 
-import BackIcon from "../.././assets/Chat/back.png";
 import UserImage from "../.././assets/User/user.jpg";
-import CircleBlack from "../.././assets/Message/circle-black.png";
+import BackIcon from '@mui/icons-material/ArrowBackRounded';
+import CircleIcon from '@mui/icons-material/Brightness1';
 
 const Chat = ({ open }) => {
 
@@ -53,10 +53,11 @@ const Chat = ({ open }) => {
                             justifyContent: "space-between",
                             backgroundColor: "rgba(180, 180, 180, 0.4)",
                             boxShadow: "0px 10px 10px rgba(180, 180, 180, 0.4)",
-                            borderBottom: "0.5px solid rgba(102, 51, 153, 0.1)"
+                            borderBottom: "0.5px solid rgba(102, 51, 153, 0.1)",
                         }}
                         >
-                            <Box component="img" src={BackIcon} sx={{ height: 25, display: { xs: "block", sm: "none" } }} onClick={() => dispatch(chatActions.reset())} />
+                            <BackIcon sx={{ fontSize: "24px", cursor: "pointer", color: "text.primary", display: { xs: "block", sm: "none" } }}
+                                onClick={() => dispatch(chatActions.reset())} />
 
                             <Flexbox gap={1}>
 
@@ -78,9 +79,9 @@ const Chat = ({ open }) => {
                             </Flexbox>
 
                             <Flexbox sx={{ gap: 0.2, flexDirection: "column", cursor: "pointer", display: { md: "flex", lg: "none" } }} onClick={open}>
-                                <Box component="img" src={CircleBlack} sx={{ height: 6 }} />
-                                <Box component="img" src={CircleBlack} sx={{ height: 6 }} />
-                                <Box component="img" src={CircleBlack} sx={{ height: 6 }} />
+                                <CircleIcon sx={{ fontSize: "7px" }} />
+                                <CircleIcon sx={{ fontSize: "7px" }} />
+                                <CircleIcon sx={{ fontSize: "7px" }} />
                             </Flexbox>
 
                         </Flexbox>

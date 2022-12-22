@@ -6,8 +6,7 @@ import { SocketContext } from '../../context/Socket';
 import ImageGallery from './ImageGallery';
 import moment from "moment"
 
-import SeenIcon from "../../assets/Message/seen.png";
-import DeliveredIcon from "../../assets/Message/delivered.png";
+import NotifyMark from '@mui/icons-material/DoneAll';
 import UserImage from "../../assets/User/user.jpg"
 import axios from 'axios';
 
@@ -158,14 +157,11 @@ const Message = ({ message, next }) => {
                                     </ImageList>
                                 }
                                 {message.senderId === user.id &&
-                                    <Box
-                                        component="img"
-                                        sx={{ width: "auto", height: "2vh", alignSelf: "flex-end", position: "absolute", top: "90%", right: "2%" }}
-                                        src={((chat.otherMembers.length + 1) === readBy.length) ? SeenIcon : DeliveredIcon}
-                                    />
+                                    <NotifyMark sx={{
+                                        fontSize: "20px", alignSelf: "flex-end", position: "absolute", top: "90%", right: "4%",
+                                        color: ((chat.otherMembers.length + 1) === readBy.length ? "blue" : "gray"),
+                                    }} />
                                 }
-
-
                             </Box>
                         </>
                     }
@@ -178,11 +174,9 @@ const Message = ({ message, next }) => {
                             </Flexbox>
                             {
                                 message.senderId === user.id &&
-                                <Box
-                                    component="img"
-                                    sx={{ width: "auto", height: "2vh", alignSelf: "flex-end" }}
-                                    src={((chat.otherMembers.length + 1) === readBy.length) ? SeenIcon : DeliveredIcon}
-                                />
+                                <NotifyMark sx={{
+                                    fontSize: "20px", alignSelf: "flex-end", color: ((chat.otherMembers.length + 1) === readBy.length ? "blue" : "gray"),
+                                }} />
                             }
                         </TextBox>
                     }

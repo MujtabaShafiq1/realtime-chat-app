@@ -2,10 +2,9 @@ import { useState } from "react"
 import { Box, Modal } from '@mui/material';
 import { Flexbox } from '../../misc/MUIComponents';
 
-import CloseIcon from "../../assets/Chat/remove-circle.png"
-import NextIcon from "../../assets/Message/next.png"
-import WhiteCircleIcon from "../../assets/Message/circle-white.png"
-import BlackCircleIcon from "../../assets/Message/circle-black.png"
+import CloseIcon from '@mui/icons-material/CancelRounded';
+import ArrowIcon from '@mui/icons-material/ExpandCircleDown';
+import CircleIcon from '@mui/icons-material/Brightness1';
 
 const ImageGallery = ({ images, close }) => {
 
@@ -54,24 +53,27 @@ const ImageGallery = ({ images, close }) => {
                             bgcolor: "rgba(0,0,0,0.01)",
                         }}
                     >
-                        <Box
-                            component="img"
-                            src={NextIcon}
-                            sx={{
-                                width: { xs: 20, md: 50 },
-                                cursor: "pointer",
-                                transform: "rotate(180deg)"
-                            }}
+                        <ArrowIcon sx={{
+                            color: "text.primary",
+                            fontSize: { xs: "24px", md: "48px" },
+                            cursor: "pointer",
+                            transform: "rotate(90deg)",
+                        }}
                             onClick={previousImageHandler}
                         />
                     </Flexbox>
                 }
 
                 {/* Closing Icon */}
-                <Box
-                    component="img"
-                    src={CloseIcon}
-                    sx={{ width: { xs: 30, md: 50 }, cursor: "pointer", position: "absolute", left: "90%", top: "2%", zIndex: 1 }}
+                <CloseIcon sx={{
+                    color: "red",
+                    fontSize: { xs: "24px", md: "48px" },
+                    cursor: "pointer",
+                    position: "absolute",
+                    left: "90%",
+                    top: "2%",
+                    zIndex: 1,
+                }}
                     onClick={close}
                 />
 
@@ -101,13 +103,12 @@ const ImageGallery = ({ images, close }) => {
                             bgcolor: "rgba(0,0,0,0.01)",
                         }}
                     >
-                        <Box
-                            component="img"
-                            src={NextIcon}
-                            sx={{
-                                width: { xs: 20, md: 50 },
-                                cursor: "pointer",
-                            }}
+                        <ArrowIcon sx={{
+                            color: "text.primary",
+                            fontSize: { xs: "24px", md: "48px" },
+                            cursor: "pointer",
+                            transform: "rotate(270deg)"
+                        }}
                             onClick={nextImageHandler}
                         />
                     </Flexbox>
@@ -117,16 +118,15 @@ const ImageGallery = ({ images, close }) => {
                 <Flexbox sx={{ position: "absolute", top: "90%", gap: { xs: 1, md: 3 } }}>
                     {images.map((image, index) => {
                         return (
-                            <Box
-                                component="img"
-                                src={slider === index ? WhiteCircleIcon : BlackCircleIcon}
-                                sx={{ width: { xs: 10, md: 20 }, cursor: "pointer" }}
+                            <CircleIcon
+                                sx={{ width: { xs: 10, md: 20 }, cursor: "pointer", fill: (slider === index ? "white" : "black") }}
                                 onClick={() => { if (index !== slider) setSlider(index) }}
                             />
                         )
                     })}
                 </Flexbox>
             </>
+
         </Modal >
     );
 }
