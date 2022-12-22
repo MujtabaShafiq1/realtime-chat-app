@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { chatActions } from "../../store/chatSlice"
 import { SocketContext } from "../../context/Socket"
 import { Box, Typography } from "@mui/material"
-
 import { Flexbox } from "../../misc/MUIComponents"
 import RecentUserbox from "../Userbar/RecentUserbox"
 
@@ -14,7 +13,7 @@ const RecentChats = ({ chats }) => {
 
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
-    const [onlineUsers, setOnlineUsers] = useState([])      //work later
+    const [onlineUsers, setOnlineUsers] = useState([])      //work late
 
     useEffect(() => {
         socket.on("getUsers", (users) => setOnlineUsers(users))
@@ -32,25 +31,26 @@ const RecentChats = ({ chats }) => {
 
     return (
         <Box>
-            {chats.length > 0 ?
-                <>
-                    <Typography sx={{ fontSize: "22px", textAlign: "center", m: "3% 0%" }}>Recent Chats</Typography>
-                    {chats.map(chat => {
-                        return (
-                            <Box key={chat._id} onClick={() => clickHandler(chat)}>
-                                <RecentUserbox chat={chat} onlineUsers={onlineUsers} />
-                            </Box>
-                        )
-                    })}
-                </>
-                :
-                <Flexbox sx={{ minHeight: "50vh" }}>
-                    <Typography sx={{ color: "gray", opacity: 0.8, textAlign: "center", fontSize: "20px" }}>
-                        Your recent Chat box is empty
-                    </Typography>
-                </Flexbox>
+            {
+                chats.length > 0 ?
+                    <>
+                        <Typography sx={{ fontSize: "22px", textAlign: "center", m: "3% 0%" }}>Recent Chats</Typography>
+                        {chats.map(chat => {
+                            return (
+                                <Box key={chat._id} onClick={() => clickHandler(chat)}>
+                                    <RecentUserbox chat={chat} onlineUsers={onlineUsers} />
+                                </Box>
+                            )
+                        })}
+                    </>
+                    :
+                    <Flexbox sx={{ minHeight: "50vh" }}>
+                        <Typography sx={{ color: "gray", opacity: 0.8, textAlign: "center", fontSize: "20px" }}>
+                            Your recent Chat box is empty
+                        </Typography>
+                    </Flexbox>
             }
-        </Box >
+        </Box>
     )
 }
 

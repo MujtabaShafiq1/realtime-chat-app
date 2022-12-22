@@ -4,11 +4,10 @@ import App from './App';
 
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { ThemeProvider } from '@emotion/react';
 import { SocketProvider } from './context/Socket';
+import { ThemeContextProvider } from "./context/ThemeProvider"
 
 import store from "./store/index"
-import theme from "./theme/theme"
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -16,11 +15,9 @@ root.render(
   <BrowserRouter>
     <Provider store={store}>
       <SocketProvider>
-        <ThemeProvider theme={theme}>
-          {/* <React.StrictMode> */}
+        <ThemeContextProvider>
           <App />
-          {/* </React.StrictMode> */}
-        </ThemeProvider>
+        </ThemeContextProvider>
       </SocketProvider>
     </Provider>
   </BrowserRouter>

@@ -16,11 +16,15 @@ import UserImage from "../../assets/User/user.jpg";
 import NewGroupIcon from "../../assets/Chat/group.png"
 import SearchIcon from "../../assets/Chat/search.png"
 
+import LightIcon from "../../assets/Theme/light.png"
+import DarkIcon from "../../assets/Theme/dark.png"
+import { ThemeContext } from '../../context/ThemeProvider';
 
 const Userbar = ({ users }) => {
 
     const dispatch = useDispatch();
     const socket = useContext(SocketContext);
+    const { mode, toggleColorMode } = useContext(ThemeContext)
 
     const chat = useSelector((state) => state.chat)
     const user = useSelector((state) => state.user.details)
@@ -63,7 +67,6 @@ const Userbar = ({ users }) => {
 
     return (
         <>
-
             <Box
                 sx={{
                     height: "100vh",
@@ -72,13 +75,18 @@ const Userbar = ({ users }) => {
                     borderRight: "0.5px solid rgba(180, 180, 180, 0.3)"
                 }}
             >
-
                 <Flexbox sx={{ justifyContent: "space-around", gap: 1, padding: "10px" }}>
                     <Avatar src={user.profilePicture || UserImage} sx={{ width: 50, height: 50 }} />
                     <Typography sx={{ fontSize: "20px", display: { xs: "block", sm: "none", md: "block" } }}>{user.username}</Typography>
                     <StyledButton sx={{ backgroundColor: "black" }} onClick={logoutHandler}>
                         Logout
                     </StyledButton>
+                    <Box
+                        component="img"
+                        src={mode === "light" ? DarkIcon : LightIcon}
+                        onClick={toggleColorMode}
+                        sx={{ height: 30, width: 30, cursor: "pointer" }}
+                    />
                 </Flexbox>
 
                 <Flexbox sx={{ gap: 3, padding: "10px", flexDirection: { xs: "row", sm: "column", md: "row" } }} >
