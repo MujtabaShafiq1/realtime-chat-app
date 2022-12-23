@@ -1,10 +1,10 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, useLayoutEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 
 import { SocketContext } from '../../context/Socket'
 import { createChat } from '../../store/chatActions'
-import { Flexbox, StyledField } from '../../misc/MUIComponents'
+import { Flexbox, StyledField, NewMessageContainer } from '../../misc/MUIComponents'
 
 import { Box, Avatar, IconButton, InputAdornment, CircularProgress } from "@mui/material"
 import CustomSnackbar from '../UI/CustomSnackbar'
@@ -13,7 +13,7 @@ import SendIcon from "../../assets/Chat/send.png"
 import RemoveCircleIcon from '@mui/icons-material/CancelRounded';
 import GalleryIcon from '@mui/icons-material/AddPhotoAlternate';
 
-const NewMessage = () => {
+const NewMessage = ({ open, close }) => {
 
     const dispatch = useDispatch();
     const socket = useContext(SocketContext);
@@ -35,6 +35,9 @@ const NewMessage = () => {
         return () => clearTimeout(timeout);
     }, [newMessage, chat.chatId, socket, chat?.users]);
 
+    useLayoutEffect(() => {
+        open(files.length > 0)
+    }, [files, open])
 
     const newMessageHandler = (e) => {
         if (e.target.value.length === 0) {
@@ -103,16 +106,8 @@ const NewMessage = () => {
     return (
         <>
             {snackbar.open && <CustomSnackbar type="error" details={snackbar.details} />}
-            <Flexbox
-                sx={{
-                    padding: "11px",
-                    position: "sticky",
-                    flexDirection: "column",
-                    backgroundColor: "secondary.main",
-                    boxShadow: "0px -10px 20px rgba(180, 180, 180, 0.4)",
-                    borderTop: "1px solid", borderColor: "secondary.other",
-                }}
-            >
+
+            <NewMessageContainer>
 
                 <Flexbox sx={{ display: (!(files.length > 0) && "none"), overflow: "auto", justifyContent: "flex-start", width: "94%", gap: 1 }} >
 
@@ -168,7 +163,7 @@ const NewMessage = () => {
 
                 </Flexbox>
 
-            </Flexbox>
+            </NewMessageContainer>
         </>
     )
 }

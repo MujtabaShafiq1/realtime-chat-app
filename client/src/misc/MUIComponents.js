@@ -102,6 +102,28 @@ const MessageContainer = styled(Box)(({ sender, consecutive, theme }) => ({
     },
 }))
 
+const NewMessageContainer = styled(Box)(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+    padding: "11px",
+    borderTop: "1px solid",
+    borderColor: theme.palette.secondary.other,
+    backgroundColor: theme.palette.secondary.main,
+    boxShadow: "0px -10px 20px rgba(180, 180, 180, 0.4)",
+}))
+
+const ChatContainer = styled(Box)(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "1% 2%",
+    borderBottom: "0.1px solid",
+    backgroundColor: theme.palette.secondary.main,
+    borderColor: theme.palette.secondary.other,
+    boxShadow: "0px 10px 10px rgba(180, 180, 180, 0.4)",
+}))
 
 const StyledStatusBadge = styled(Badge)(({ show }) => ({
     '& .MuiBadge-badge': {
@@ -133,4 +155,15 @@ const StyledStatusBadge = styled(Badge)(({ show }) => ({
 
 
 
-export { Flexbox, StyledField, StyledButton, TextBox, LatestText, UserContainer, MessageContainer, StyledStatusBadge }
+export {
+    Flexbox,
+    StyledField,
+    StyledButton,
+    TextBox,
+    LatestText,
+    UserContainer,
+    MessageContainer,
+    StyledStatusBadge,
+    NewMessageContainer,
+    ChatContainer
+}

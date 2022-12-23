@@ -8,7 +8,7 @@ import Message from './Message'
 import Typing from "../UI/Typing"
 import axios from "axios"
 
-const Messages = () => {
+const Messages = ({ value }) => {
 
     const scrollRef = useRef()
     const socket = useContext(SocketContext)
@@ -31,7 +31,6 @@ const Messages = () => {
         setMessages(prev => [...prev, newMessage])
     }, [chatId, newMessage])
 
-
     useEffect(() => {
         getMessages()
     }, [getMessages])
@@ -47,9 +46,8 @@ const Messages = () => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [socket])
 
-
     return (
-        <Box sx={{ minHeight: "86.5%", overflow: "auto", backgroundColor: "secondary.light" }}>
+        <Box sx={{ height: (value ? "79.5vh" : "86.6vh"), overflow: "auto", backgroundColor: "secondary.light" }}>
             {messages.length > 0 ?
                 <>
                     <Box sx={{ padding: "15px 15px 0px 15px" }}>

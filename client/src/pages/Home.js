@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { SocketContext } from '../context/Socket'
-import { Flexbox } from '../misc/MUIComponents'
 import { Box, SwipeableDrawer } from '@mui/material'
 import axios from "axios"
 
@@ -38,8 +37,8 @@ const Home = () => {
     }, [fetchUsers])
 
     return (
-        <Flexbox bgcolor={"primary.main"} color={"text.primary"}>
-            < Userbar users={users} />
+        <Box sx={{ display: "flex", justifyContent: "center", bgcolor: "primary.main", color: "text.primary" }} >
+            <Userbar users={users} />
             <Chat open={() => setDrawer(true)} />
             {
                 chat.chatId &&
@@ -62,7 +61,7 @@ const Home = () => {
                     </SwipeableDrawer>
                 </>
             }
-        </Flexbox >
+        </Box >
     )
 }
 
