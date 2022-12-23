@@ -39,7 +39,7 @@ const UserContainer = styled(Box)(({ theme }) => ({
 const StyledField = styled(TextField)(({ auth, error, theme }) => ({
     width: "90%",
     input: {
-        color: theme.palette.text.primary,
+        color: auth ? "black" : theme.palette.text.primary,
         borderBottom: auth && error && "0.5px solid red",
         background: auth && "rgb(223, 235, 251, 0.5)",
     },
