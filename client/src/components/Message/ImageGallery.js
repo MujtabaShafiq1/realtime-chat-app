@@ -119,7 +119,7 @@ const ImageGallery = ({ images, close }) => {
                     {images.map((image, index) => {
                         return (
                             <CircleIcon
-                                sx={{ width: { xs: 10, md: 20 }, cursor: "pointer", fill: (slider === index ? "white" : "black") }}
+                                sx={{ width: { xs: 10, md: 20 }, cursor: "pointer", fill: (slider === index ? "white" : "primary.other") }}
                                 onClick={() => { if (index !== slider) setSlider(index) }}
                             />
                         )

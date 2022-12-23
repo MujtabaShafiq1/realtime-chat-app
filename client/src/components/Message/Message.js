@@ -92,7 +92,7 @@ const Message = ({ message, next }) => {
                                 {message.images.length === 1 ?
                                     <Box
                                         component="img"
-                                        sx={{ maxWidth: { xs: 250, md: 300 }, maxHeight: { xs: 200, md: 300 }, borderRadius: "8px" }}
+                                        sx={{ maxWidth: { xs: 250, md: 300 }, maxHeight: { xs: 200, md: 300 } }}
                                         src={message.images[0]}
                                     />
                                     :
@@ -101,15 +101,16 @@ const Message = ({ message, next }) => {
                                             width: { xs: 250, md: 500 },
                                             height: { xs: 200, md: 300 },
                                         }}
-                                        variant="quilted"
+                                        rowHeight={148}
                                         cols={4}
+                                        variant="quilted"
                                     >
-                                        <ImageListItem cols={2} rows={2} >
+                                        <ImageListItem cols={2} rows={2}>
                                             <img
                                                 {...srcset(message.images[0])}
                                                 loading="lazy"
                                                 alt=""
-                                                style={{ borderRadius: "8px" }}
+                                                style={{ borderRadius: "5px" }}
                                             />
                                         </ImageListItem>
                                         <ImageListItem
@@ -120,7 +121,7 @@ const Message = ({ message, next }) => {
                                                 {...srcset(message.images[1])}
                                                 loading="lazy"
                                                 alt=""
-                                                style={{ borderRadius: "8px" }}
+                                                style={{ borderRadius: "5px" }}
                                             />
                                         </ImageListItem>
                                         {message.images[2] &&
@@ -132,7 +133,7 @@ const Message = ({ message, next }) => {
                                                     {...srcset(message.images[2])}
                                                     loading="lazy"
                                                     alt=""
-                                                    style={{ borderRadius: "8px" }}
+                                                    style={{ borderRadius: "5px" }}
                                                 />
                                             </ImageListItem>
                                         }
@@ -142,7 +143,7 @@ const Message = ({ message, next }) => {
                                                     {...srcset(message.images[3])}
                                                     loading="lazy"
                                                     alt=""
-                                                    style={{ borderRadius: "8px" }}
+                                                    style={{ borderRadius: "5px" }}
                                                 />
                                                 {message.images.length > 4 &&
                                                     <Flexbox

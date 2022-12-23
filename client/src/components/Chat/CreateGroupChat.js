@@ -56,6 +56,7 @@ const CreateGroupChat = ({ users, close }) => {
     return (
         <>
             {snackbar.open && <CustomSnackbar type="error" details={snackbar.details} />}
+
             <Flexbox sx={{ justifyContent: "space-around" }}>
                 <Typography sx={{ fontSize: "22px", m: "3% 0%" }}>Create New Group</Typography>
                 <RemoveCircleIcon sx={{ fontSize: "24px", cursor: "pointer", color: "red" }} onClick={close} />
@@ -67,13 +68,13 @@ const CreateGroupChat = ({ users, close }) => {
                         {addedUsers.map(user => {
                             return (
                                 <Flexbox key={user._id} sx={{ padding: "5px 10px", borderRadius: "20px", backgroundColor: "rgba(191,191,191,1)", gap: 0.5 }}>
-                                    <Typography sx={{ color: "black", fontSize: "12px" }}>{user.username}</Typography>
-                                    <RemoveCircleIcon sx={{ fontSize: "24px", cursor: "pointer", color: "red" }} onClick={() => clickHandler(user)} />
+                                    <Typography sx={{ fontSize: "12px" }}>{user.username}</Typography>
+                                    <RemoveCircleIcon sx={{ fontSize: "18px", cursor: "pointer", color: "red" }} onClick={() => clickHandler(user)} />
                                 </Flexbox>
                             )
                         })}
                     </Flexbox>
-                    <ConfirmIcon sx={{ fontSize: "28px", color: "text.primary", cursor: "pointer" }} onClick={createGroup} />
+                    <ConfirmIcon sx={{ fontSize: "24px", color: "text.primary", cursor: "pointer" }} onClick={createGroup} />
                 </Flexbox>
             }
 
@@ -82,9 +83,10 @@ const CreateGroupChat = ({ users, close }) => {
                     <Flexbox key={user._id} sx={{
                         mt: "3%",
                         justifyContent: "space-between",
+                        padding: "10px",
                         '&:hover': {
                             cursor: "pointer",
-                            backgroundColor: "rgba(239, 239, 240, 0.8)",
+                            backgroundColor: "primary.light",
                         }
                     }}
                     >

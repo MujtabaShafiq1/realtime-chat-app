@@ -36,13 +36,7 @@ const Chat = ({ open }) => {
 
     return (
         <>
-            <Box
-                sx={{
-                    flex: 4,
-                    borderRight: "0.5px solid rgba(180, 180, 180, 0.1)",
-                    display: { xs: (!chat.chatId && "none"), sm: "block" }
-                }}
-            >
+            <Box sx={{ flex: 4, borderRight: "1px solid", borderColor: "secondary.other", display: { xs: (!chat.chatId && "none"), sm: "block" } }}>
 
                 {chat.otherMembers.length > 0 ?
 
@@ -51,9 +45,9 @@ const Chat = ({ open }) => {
                         <Flexbox sx={{
                             padding: "1% 2%",
                             justifyContent: "space-between",
-                            backgroundColor: "rgba(180, 180, 180, 0.4)",
+                            backgroundColor: "secondary.main",
                             boxShadow: "0px 10px 10px rgba(180, 180, 180, 0.4)",
-                            borderBottom: "0.5px solid rgba(102, 51, 153, 0.1)",
+                            borderBottom: "0.1px solid", borderColor: "secondary.other",
                         }}
                         >
                             <BackIcon sx={{ fontSize: "24px", cursor: "pointer", color: "text.primary", display: { xs: "block", sm: "none" } }}
@@ -91,7 +85,7 @@ const Chat = ({ open }) => {
                     </Box>
                     :
                     <Flexbox sx={{ minHeight: "50vh" }}>
-                        <Typography sx={{ fontSize: "32px", color: "gray", opacity: 0.4, textAlign: "center" }}>
+                        <Typography sx={{ fontSize: "32px", color: "text.secondary", textAlign: "center" }}>
                             Please select a conversation to start
                         </Typography>
                     </Flexbox>

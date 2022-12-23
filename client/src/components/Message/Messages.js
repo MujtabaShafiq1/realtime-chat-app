@@ -49,7 +49,7 @@ const Messages = () => {
 
 
     return (
-        <Box sx={{ height: "86.5%", overflow: "auto", backgroundColor: "rgba(239, 239, 240, 0.4)", }}>
+        <Box sx={{ minHeight: "86.5%", overflow: "auto", backgroundColor: "secondary.light" }}>
             {messages.length > 0 ?
                 <>
                     <Box sx={{ padding: "15px 15px 0px 15px" }}>

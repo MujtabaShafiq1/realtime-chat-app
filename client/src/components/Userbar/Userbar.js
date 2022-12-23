@@ -71,7 +71,7 @@ const Userbar = ({ users }) => {
                     height: "100vh",
                     width: { xs: "100%", sm: "33%", lg: "22%" },
                     display: { xs: (chat.chatId && "none"), sm: "block" },
-                    borderRight: "0.5px solid rgba(180, 180, 180, 0.3)"
+                    borderRight: "1px solid", borderColor: "secondary.other",
                 }}
             >
                 <Flexbox sx={{ justifyContent: "space-around", gap: 1, padding: "10px" }}>
@@ -118,7 +118,7 @@ const Userbar = ({ users }) => {
                         <CreateGroupChat users={search ? searchedUsers : users} close={() => setCreateGroup(false)} />
                         :
                         <Box sx={{ height: { xs: "75vh", sm: "70vh", md: "75vh" }, overflow: "auto" }}>
-                            <Divider orientation='horizontal' sx={{ m: "1% 0%", background: "rgba(128, 128, 128, 0.1)" }} />
+                            <Divider orientation='horizontal' sx={{ m: "1% 0%", background: "secondary.other" }} />
                             {search ?
                                 <SearchedChats searchedUsers={searchedUsers} clear={() => setSearch("")} />
                                 :

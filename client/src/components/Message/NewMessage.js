@@ -108,9 +108,9 @@ const NewMessage = () => {
                     padding: "11px",
                     position: "sticky",
                     flexDirection: "column",
-                    backgroundColor: "rgba(180, 180, 180, 0.3)",
+                    backgroundColor: "secondary.main",
                     boxShadow: "0px -10px 20px rgba(180, 180, 180, 0.4)",
-                    borderTop: "0.5px solid rgba(102, 51, 153, 0.1)",
+                    borderTop: "1px solid", borderColor: "secondary.other",
                 }}
             >
 
@@ -121,7 +121,7 @@ const NewMessage = () => {
                             <Box key={file.name} sx={{ position: "relative" }}>
                                 <Box
                                     component="img"
-                                    sx={{ width: 60, height: 60, border: "2px solid rgba(180,180,180,0.5)", borderRadius: "10px" }}
+                                    sx={{ width: 60, height: 60, border: "1px solid rgba(180,180,180,0.5)", borderRadius: "10px" }}
                                     src={URL.createObjectURL(file)}
                                 />
                                 <RemoveCircleIcon

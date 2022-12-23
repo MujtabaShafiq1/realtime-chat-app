@@ -15,20 +15,30 @@ const theme = (mode) => ({
                     light: "rgba(239, 239, 240, 0.8)",
                     other: "rgb(0, 0, 0)",
                 },
+                secondary: {
+                    main: "rgba(180, 180, 180, 0.4)",
+                    light: "rgba(239, 239, 240, 0.5)",
+                    other: "rgba(102, 51, 153, 0.1)",
+                },
                 text: {
                     primary: "rgb(0, 0, 0)",
-                    secondary: "rgba(128, 128, 128, 1)"
+                    secondary: "rgba(128, 128, 128, 0.5)"
                 },
             } : {
                 // palette values for dark mode
                 primary: {
-                    main: "rgb(0, 0, 0)",
-                    light: "rgba(128, 128, 128, 0.3)",
-                    other: "rgb(255, 255, 255)",
+                    main: "rgb(0, 0, 0)",                   // main theme color
+                    light: "rgba(128, 128, 128, 0.3)",      // hovering effect
+                    other: "rgb(255, 255, 255)",            // button opposite 
+                },
+                secondary: {
+                    main: "rgb(24, 24, 24, 1)",             // main chat  ( top and new message )
+                    light: "rgba(40, 40, 43, 0.5)",         // chat background
+                    other: "rgba(64, 64, 64, 1)",           // borders
                 },
                 text: {
-                    primary: "rgb(255, 255, 255)",
-                    secondary: "rgba(128, 128, 128, 0.6)"
+                    primary: "rgb(255, 255, 255)",          // primary text 
+                    secondary: "rgba(128, 128, 128, 0.6)"   // sub text (latest message etc)
                 },
             })
     },
