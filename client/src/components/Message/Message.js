@@ -27,7 +27,6 @@ const Message = ({ message, next }) => {
     const dateFormat = "YYYY-MM-DD HH:mm:ss"
     const duration = moment(moment(next?.createdAt).format(dateFormat)).diff(moment(message.createdAt).format(dateFormat), 'hours');
 
-
     // to read message by logged in user
     useEffect(() => {
         const updateMessage = async () => {
@@ -41,7 +40,6 @@ const Message = ({ message, next }) => {
         updateMessage()
     }, [socket, message, readBy, user.id])
 
-
     // to update readby of all message of all users
     useEffect(() => {
         socket.on("getMessageReadby", (details) => {
@@ -50,7 +48,6 @@ const Message = ({ message, next }) => {
             setReadBy(details.readBy)
         });
     }, [socket, message._id])
-
 
     function srcset(image, size = 148, rows = 1, cols = 1) {
         return {

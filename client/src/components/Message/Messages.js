@@ -12,11 +12,10 @@ const Messages = ({ value }) => {
 
     const scrollRef = useRef()
     const socket = useContext(SocketContext)
-
-    const [newMessage, setNewMessage] = useState(null)
     const chatId = useSelector((state) => state.chat.chatId)
 
     const [messages, setMessages] = useState([])
+    const [newMessage, setNewMessage] = useState(null)
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
 
     const getMessages = useCallback(async () => {
@@ -48,7 +47,7 @@ const Messages = ({ value }) => {
 
     return (
         <Box sx={{ height: (value ? "79.5vh" : "86.6vh"), overflow: "auto", backgroundColor: "secondary.light" }}>
-            {messages.length > 0 ?
+            {(messages.length > 0 && chatId === messages[0].chatId) ?
                 <>
                     <Box sx={{ padding: "15px 15px 0px 15px" }}>
                         {messages.map((message, index) => {
