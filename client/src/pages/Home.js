@@ -13,24 +13,24 @@ import CloseIcon from '@mui/icons-material/CancelRounded';
 
 const Home = () => {
 
+    const socket = useContext(SocketContext)
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
 
     const [users, setUsers] = useState([])
     const [drawer, setDrawer] = useState(false)
 
-    const socket = useContext(SocketContext)
-
     const fetchUsers = useCallback(async () => {
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/user/all`)
         const data = response.data.filter((person) => person._id !== userId)
         setUsers(data)
+        // console.clear()
+    }, [userId])
 
-        console.log("connection established")
-        socket.emit("connection", userId);
-        console.clear()
-
-    }, [userId, socket])
+    useEffect(() => {
+        socket.connect();
+        socket.emit("setup", userId)
+    }, [socket, userId])
 
     useEffect(() => {
         fetchUsers();

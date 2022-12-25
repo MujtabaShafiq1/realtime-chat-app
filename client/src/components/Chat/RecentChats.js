@@ -13,16 +13,18 @@ const RecentChats = ({ chats }) => {
 
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
-    const [onlineUsers, setOnlineUsers] = useState([])      //work late
 
+    const [onlineUsers, setOnlineUsers] = useState([])
+
+    // get all the online users
     useEffect(() => {
-        socket.on("getUsers", (users) => setOnlineUsers(users))
+        // socket.on("getUsers", (data) => setOnlineUsers(data))
+        // socket.on("getUsers", (data) => console.log(data))
     }, [socket])
 
+
     const clickHandler = async (selectedChat) => {
-
         if (selectedChat._id === chat?.chatId) return;
-
         const { _id, isGroupChat, members, groupAdmin, createdAt } = selectedChat;
         const activeChat = { chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId), groupAdmin, createdAt }
         dispatch(chatActions.conversation(activeChat))

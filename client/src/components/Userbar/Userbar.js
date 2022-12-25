@@ -53,6 +53,7 @@ const Userbar = ({ users }) => {
 
 
     const logoutHandler = async () => {
+        socket.emit("logout", user.id)
         await axios.get(`${process.env.REACT_APP_SERVER}/auth/logout`)
         dispatch(chatActions.reset())
         dispatch(userActions.logout())

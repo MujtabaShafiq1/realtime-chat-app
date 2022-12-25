@@ -6,17 +6,17 @@ import { SocketContext } from '../../context/Socket';
 
 import UserImage from "../../assets/User/user.jpg";
 
-const RecentUserbox = ({ chat, onlineUsers }) => {
+const RecentUserbox = ({ onlineUsers, chat }) => {
 
     const dispatch = useDispatch()
 
     const socket = useContext(SocketContext)
     const user = useSelector((state) => state.user.details)
 
+    // const [onlineStatus, setOnlineStatus] = useState(false)
     const [latestMessage, setLatestMessage] = useState(chat.latestMessage)
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
     const [filteredUser, setFilteredUser] = useState(chat.members.filter(member => member._id !== user.id))
-
 
     //latest message user update
     useEffect(() => {
@@ -27,7 +27,6 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
             }
         })
     }, [socket, chat._id])
-
 
     // adding new user in group chat
     useEffect(() => {
@@ -63,7 +62,7 @@ const RecentUserbox = ({ chat, onlineUsers }) => {
                     overlap="circular"
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                     variant="dot"
-                    show={+(onlineUsers.some(r => r.includes(filteredUser[0]._id)))}
+                    show={+(onlineUsers.some(r => r.userId === filteredUser[0]._id))}
                 >
                     <Avatar
                         sx={{ width: 50, height: 50 }}
