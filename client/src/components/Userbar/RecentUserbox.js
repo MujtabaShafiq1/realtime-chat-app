@@ -6,17 +6,17 @@ import { SocketContext } from '../../context/Socket';
 
 import UserImage from "../../assets/User/user.jpg";
 
-const RecentUserbox = ({ onlineUsers, chat }) => {
+const RecentUserbox = ({ onlineUsers, members, chat }) => {
 
     const dispatch = useDispatch()
 
     const socket = useContext(SocketContext)
     const user = useSelector((state) => state.user.details)
 
-    // const [onlineStatus, setOnlineStatus] = useState(false)
+    const [onlineStatus, setOnlineStatus] = useState(onlineUsers.some(ou => ou.userId === members[0]._id))
     const [latestMessage, setLatestMessage] = useState(chat.latestMessage)
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
-    const [filteredUser, setFilteredUser] = useState(chat.members.filter(member => member._id !== user.id))
+    const [filteredUser, setFilteredUser] = useState(members)
 
     //latest message user update
     useEffect(() => {
@@ -38,6 +38,13 @@ const RecentUserbox = ({ onlineUsers, chat }) => {
         })
         // eslint-disable-next-line
     }, [dispatch, socket])
+
+
+    // user online and offline 
+    useEffect(() => {
+        socket.on("newConnection", (userId) => { if (filteredUser.some(filtered => filtered._id === userId)) setOnlineStatus(true) })
+        socket.on("disconnectedUser", (userId) => { if (filteredUser.some(user => user._id === userId)) setOnlineStatus(false) })
+    }, [socket, filteredUser])
 
 
     useEffect(() => {
@@ -62,7 +69,7 @@ const RecentUserbox = ({ onlineUsers, chat }) => {
                     overlap="circular"
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                     variant="dot"
-                    show={+(onlineUsers.some(r => r.userId === filteredUser[0]._id))}
+                    show={+(onlineStatus)}
                 >
                     <Avatar
                         sx={{ width: 50, height: 50 }}

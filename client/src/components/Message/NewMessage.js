@@ -153,7 +153,7 @@ const NewMessage = ({ open, close }) => {
 
                     <Flexbox>
                         {loading ?
-                            <CircularProgress />
+                            <CircularProgress sx={{ size: "26px", color: "white" }} />
                             :
                             <Avatar sx={{ backgroundColor: "lightblue", cursor: "pointer" }} disabled={loading} onClick={messageHandler}>
                                 <Box component="img" src={SendIcon} />

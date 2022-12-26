@@ -150,7 +150,7 @@ const Login = () => {
                             />
 
                             <StyledButton type="submit" disabled={loading} sx={{ width: "25%", backgroundColor: "rgba( 76,76,163, 1 )" }}>
-                                {loading ? <CircularProgress size="26px" /> : <Typography>login</Typography>}
+                                {loading ? <CircularProgress sx={{ size: "26px", color: "white" }} /> : <Typography>login</Typography>}
                             </StyledButton>
 
                             <Box display="flex" gap={2} flexDirection={{ xs: "column", md: "row" }}>

@@ -18,8 +18,10 @@ const RecentChats = ({ chats }) => {
 
     // get all the online users
     useEffect(() => {
-        // socket.on("getUsers", (data) => setOnlineUsers(data))
-        // socket.on("getUsers", (data) => console.log(data))
+        socket.on("getUsers", (data) => {
+            setOnlineUsers(data)
+            console.log(data)
+        })
     }, [socket])
 
 
@@ -40,7 +42,7 @@ const RecentChats = ({ chats }) => {
                         {chats.map(chat => {
                             return (
                                 <Box key={chat._id} onClick={() => clickHandler(chat)}>
-                                    <RecentUserbox chat={chat} onlineUsers={onlineUsers} />
+                                    <RecentUserbox chat={chat} onlineUsers={onlineUsers} members={chat.members.filter(member => member._id !== userId)} />
                                 </Box>
                             )
                         })}

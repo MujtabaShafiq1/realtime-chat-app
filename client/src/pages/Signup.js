@@ -204,7 +204,7 @@ const Login = () => {
 
                             <Flexbox sx={{ justifyContent: "left", gap: 2, width: "90%" }}>
                                 <StyledButton type="submit" disabled={loading} sx={{ backgroundColor: "rgba( 76,76,163, 1 )" }} >
-                                    {loading ? <CircularProgress size="26px" /> : <Typography>Signup</Typography>}
+                                    {loading ? <CircularProgress sx={{ size: "26px", color: "white" }} /> : <Typography>Signup</Typography>}
                                 </StyledButton>
                                 <Flexbox sx={{ gap: 1 }}>
                                     <Typography sx={{ fontSize: "16px", display: { xs: "none", md: "block" } }}>Already have an account ? </Typography>
