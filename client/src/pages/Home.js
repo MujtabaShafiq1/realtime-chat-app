@@ -29,8 +29,7 @@ const Home = () => {
 
     useEffect(() => {
         socket.connect();
-        socket.emit("setup", userId)
-    }, [socket, userId])
+    }, [socket])
 
     useEffect(() => {
         fetchUsers();

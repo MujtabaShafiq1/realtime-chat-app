@@ -1,4 +1,6 @@
 const io = require("socket.io")(8900, { cors: { origin: 'http://localhost:3000', credentials: true } });
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 
 let users = [];
 
@@ -15,86 +17,85 @@ const removeUser = (socketId) => {
     users = users.filter(user => user.socketId !== socketId);
 }
 
+io.use((socket, next) => {
+
+    const token = socket.handshake.headers.cookie.split("=")[1]
+    const user = jwt.verify(token, process.env.JWT_KEY)
+
+    if (!user.id) return next(new Error("Invalid User"))
+    addUser(user.id, socket.id);
+    socket.userId = user.id
+    next();
+})
+
 
 io.on("connection", (socket) => {
 
-    if (socket.handshake.headers.cookie) {
+    console.log(socket.userId, "user connected")
 
-        console.log("user connected")
+    // all online users when user connects to server
+    socket.emit("getUsers", users);
 
-        // all online users when user connects to server
-        socket.emit("getUsers", users);
+    // online users
+    socket.broadcast.emit("newConnection", socket.userId);
 
-        // online users
-        socket.on("setup", (userId) => {
-            addUser(userId, socket.id);
-            socket.broadcast.emit("newConnection", userId);
-        });
+    // join socket room
+    socket.on("join chat", (chatId) => {
+        socket.join(chatId)
+    })
 
-        // join socket room
-        socket.on("join chat", (chatId) => {
-            socket.join(chatId)
-        })
+    // new chat
+    socket.on("new chat", (chat) => {
+        const userSockets = getUsersSocket(chat.members)
+        if (userSockets.length === 0) return;
+        io.to(userSockets).emit("getChats", (chat.updatedChat || chat))
+    })
 
-        // new chat
-        socket.on("new chat", (chat) => {
-            const userSockets = getUsersSocket(chat.members)
-            if (userSockets.length === 0) return;
-            io.to(userSockets).emit("getChats", (chat.updatedChat || chat))
-        })
+    // add user to group chat
+    socket.on("add user", (data) => {
+        const userSocket = getUsersSocket(data.users)
+        io.to(userSocket).emit("getNewuser", { newUser: data.newUser, chatId: data.chatId })
+    })
 
-        // add user to group chat
-        socket.on("add user", (data) => {
-            const userSocket = getUsersSocket(data.users)
-            io.to(userSocket).emit("getNewuser", { newUser: data.newUser, chatId: data.chatId })
-        })
+    // remove user from group chat
+    socket.on("remove member", (chat) => {
+        const userSockets = getUsersSocket(chat.members)
+        io.to(userSockets).emit("getChats", chat)
+    })
 
-        // remove user from group chat
-        socket.on("remove member", (chat) => {
-            const userSockets = getUsersSocket(chat.members)
-            io.to(userSockets).emit("getChats", chat)
-        })
+    // get latest message of chat
+    socket.on("latestMessage", (message) => {
+        const userSockets = getUsersSocket(message.users)
+        io.to(userSockets).emit('getLatestMessage', message);
+    });
 
-        // get latest message of chat
-        socket.on("latestMessage", (message) => {
-            const userSockets = getUsersSocket(message.users)
-            io.to(userSockets).emit('getLatestMessage', message);
-        });
+    // read message when user is in chat
+    socket.on("readMessage", (details) => {
+        socket.in(details.chatId).emit('getMessageReadby', details);
+    });
 
-        // read message when user is in chat
-        socket.on("readMessage", (details) => {
-            socket.in(details.chatId).emit('getMessageReadby', details);
-        });
+    // read all message when user opens chat
+    socket.on("readAllMessage", (details) => {
+        socket.in(details.chatId).emit('getMessageReadbyAll', details);
+    });
 
-        // read all message when user opens chat
-        socket.on("readAllMessage", (details) => {
-            socket.in(details.chatId).emit('getMessageReadbyAll', details);
-        });
+    // typing 
+    socket.on("typing", (chat) => {
+        const userSockets = getUsersSocket(chat?.members)
+        socket.to(userSockets).emit("typing", chat.chatId)
+    });
 
-        // typing 
-        socket.on("typing", (chat) => {
-            const userSockets = getUsersSocket(chat?.members)
-            socket.to(userSockets).emit("typing", chat.chatId)
-        });
+    // stop typing
+    socket.on("stop typing", (chat) => {
+        const userSockets = getUsersSocket(chat?.members)
+        socket.to(userSockets).emit("stop typing", chat.chatId)
+    });
 
-        // stop typing
-        socket.on("stop typing", (chat) => {
-            const userSockets = getUsersSocket(chat?.members)
-            socket.to(userSockets).emit("stop typing", chat.chatId)
-        });
+    // when user disconnects from server
+    socket.on("disconnect", () => {
+        console.log(socket.userId, "user disconnected")
+        removeUser(socket.id)
+        socket.broadcast.emit("disconnectedUser", socket.userId);
+    })
 
-        // when user disconnects from server
-        socket.on("logout", (userId) => {
-            removeUser(socket.id)
-            socket.disconnect(true)
-            socket.broadcast.emit("disconnectedUser", userId);
-        })
-
-        socket.on("disconnect", () => {
-            console.log("user disconnected")
-        })
-    } else {
-        console.log("manual disconnect");
-        socket.disconnect(true)
-    }
 })

@@ -42,8 +42,10 @@ const RecentUserbox = ({ onlineUsers, members, chat }) => {
 
     // user online and offline 
     useEffect(() => {
-        socket.on("newConnection", (userId) => { if (filteredUser.some(filtered => filtered._id === userId)) setOnlineStatus(true) })
-        socket.on("disconnectedUser", (userId) => { if (filteredUser.some(user => user._id === userId)) setOnlineStatus(false) })
+        // socket.on("newConnection", (userId) => { if (filteredUser.some(filtered => filtered._id === userId)) setOnlineStatus(true) })
+        // socket.on("disconnectedUser", (userId) => { if (filteredUser.some(user => user._id === userId)) setOnlineStatus(false) })
+        socket.on("newConnection", (userId) => { if (filteredUser.some(filtered => filtered._id === userId)) console.log("Connected", userId) })
+        socket.on("disconnectedUser", (userId) => { if (filteredUser.some(user => user._id === userId)) console.log("Disconnected", userId) })
     }, [socket, filteredUser])
 
 

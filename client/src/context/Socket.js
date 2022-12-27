@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { io } from 'socket.io-client';
 
-const socket = io("http://localhost:8900", { transports: ['websocket'], withCredentials: true })
+const socket = io("http://localhost:8900", { withCredentials: true })
 const SocketContext = createContext(socket);
 
 const SocketProvider = ({ children }) => {
