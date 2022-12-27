@@ -24,12 +24,11 @@ io.use((socket, next) => {
     if (!user.id) return next(new Error("Invalid User"))
     socket.userId = user.id
     next();
+
 })
 
 
 io.on("connection", (socket) => {
-
-    console.log(socket.userId, "user connected")
 
     // new user on server
     socket.broadcast.emit("newConnection", socket.userId);
@@ -94,7 +93,6 @@ io.on("connection", (socket) => {
 
     // when user disconnects from server
     socket.on("disconnect", () => {
-        console.log(socket.userId, "user disconnected")
         removeUser(socket.id)
         socket.broadcast.emit("disconnectedUser", socket.userId);
     })
