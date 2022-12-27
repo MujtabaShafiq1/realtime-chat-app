@@ -18,10 +18,8 @@ const RecentChats = ({ chats }) => {
 
     // get all the online users
     useEffect(() => {
-        // socket.on("getUsers", (data) => setOnlineUsers(data))
-        socket.on("getUsers", (data) => console.log(data))
+        socket.once("getUsers", (data) => setOnlineUsers(data))
     }, [socket])
-
 
     const clickHandler = async (selectedChat) => {
         if (selectedChat._id === chat?.chatId) return;
