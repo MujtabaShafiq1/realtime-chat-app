@@ -18,13 +18,12 @@ const removeUser = (socketId) => {
 }
 
 io.use((socket, next) => {
-
     const token = socket.handshake.headers.cookie.split("=")[1]
     const user = jwt.verify(token, process.env.JWT_KEY)
     if (!user.id) return next(new Error("Invalid User"))
+    addUser(user.id, socket.id);
     socket.userId = user.id
     next();
-
 })
 
 
@@ -34,10 +33,7 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("newConnection", socket.userId);
 
     // active users
-    socket.on("setup", () => {
-        addUser(socket.userId, socket.id);
-        socket.emit("getUsers", users);
-    })
+    socket.emit("getUsers", users);
 
     // join socket room
     socket.on("join chat", (chatId) => {
