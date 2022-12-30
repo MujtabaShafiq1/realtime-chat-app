@@ -1,15 +1,19 @@
 const asyncHandler = require('express-async-handler')
 const Chat = require("../models/Chat");
+const Message = require("../models/Message")
 
 const createChat = asyncHandler(async (req, res) => {
 
-    const newChat = new Chat({
-        members: [req.body.senderId, ...req.body.receiverId],
-        groupAdmin: (req.body.isGroupChat && req.body.senderId),
-        isGroupChat: req.body.isGroupChat
-    });
+    const { senderId, receiverId, isGroupChat, groupAdmin, content, images } = req.body;
+
+    const newChat = new Chat({ members: [senderId, ...receiverId], groupAdmin, isGroupChat });
     const savedChat = await newChat.save();
-    const chat = await savedChat.populate("members", "-password");
+
+    const newMessage = new Message({ chatId: savedChat._id, senderId, type: images ? "image" : "text", images, content, readBy: [senderId] });
+    const savedMessage = await newMessage.save();
+
+    const updatedChat = await Chat.findByIdAndUpdate(savedChat._id, { latestMessage: savedMessage._id }, { new: true })
+    const chat = await updatedChat.populate("members latestMessage", "-password");
     res.status(200).json(chat);
 
 });

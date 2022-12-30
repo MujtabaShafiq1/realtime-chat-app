@@ -24,7 +24,7 @@ const Home = () => {
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/user/all`)
         const data = response.data.filter((person) => person._id !== userId)
         setUsers(data)
-        // console.clear()
+        console.clear()
     }, [userId])
 
     useEffect(() => {

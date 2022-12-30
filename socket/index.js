@@ -55,8 +55,8 @@ io.on("connection", (socket) => {
 
     // remove user from group chat
     socket.on("remove member", (chat) => {
-        const userSockets = getUsersSocket(chat.members)
-        io.to(userSockets).emit("getChats", chat)
+        // const userSockets = getUsersSocket(chat.members)
+        // io.to(userSockets).emit("getChats", chat)
     })
 
     // get latest message of chat

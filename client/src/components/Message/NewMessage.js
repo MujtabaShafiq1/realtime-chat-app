@@ -82,25 +82,29 @@ const NewMessage = ({ open, close }) => {
     const messageHandler = async () => {
         if ((newMessage?.trim().length > 0 || files.length > 0)) {
 
-            let newChatId;
             const imageList = await uploadImages()
 
             if (!chat.chatId) {
-                const response = await dispatch(createChat({ senderId: user.id, receiverId: chat.otherMembers.map(user => user._id) })).unwrap()
-                newChatId = response._id;
+                const response = await dispatch(createChat({
+                    senderId: user.id,
+                    receiverId: chat.otherMembers.map(user => user._id),
+                    content: newMessage,
+                    images: imageList,
+                    groupAdmin: null
+                })).unwrap()
                 socket.emit("new chat", response)
+                setNewMessage("")
+                return;
             }
 
             const messageBody = {
-                chatId: chat.chatId || newChatId, senderId: user.id, type: imageList ? "image" : "text",
-                images: imageList, content: newMessage, readBy: [user.id]
+                chatId: chat.chatId, senderId: user.id, type: imageList ? "image" : "text", images: imageList, content: newMessage, readBy: [user.id]
             }
-
             const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
             socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...chat.otherMembers, user.id] });
-            socket.emit("stop typing", (chat.chatId || newChatId));
+            socket.emit("stop typing", (chat.chatId));
+            setNewMessage("")
         }
-        setNewMessage("")
     }
 
     return (
