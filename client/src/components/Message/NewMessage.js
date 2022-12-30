@@ -89,8 +89,9 @@ const NewMessage = ({ open, close }) => {
                     senderId: user.id,
                     receiverId: chat.otherMembers.map(user => user._id),
                     content: newMessage,
+                    type: imageList ? "image" : "text",
                     images: imageList,
-                    groupAdmin: null
+                    isGroupChat: false
                 })).unwrap()
                 socket.emit("new chat", response)
                 setNewMessage("")

@@ -6,7 +6,6 @@ import { SocketContext } from "../../context/Socket";
 import { chatActions } from "../../store/chatSlice";
 import { createChat } from "../../store/chatActions";
 import CustomSnackbar from "../UI/CustomSnackbar"
-import axios from "axios"
 
 import UserImage from "../../assets/User/user.jpg";
 import AddIcon from '@mui/icons-material/PersonAddAltRounded';
@@ -37,13 +36,15 @@ const CreateGroupChat = ({ users, close }) => {
         if (addedUsers.length <= 20) {
             dispatch(chatActions.conversation({ otherMembers: [...addedUsers] }))
 
-            const response = await dispatch(createChat({ senderId: user.id, receiverId: addedUsers.map(user => user._id), isGroupChat: true })).unwrap()
+            const response = await dispatch(createChat({
+                senderId: user.id,
+                receiverId: addedUsers.map(user => user._id),
+                content: `Group created by ${user.username}`,
+                type: "info",
+                isGroupChat: true
+            })).unwrap()
+
             socket.emit("new chat", response)
-
-            const messageBody = { chatId: response._id, senderId: user.id, type: "info", content: `Group created by ${user.username}`, readBy: [user.id] }
-            const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
-            socket.emit("latestMessage", { messageBody: messageResponse.data, users: [...addedUsers.map(user => user._id), user.id] });
-
             close();
             return;
         }
@@ -52,6 +53,7 @@ const CreateGroupChat = ({ users, close }) => {
             setSnackbar({ open: false, details: "" })
         }, 2000)
     }
+
 
     return (
         <>
