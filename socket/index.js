@@ -50,7 +50,7 @@ io.on("connection", (socket) => {
     // add user to group chat
     socket.on("add user", (data) => {
         const userSocket = getUsersSocket(data.users)
-        io.to(userSocket).emit("getNewuser", { newUser: data.newUser, chatId: data.chatId })
+        io.to(userSocket).emit("getNewuser", { newUser: data.newUsers, chatId: data.chatId })
     })
 
     // remove user from group chat

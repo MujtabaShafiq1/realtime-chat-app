@@ -182,7 +182,7 @@ const Message = ({ message, next }) => {
                 </Flexbox>
 
                 {hover &&
-                    <Flexbox sx={{ backgroundColor: "gray", borderRadius: "30px", width: "auto", height: "auto", opacity: 0.8, padding: "4px" }}>
+                    <Flexbox sx={{ backgroundColor: "gray", borderRadius: "30px", width: "auto", height: "auto", opacity: 0.8, margin: "4px" }}>
                         <Typography sx={{ fontSize: "11px", fontWeight: 300, opacity: 1, color: "white", textAlign: "center" }}>
                             {moment(message.createdAt).calendar()}
                         </Typography>
@@ -193,7 +193,7 @@ const Message = ({ message, next }) => {
 
             {
                 message.type === "info" &&
-                <Typography sx={{ fontSize: "15px", fontWeight: 300, opacity: 1, color: "gray", textAlign: "center", margin: "1% 0" }}>
+                <Typography sx={{ fontSize: "15px", fontWeight: 300, color: "gray", textAlign: "center", margin: "1% 0" }}>
                     {message.content}
                 </Typography>
             }
@@ -201,7 +201,7 @@ const Message = ({ message, next }) => {
             {
                 (duration > 2 && next)
                 &&
-                <Typography sx={{ fontSize: "15px", fontWeight: 300, opacity: 1, color: "gray", textAlign: "center", margin: "1% 0" }}>
+                <Typography sx={{ fontSize: "15px", fontWeight: 300, color: "gray", textAlign: "center", margin: "1% 0" }}>
                     {moment(next?.createdAt).calendar()}
                 </Typography>
             }

@@ -35,7 +35,20 @@ const updateLatestMessage = asyncHandler(async (req, res) => {
 });
 
 const addUser = asyncHandler(async (req, res) => {
-    const updatedChat = await Chat.findByIdAndUpdate(req.params.id, { $addToSet: { "members": { $each: req.body.users } } }, { new: true }).populate("members", "-password");
+
+    const { id } = req.params
+    const { sender, users } = req.body;
+
+    const newMessage = new Message({
+        chatId: id, senderId: sender.id, type: "info", readBy: [sender.id],
+        content: `${sender.username} added ${users.map(u => u.username).join(', ')}`,
+    });
+    const savedMessage = await newMessage.save();
+
+    const updatedChat = await Chat.findByIdAndUpdate(req.params.id, {
+        $addToSet: { "members": { $each: users } }, latestMessage: savedMessage._id
+    }, { new: true }).populate("members latestMessage", "-password");
+
     res.status(200).json(updatedChat)
 });
 

@@ -32,8 +32,8 @@ const RecentUserbox = ({ onlineUsers, members, chat }) => {
     useEffect(() => {
         socket.on("getNewuser", (data) => {
             if (chat._id === data.chatId) {
-                chat.members.push(data.newUser)
-                setFilteredUser(prev => [...prev, data.newUser])
+                chat.members.push(...data.newUser)
+                setFilteredUser(prev => [...prev, ...data.newUser])
             }
         })
         // eslint-disable-next-line

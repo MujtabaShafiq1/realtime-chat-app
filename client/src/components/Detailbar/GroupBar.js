@@ -29,18 +29,10 @@ const GroupBar = ({ users }) => {
     // add member in chat
     const addUserHandler = async () => {
         if ((userList.length + chat.otherMembers.length) <= 20) {
-
-            const response = await axios.put(`${process.env.REACT_APP_SERVER}/chat/add/${chat.chatId}`, { users: userList })
-
-            userList.map(async (newUser) => {
-                const messageBody = { chatId: chat.chatId, senderId: loggedInUser.id, type: "info", content: `${groupAdmin} added ${newUser.username}`, readBy: [loggedInUser.id] }
-                const messageResponse = await axios.post(`${process.env.REACT_APP_SERVER}/message`, messageBody)
-
-                response.data.latestMessage = messageResponse.data;
-                socket.emit("new chat", { members: newUser, updatedChat: response.data })
-                socket.emit("add user", { newUser, chatId: chat.chatId, users: [...chat.otherMembers, loggedInUser] })
-                socket.emit("latestMessage", { messageBody: messageResponse.data, users: [loggedInUser.id, ...chat.otherMembers], newUser });
-            })
+            const response = await axios.put(`${process.env.REACT_APP_SERVER}/chat/add/${chat.chatId}`, { users: userList, sender: loggedInUser })
+            socket.emit("add user", { newUsers: userList, chatId: chat.chatId, users: [...chat.otherMembers, loggedInUser] })
+            socket.emit("new chat", { members: userList, updatedChat: response.data })
+            socket.emit("latestMessage", { messageBody: response.data.latestMessage, users: [loggedInUser.id, ...chat.otherMembers] });
             closeHandler()
             return;
         }
