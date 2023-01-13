@@ -44,9 +44,9 @@ const Messages = ({ value }) => {
         socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [socket])
-
+    //"79.5vh" : "86.6vh"
     return (
-        <Box sx={{ height: (value ? "79.5vh" : "86.6vh"), overflow: "auto", backgroundColor: "secondary.light" }}>
+        <Box sx={{ height: "79.5vh", overflow: "auto", backgroundColor: "secondary.light" }}>
             {(messages.length > 0 && chatId === messages[0].chatId) ?
                 <>
                     <Box sx={{ padding: "15px 15px 0px 15px" }}>

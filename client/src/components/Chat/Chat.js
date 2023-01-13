@@ -20,8 +20,6 @@ const Chat = ({ open }) => {
     const chat = useSelector((state) => state.chat)
     const user = useSelector((state) => state.user.details)
 
-    const [dynamicHeight, setDynamicHeight] = useState(false)
-
     useEffect(() => {
         if (chat.chatId) socket.emit("join chat", chat.chatId);
     }, [chat.chatId, socket])
@@ -80,8 +78,8 @@ const Chat = ({ open }) => {
                         </Flexbox>
 
                     </ChatContainer>
-                    <Messages value={dynamicHeight} />
-                    <NewMessage open={(value) => setDynamicHeight(value)} />
+                    <Messages />
+                    <NewMessage />
                 </Box>
                 :
                 <Flexbox sx={{ minHeight: "50vh" }}>

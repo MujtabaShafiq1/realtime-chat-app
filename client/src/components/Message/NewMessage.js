@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useLayoutEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 
@@ -13,7 +13,7 @@ import SendIcon from "../../assets/Chat/send.png"
 import RemoveCircleIcon from '@mui/icons-material/CancelRounded';
 import GalleryIcon from '@mui/icons-material/AddPhotoAlternate';
 
-const NewMessage = ({ open, close }) => {
+const NewMessage = () => {
 
     const dispatch = useDispatch();
     const socket = useContext(SocketContext);
@@ -34,10 +34,6 @@ const NewMessage = ({ open, close }) => {
         }, 1000);
         return () => clearTimeout(timeout);
     }, [newMessage, chat.chatId, socket, chat?.users]);
-
-    useLayoutEffect(() => {
-        open(files.length > 0)
-    }, [files, open])
 
     const newMessageHandler = (e) => {
         if (e.target.value.length === 0) {
