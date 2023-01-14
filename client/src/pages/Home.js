@@ -13,7 +13,7 @@ import CloseIcon from '@mui/icons-material/CancelRounded';
 
 const Home = () => {
 
-    const socket = useContext(SocketContext)
+    const { socket } = useContext(SocketContext)
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
 
@@ -24,7 +24,7 @@ const Home = () => {
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/user/all`)
         const data = response.data.filter((person) => person._id !== userId)
         setUsers(data)
-        // console.clear()
+        console.clear()
     }, [userId])
 
     useEffect(() => {

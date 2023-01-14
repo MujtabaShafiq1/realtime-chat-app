@@ -6,14 +6,14 @@ import { SocketContext } from '../../context/Socket';
 
 import UserImage from "../../assets/User/user.jpg";
 
-const RecentUserbox = ({ onlineUsers, members, chat }) => {
+const RecentUserbox = ({ members, chat }) => {
 
     const dispatch = useDispatch()
 
-    const socket = useContext(SocketContext)
+    const { socket, onlineUsers } = useContext(SocketContext)
     const user = useSelector((state) => state.user.details)
 
-    const [onlineStatus, setOnlineStatus] = useState(onlineUsers.some(ou => ou.userId === members[0]._id))
+    const [onlineStatus, setOnlineStatus] = useState(members.some(mem => onlineUsers.includes(mem._id)))
     const [latestMessage, setLatestMessage] = useState(chat.latestMessage)
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
     const [filteredUser, setFilteredUser] = useState(members)

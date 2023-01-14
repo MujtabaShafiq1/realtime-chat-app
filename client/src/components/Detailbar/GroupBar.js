@@ -15,7 +15,7 @@ import RemoveCircleIcon from '@mui/icons-material/CancelRounded';
 
 const GroupBar = ({ users }) => {
 
-    const socket = useContext(SocketContext)
+    const { socket } = useContext(SocketContext)
     const [addUser, setAddUser] = useState(false)
     const [userList, setUserList] = useState([])
     const [snackbar, setSnackbar] = useState({ open: false, details: "" })

@@ -12,7 +12,7 @@ import axios from 'axios';
 
 const Message = ({ message, next }) => {
 
-    const socket = useContext(SocketContext)
+    const { socket } = useContext(SocketContext)
 
     const user = useSelector((state) => state.user.details)
     const chat = useSelector((state) => state.chat)

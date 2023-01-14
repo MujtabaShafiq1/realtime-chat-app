@@ -22,7 +22,7 @@ import LightIcon from '@mui/icons-material/Brightness7';
 const Userbar = ({ users }) => {
 
     const dispatch = useDispatch();
-    const socket = useContext(SocketContext);
+    const { socket } = useContext(SocketContext);
     const { mode, toggleColorMode } = useContext(ThemeContext)
 
     const chat = useSelector((state) => state.chat)

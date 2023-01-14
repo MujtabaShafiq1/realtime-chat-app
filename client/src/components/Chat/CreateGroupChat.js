@@ -17,7 +17,7 @@ import RemoveCircleIcon from '@mui/icons-material/CancelRounded';
 const CreateGroupChat = ({ users, close }) => {
 
     const dispatch = useDispatch();
-    const socket = useContext(SocketContext)
+    const { socket } = useContext(SocketContext)
     const user = useSelector(state => state.user.details)
 
     const [addedUsers, setAddedUsers] = useState([])

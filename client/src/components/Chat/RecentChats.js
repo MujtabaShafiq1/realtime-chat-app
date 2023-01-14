@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react"
+import { useContext } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { chatActions } from "../../store/chatSlice"
 import { SocketContext } from "../../context/Socket"
@@ -9,17 +9,10 @@ import RecentUserbox from "../Userbar/RecentUserbox"
 const RecentChats = ({ chats }) => {
 
     const dispatch = useDispatch()
-    const socket = useContext(SocketContext);
+    const { socket } = useContext(SocketContext);
 
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
-
-    const [onlineUsers, setOnlineUsers] = useState([])
-
-    // get all the online users
-    useEffect(() => {
-        socket.once("getUsers", (data) => setOnlineUsers(data))
-    }, [socket])
 
     const clickHandler = async (selectedChat) => {
         if (selectedChat._id === chat?.chatId) return;
@@ -38,7 +31,7 @@ const RecentChats = ({ chats }) => {
                         {chats.map(chat => {
                             return (
                                 <Box key={chat._id} onClick={() => clickHandler(chat)}>
-                                    <RecentUserbox chat={chat} onlineUsers={onlineUsers} members={chat.members.filter(member => member._id !== userId)} />
+                                    <RecentUserbox chat={chat} members={chat.members.filter(member => member._id !== userId)} />
                                 </Box>
                             )
                         })}

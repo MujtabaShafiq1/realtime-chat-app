@@ -11,7 +11,7 @@ import axios from "axios"
 const Messages = ({ value }) => {
 
     const scrollRef = useRef()
-    const socket = useContext(SocketContext)
+    const { socket } = useContext(SocketContext)
     const chatId = useSelector((state) => state.chat.chatId)
 
     const [messages, setMessages] = useState([])
