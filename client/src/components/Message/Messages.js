@@ -16,7 +16,7 @@ const Messages = ({ value }) => {
 
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState(null)
-    const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
+    const [typingDetails, setTypingDetails] = useState()
 
     const getMessages = useCallback(async () => {
         if (!chatId) return setMessages([])
@@ -40,10 +40,11 @@ const Messages = ({ value }) => {
 
     useEffect(() => {
         socket.on("getLatestMessage", (data) => setNewMessage(data.messageBody))
-        socket.on("typing", (chatId) => setTypingDetails({ typing: true, chatId: chatId }));
-        socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
+        socket.on("typing", (details) => setTypingDetails(details));
+        socket.on("stop typing", (details) => setTypingDetails(details));
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [socket])
+
     //"79.5vh" : "86.6vh"
     return (
         <Box sx={{ height: "79.5vh", overflow: "auto", backgroundColor: "secondary.light" }}>
@@ -57,7 +58,7 @@ const Messages = ({ value }) => {
                                 </Box>
                             )
                         })}
-                        {typingDetails.typing && typingDetails.chatId === chatId && <Typing />}
+                        {typingDetails?.typer && typingDetails.chatId === chatId && <Typing user={typingDetails.typer} />}
                     </Box>
                 </>
                 :

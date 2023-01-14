@@ -6,9 +6,9 @@ import Lottie from "react-lottie";
 
 import UserImage from "../../assets/User/user.jpg"
 
-const Typing = () => {
+const Typing = ({ user }) => {
 
-    const typingUser = useSelector((state) => state.chat.otherMembers)
+    const members = useSelector((state) => state.chat.otherMembers)
 
     const defaultOptions = {
         loop: true,
@@ -23,7 +23,7 @@ const Typing = () => {
 
         <>
             <Box sx={{ display: "flex", float: "left", gap: 2, marginTop: "1%" }} >
-                <Avatar src={typingUser[0].profilePicture || UserImage} />
+                <Avatar src={members.find(u => u._id === user).profilePicture || UserImage} />
                 <Lottie options={defaultOptions} style={{ height: 35, width: 65, borderRadius: "30px" }} />
             </Box >
         </>

@@ -76,9 +76,9 @@ io.on("connection", (socket) => {
     });
 
     // typing 
-    socket.on("typing", (chat) => {
-        const userSockets = getUsersSocket(chat?.members)
-        socket.to(userSockets).emit("typing", chat.chatId)
+    socket.on("typing", (details) => {
+        const userSockets = getUsersSocket(details?.members)
+        socket.to(userSockets).emit("typing", { chatId: details.chatId, typer: details.typer })
     });
 
     // stop typing

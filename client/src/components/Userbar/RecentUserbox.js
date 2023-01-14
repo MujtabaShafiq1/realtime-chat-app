@@ -28,6 +28,7 @@ const RecentUserbox = ({ members, chat }) => {
         })
     }, [socket, chat._id])
 
+
     // adding new user in group chat
     useEffect(() => {
         socket.on("getNewuser", (data) => {
@@ -48,8 +49,8 @@ const RecentUserbox = ({ members, chat }) => {
 
 
     useEffect(() => {
-        socket.on("typing", (chatId) => setTypingDetails({ typing: true, chatId: chatId }))
-        socket.on("stop typing", (chatId) => setTypingDetails({ typing: false, chatId: chatId }));
+        socket.on("typing", (details) => setTypingDetails(details));
+        socket.on("stop typing", (details) => setTypingDetails(details));
     }, [socket])
 
 
@@ -90,23 +91,18 @@ const RecentUserbox = ({ members, chat }) => {
                             <Typography sx={{ fontSize: "18px" }}>{filteredUser[0].username}</Typography>
                         }
                     </Box>
-                    {typingDetails.typing && typingDetails.chatId === chat._id && <Typography sx={{ fontSize: "16px" }} color="green">typing... </Typography>}
+                    {typingDetails?.typer && typingDetails.chatId === chat._id && <Typography sx={{ fontSize: "16px" }} color="green">typing... </Typography>}
                 </UserContainer>
 
 
                 {latestMessage &&
-                    <LatestText all={+(chat.members.every(val => latestMessage.readBy.includes(val._id)))}>
+                    <LatestText>
                         {(user.id === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
                         {
                             (chat._id === latestMessage.chatId)
                                 &&
-                                latestMessage.type === "image" ?
-                                `Sent an Image`
-                                :
-                                latestMessage.content.length > 25 ?
-                                    latestMessage.content.substring(0, 25) + `...`
-                                    :
-                                    latestMessage.content
+                                (latestMessage.type === "image") ? `Sent an Image` :
+                                (latestMessage.content.length > 25) ? latestMessage.content.substring(0, 25) + `...` : latestMessage.content
                         }
                     </LatestText>
                 }

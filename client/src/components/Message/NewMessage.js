@@ -29,11 +29,11 @@ const NewMessage = () => {
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (newMessage.length > 0) {
-                socket.emit("typing", { chatId: chat.chatId, members: chat?.users });
+                socket.emit("typing", { chatId: chat.chatId, members: chat?.users, typer: user.id });
             }
         }, 1000);
         return () => clearTimeout(timeout);
-    }, [newMessage, chat.chatId, socket, chat?.users]);
+    }, [newMessage, chat.chatId, socket, chat?.users, user.id]);
 
     const newMessageHandler = (e) => {
         if (e.target.value.length === 0) {
