@@ -70,11 +70,6 @@ io.on("connection", (socket) => {
         socket.in(details.chatId).emit('getMessageReadby', details);
     });
 
-    // read all message when user opens chat
-    socket.on("readAllMessage", (details) => {
-        socket.in(details.chatId).emit('getMessageReadbyAll', details);
-    });
-
     // typing 
     socket.on("typing", (details) => {
         const userSockets = getUsersSocket(details?.members)

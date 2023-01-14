@@ -30,23 +30,24 @@ const Message = ({ message, next }) => {
     // to read message by logged in user
     useEffect(() => {
         const updateMessage = async () => {
-            if (!readBy.includes(user.id) && chat.otherMembers.length !== (readBy.length - 1)) {
+            if (!readBy.includes(user.id) && ((chat.otherMembers.length + 1) !== readBy.length)) {
                 await axios.put(`${process.env.REACT_APP_SERVER}/message/${message._id}`, { userId: user.id })
                 console.log("Before read")
                 message.readBy.push(user.id)
-                socket.emit("readMessage", message)
+                socket.emit("readMessage", { chatId: message.chatId, messageId: message._id, userId: user.id })
             }
         }
         updateMessage()
-    }, [socket, message, readBy, user.id, chat.otherMembers.length])
+        // eslint-disable-next-line
+    }, [socket])
 
 
     // to update readby of all message of all users
     useEffect(() => {
         socket.on("getMessageReadby", (details) => {
-            if (details._id !== message._id) return;
+            if (details.messageId !== message._id) return;
             console.log("on read by")
-            setReadBy(details.readBy)
+            setReadBy(prev => [...prev, details.userId])
         });
     }, [socket, message._id])
 

@@ -1,7 +1,5 @@
-import { useContext } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { chatActions } from "../../store/chatSlice"
-import { SocketContext } from "../../context/Socket"
 import { Box, Typography } from "@mui/material"
 import { Flexbox } from "../../misc/MUIComponents"
 import RecentUserbox from "../Userbar/RecentUserbox"
@@ -9,7 +7,6 @@ import RecentUserbox from "../Userbar/RecentUserbox"
 const RecentChats = ({ chats }) => {
 
     const dispatch = useDispatch()
-    const { socket } = useContext(SocketContext);
 
     const chat = useSelector((state) => state.chat)
     const userId = useSelector((state) => state.user.details.id)
@@ -19,7 +16,6 @@ const RecentChats = ({ chats }) => {
         const { _id, isGroupChat, members, groupAdmin, createdAt } = selectedChat;
         const activeChat = { chatId: _id, isGroupChat, otherMembers: members.filter(member => member._id !== userId), groupAdmin, createdAt }
         dispatch(chatActions.conversation(activeChat))
-        socket.emit("readAllMessage", { chatId: _id, readByUser: userId, totalMembers: members.length })
     }
 
     return (

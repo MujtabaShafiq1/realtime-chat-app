@@ -8,7 +8,7 @@ import Message from './Message'
 import Typing from "../UI/Typing"
 import axios from "axios"
 
-const Messages = ({ value }) => {
+const Messages = () => {
 
     const scrollRef = useRef()
     const { socket } = useContext(SocketContext)
