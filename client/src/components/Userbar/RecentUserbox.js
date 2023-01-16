@@ -1,7 +1,8 @@
 import { useState, useContext, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux"
 import { Box, Avatar, Typography, AvatarGroup } from '@mui/material';
 import { LatestText, StyledStatusBadge, UserContainer } from '../../misc/MUIComponents';
+import { chatActions } from "../../store/chatSlice"
 import { SocketContext } from '../../context/Socket';
 
 import UserImage from "../../assets/User/user.jpg";
@@ -10,24 +11,27 @@ const RecentUserbox = ({ members, chat }) => {
 
     const dispatch = useDispatch()
 
+    const userId = useSelector((state) => state.user.details.id)
+    const chatId = useSelector((state) => state.chat.chatId)
     const { socket, onlineUsers } = useContext(SocketContext)
-    const user = useSelector((state) => state.user.details)
 
+    const [filteredUser, setFilteredUser] = useState(members)
     const [onlineStatus, setOnlineStatus] = useState(members.some(mem => onlineUsers.includes(mem._id)))
     const [latestMessage, setLatestMessage] = useState(chat.latestMessage)
     const [typingDetails, setTypingDetails] = useState({ typing: false, chatId: null })
-    const [filteredUser, setFilteredUser] = useState(members)
 
     //latest message user update
     useEffect(() => {
         socket.on("getLatestMessage", (data) => {
-            if (chat._id === data.messageBody.chatId) {
+            const { messageBody } = data;
+            if (chat._id === messageBody.chatId) {
                 console.log("updating latest message");
+                if (messageBody.chatId === chatId && !messageBody.readBy.includes(userId)) messageBody.readBy.push(userId);
                 setLatestMessage(data.messageBody)
             }
         })
+        // eslint-disable-next-line
     }, [socket, chat._id])
-
 
     // adding new user in group chat
     useEffect(() => {
@@ -41,28 +45,50 @@ const RecentUserbox = ({ members, chat }) => {
     }, [dispatch, socket])
 
 
+    //message read
+    useEffect(() => {
+        socket.on("getMessageReadby", (details) => {
+            if (details.messageId !== latestMessage._id) return;
+            setLatestMessage(prev => ({ ...prev, readBy: [...prev.readBy, details.userId] }));
+        });
+    }, [socket, latestMessage._id])
+
+
     // user online and offline 
     useEffect(() => {
-        socket.on("newConnection", (userId) => { if (filteredUser.some(filtered => filtered._id === userId)) setOnlineStatus(true) })
-        socket.on("disconnectedUser", (userId) => { if (filteredUser.some(user => user._id === userId)) setOnlineStatus(false) })
+        socket.on("newConnection", (uid) => { if (filteredUser.some(filtered => filtered._id === uid)) setOnlineStatus(true) })
+        socket.on("disconnectedUser", (uid) => { if (filteredUser.some(user => user._id === uid)) setOnlineStatus(false) })
     }, [socket, filteredUser])
 
 
+    // typing status of user
     useEffect(() => {
         socket.on("typing", (details) => setTypingDetails(details));
         socket.on("stop typing", (details) => setTypingDetails(details));
     }, [socket])
 
 
+    // select chat 
+    const clickHandler = (selectedChat) => {
+        if (selectedChat._id === chatId) return;
+        if (!latestMessage.readBy.includes(userId)) setLatestMessage(prev => ({ ...prev, readBy: [...prev.readBy, userId] }));
+        const { _id, isGroupChat, groupAdmin, createdAt } = selectedChat;
+        const activeChat = { chatId: _id, isGroupChat, otherMembers: filteredUser, groupAdmin, createdAt }
+        dispatch(chatActions.conversation(activeChat))
+    }
+
+
     return (
-        <Box sx={{
-            gap: 2,
-            display: "flex",
-            justifyContent: "left",
-            alignItems: "center",
-            padding: "10px",
-            '&:hover': { cursor: "pointer", backgroundColor: "primary.light" }
-        }}
+        <Box
+            sx={{
+                gap: 2,
+                display: "flex",
+                justifyContent: "left",
+                alignItems: "center",
+                padding: "10px",
+                '&:hover': { cursor: "pointer", backgroundColor: "primary.light" }
+            }}
+            onClick={() => clickHandler(chat)}
         >
 
             <AvatarGroup total={filteredUser.length + (chat.isGroupChat && 1)} >
@@ -96,8 +122,8 @@ const RecentUserbox = ({ members, chat }) => {
 
 
                 {latestMessage &&
-                    <LatestText>
-                        {(user.id === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
+                    <LatestText all={+(chat.members.length === latestMessage.readBy.length)}>
+                        {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
                         {
                             (chat._id === latestMessage.chatId)
                                 &&

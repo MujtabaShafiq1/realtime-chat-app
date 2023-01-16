@@ -1,12 +1,14 @@
 import { useState, useEffect, useContext } from 'react'
 import { useSelector } from 'react-redux';
-import { Box, Typography, Avatar, ImageListItem, ImageList } from '@mui/material'
+import { Box, Typography, Avatar } from '@mui/material'
 import { Flexbox, TextBox, MessageContainer } from "../../misc/MUIComponents"
 import { SocketContext } from '../../context/Socket';
 import ImageGallery from './ImageGallery';
+import ImageGrid from './ImageGrid';
 import moment from "moment"
 
 import NotifyMark from '@mui/icons-material/DoneAll';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import UserImage from "../../assets/User/user.jpg"
 import axios from 'axios';
 
@@ -52,11 +54,15 @@ const Message = ({ message, next }) => {
     }, [socket, message._id])
 
 
-    function srcset(image, size = 148, rows = 1, cols = 1) {
-        return {
-            src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-            srcSet: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format&dpr=2 2x`,
-        };
+    const hideMessageDetails = () => {
+        const timeout = setTimeout(() => {
+            setHover(false)
+        }, 1000)
+        return () => clearTimeout(timeout);
+    }
+
+    const deleteHandler = () => {
+        console.log("deleting");
     }
 
     return (
@@ -87,75 +93,12 @@ const Message = ({ message, next }) => {
                                 sx={{ display: "flex", flexDirection: "column", m: "1.5% 0%", cursor: "pointer", position: "relative" }}
                                 onClick={() => setGallery(true)}
                                 onMouseEnter={() => setHover(true)}
-                                onMouseLeave={() => setHover(false)}
+                                onMouseLeave={hideMessageDetails}
                             >
                                 {message.images.length === 1 ?
-                                    <Box
-                                        component="img"
-                                        sx={{ maxWidth: { xs: 250, md: 300 }, maxHeight: { xs: 200, md: 300 } }}
-                                        src={message.images[0]}
-                                    />
+                                    <Box component="img" sx={{ maxWidth: { xs: 250, md: 300 }, maxHeight: { xs: 200, md: 300 } }} src={message.images[0]} />
                                     :
-                                    <ImageList
-                                        sx={{
-                                            width: { xs: 250, md: 500 },
-                                            height: { xs: 200, md: 300 },
-                                        }}
-                                        rowHeight={148}
-                                        cols={4}
-                                        variant="quilted"
-                                    >
-                                        <ImageListItem cols={2} rows={2}>
-                                            <img
-                                                {...srcset(message.images[0])}
-                                                loading="lazy"
-                                                alt=""
-                                                style={{ borderRadius: "5px" }}
-                                            />
-                                        </ImageListItem>
-                                        <ImageListItem
-                                            cols={(message.images.length === 2 || message.images.length === 3) ? 2 : 1}
-                                            rows={message.images.length === 2 ? 2 : 1}
-                                        >
-                                            <img
-                                                {...srcset(message.images[1])}
-                                                loading="lazy"
-                                                alt=""
-                                                style={{ borderRadius: "5px" }}
-                                            />
-                                        </ImageListItem>
-                                        {message.images[2] &&
-                                            <ImageListItem
-                                                cols={message.images.length === 3 ? 2 : 1}
-                                                rows={1}
-                                            >
-                                                <img
-                                                    {...srcset(message.images[2])}
-                                                    loading="lazy"
-                                                    alt=""
-                                                    style={{ borderRadius: "5px" }}
-                                                />
-                                            </ImageListItem>
-                                        }
-                                        {message.images[3] &&
-                                            <ImageListItem cols={2} rows={1} sx={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}>
-                                                <img
-                                                    {...srcset(message.images[3])}
-                                                    loading="lazy"
-                                                    alt=""
-                                                    style={{ borderRadius: "5px" }}
-                                                />
-                                                {message.images.length > 4 &&
-                                                    <Flexbox
-                                                        sx={{ backgroundColor: "rgba(0,0,0,0.5)", position: "absolute", height: "100%", width: "100%", borderRadius: "8px" }}>
-                                                        <Typography sx={{ fontSize: "28px", color: "white", fontWeight: 400, opacity: 0.7 }}>
-                                                            + {message.images.length - 4}
-                                                        </Typography>
-                                                    </Flexbox>
-                                                }
-                                            </ImageListItem>
-                                        }
-                                    </ImageList>
+                                    <ImageGrid images={message.images} />
                                 }
                                 {message.senderId === user.id &&
                                     <NotifyMark sx={{
@@ -169,7 +112,7 @@ const Message = ({ message, next }) => {
 
                     {/* Text */}
                     {(message.content && message.type !== "info") &&
-                        <TextBox onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+                        <TextBox onMouseEnter={() => setHover(true)} onMouseLeave={hideMessageDetails}>
                             <Flexbox>
                                 <Typography sx={{ fontSize: { xs: "14px", sm: "16px" } }}>{message.content}</Typography>
                             </Flexbox>
@@ -185,29 +128,30 @@ const Message = ({ message, next }) => {
                 </Flexbox>
 
                 {hover &&
-                    <Flexbox sx={{ backgroundColor: "gray", borderRadius: "30px", width: "auto", height: "auto", opacity: 0.8, margin: "4px" }}>
-                        <Typography sx={{ fontSize: "11px", fontWeight: 300, opacity: 1, color: "white", textAlign: "center" }}>
-                            {moment(message.createdAt).calendar()}
-                        </Typography>
+                    <Flexbox>
+                        {message.senderId === user.id && <DeleteForeverIcon sx={{ fontSize: "20px", fill: "red", cursor: "pointer" }} onClick={deleteHandler} />}
+                        <Flexbox sx={{ backgroundColor: "gray", borderRadius: "30px", opacity: 0.8, padding: "2px 6px" }}>
+                            <Typography sx={{ fontSize: "11px", fontWeight: 300, opacity: 1, color: "white", textAlign: "center" }}>
+                                {moment(message.createdAt).calendar()}
+                            </Typography>
+                        </Flexbox>
                     </Flexbox>
                 }
 
             </MessageContainer >
 
-            {
-                message.type === "info" &&
+            {message.type === "info" &&
                 <Typography sx={{ fontSize: "15px", fontWeight: 300, color: "gray", textAlign: "center", margin: "1% 0" }}>
                     {message.content}
                 </Typography>
             }
 
-            {
-                (duration > 2 && next)
-                &&
+            {(duration > 2 && next) &&
                 <Typography sx={{ fontSize: "15px", fontWeight: 300, color: "gray", textAlign: "center", margin: "1% 0" }}>
                     {moment(next?.createdAt).calendar()}
                 </Typography>
             }
+
         </>
     )
 }
