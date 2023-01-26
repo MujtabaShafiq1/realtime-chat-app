@@ -61,7 +61,7 @@ const Message = ({ message, next, index }) => {
     }
 
     const deleteHandler = async () => {
-        // await axios.delete(`${process.env.REACT_APP_SERVER}/message/${message._id}`, { userId: user.id })
+        await axios.delete(`${process.env.REACT_APP_SERVER}/message/${message._id}`, { userId: user.id })
         socket.emit("deleteMessage", { chatId: message.chatId, messageId: message._id })
     }
 
