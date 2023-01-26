@@ -12,7 +12,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import UserImage from "../../assets/User/user.jpg"
 import axios from 'axios';
 
-const Message = ({ message, next }) => {
+const Message = ({ message, next, index }) => {
 
     const { socket } = useContext(SocketContext)
 
@@ -55,14 +55,14 @@ const Message = ({ message, next }) => {
 
 
     const hideMessageDetails = () => {
-        const timeout = setTimeout(() => {
+        setTimeout(() => {
             setHover(false)
-        }, 1000)
-        return () => clearTimeout(timeout);
+        }, 1500)
     }
 
-    const deleteHandler = () => {
-        console.log("deleting");
+    const deleteHandler = async () => {
+        // await axios.delete(`${process.env.REACT_APP_SERVER}/message/${message._id}`, { userId: user.id })
+        socket.emit("deleteMessage", { chatId: message.chatId, messageId: message._id })
     }
 
     return (

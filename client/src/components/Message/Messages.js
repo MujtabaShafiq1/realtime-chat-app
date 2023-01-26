@@ -12,31 +12,51 @@ const Messages = () => {
 
     const scrollRef = useRef()
     const { socket } = useContext(SocketContext)
-    const chatId = useSelector((state) => state.chat.chatId)
+    const chat = useSelector((state) => state.chat)
 
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState(null)
     const [typingDetails, setTypingDetails] = useState()
 
+
     const getMessages = useCallback(async () => {
-        if (!chatId) return setMessages([])
-        const response = await axios.get(`${process.env.REACT_APP_SERVER}/message/${chatId}`)
+        if (!chat.chatId) return setMessages([])
+        const response = await axios.get(`${process.env.REACT_APP_SERVER}/message/${chat.chatId}`)
         console.log("fetching all message")
         setMessages(response.data)
-    }, [chatId])
+    }, [chat.chatId])
+
 
     const updateMessages = useCallback(() => {
-        if (newMessage?.chatId !== chatId) return;
+        if (newMessage?.chatId !== chat.chatId) return;
         setMessages(prev => [...prev, newMessage])
-    }, [chatId, newMessage])
+    }, [chat.chatId, newMessage])
+
+
+    const messageDeletedHandler = useCallback((mId) => {
+        if (messages.length < 1) return;
+        if (mId === messages[messages.length - 1]._id) {
+            socket.emit("updateLatest", { messageBody: messages[messages.length - 2], users: [...chat.otherMembers] });
+        }
+        socket.off("messageDeleted", messageDeletedHandler);
+        setMessages((prev) => prev.filter(m => m._id !== mId))
+    }, [socket, messages, chat.otherMembers,])
+
 
     useEffect(() => {
         getMessages()
     }, [getMessages])
 
+
     useEffect(() => {
         updateMessages()
     }, [updateMessages])
+
+
+    useEffect(() => {
+        socket.on("messageDeleted", messageDeletedHandler)
+    }, [socket, messageDeletedHandler])
+
 
     useEffect(() => {
         socket.on("getLatestMessage", (data) => setNewMessage(data.messageBody))
@@ -45,10 +65,11 @@ const Messages = () => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [socket])
 
+
     //"79.5vh" : "86.6vh"
     return (
         <Box sx={{ height: "79.5vh", overflow: "auto", backgroundColor: "secondary.light" }}>
-            {(messages.length > 0 && chatId === messages[0].chatId) ?
+            {(messages.length > 0 && chat.chatId === messages[0].chatId) ?
                 <>
                     <Box sx={{ padding: "15px 15px 0px 15px" }}>
                         {messages.map((message, index) => {
@@ -58,7 +79,7 @@ const Messages = () => {
                                 </Box>
                             )
                         })}
-                        {typingDetails?.typer && typingDetails.chatId === chatId && <Typing user={typingDetails.typer} />}
+                        {typingDetails?.typer && typingDetails.chatId === chat.chatId && <Typing user={typingDetails.typer} />}
                     </Box>
                 </>
                 :

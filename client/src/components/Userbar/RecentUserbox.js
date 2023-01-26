@@ -4,7 +4,6 @@ import { Box, Avatar, Typography, AvatarGroup } from '@mui/material';
 import { LatestText, StyledStatusBadge, UserContainer } from '../../misc/MUIComponents';
 import { chatActions } from "../../store/chatSlice"
 import { SocketContext } from '../../context/Socket';
-
 import UserImage from "../../assets/User/user.jpg";
 
 const RecentUserbox = ({ members, chat }) => {
@@ -33,6 +32,15 @@ const RecentUserbox = ({ members, chat }) => {
         // eslint-disable-next-line
     }, [socket, chat._id])
 
+
+    //update latest message when deleted
+    useEffect(() => {
+        socket.on("getUpdatedLatest", (updated) => {
+            if (chat._id === updated.chatId) setLatestMessage(updated)
+        })
+    }, [socket, chat._id])
+
+
     // adding new user in group chat
     useEffect(() => {
         socket.on("getNewuser", (data) => {
@@ -51,7 +59,7 @@ const RecentUserbox = ({ members, chat }) => {
             if (details.messageId !== latestMessage._id) return;
             setLatestMessage(prev => ({ ...prev, readBy: [...prev.readBy, details.userId] }));
         });
-    }, [socket, latestMessage._id])
+    }, [socket, latestMessage?._id])
 
 
     // user online and offline 
@@ -71,7 +79,9 @@ const RecentUserbox = ({ members, chat }) => {
     // select chat 
     const clickHandler = (selectedChat) => {
         if (selectedChat._id === chatId) return;
-        if (!latestMessage.readBy.includes(userId)) setLatestMessage(prev => ({ ...prev, readBy: [...prev.readBy, userId] }));
+        if (latestMessage?._id && !latestMessage.readBy.includes(userId))
+            setLatestMessage(prev => ({ ...prev, readBy: [...prev.readBy, userId] }));
+
         const { _id, isGroupChat, groupAdmin, createdAt } = selectedChat;
         const activeChat = { chatId: _id, isGroupChat, otherMembers: filteredUser, groupAdmin, createdAt }
         dispatch(chatActions.conversation(activeChat))
@@ -123,13 +133,14 @@ const RecentUserbox = ({ members, chat }) => {
 
                 {latestMessage &&
                     <LatestText all={+(chat.members.length === latestMessage.readBy.length)}>
-                        {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
-                        {
-                            (chat._id === latestMessage.chatId)
-                                &&
-                                (latestMessage.type === "image") ? `Sent an Image` :
-                                (latestMessage.content.length > 25) ? latestMessage.content.substring(0, 25) + `...` : latestMessage.content
-                        }
+                        <>
+                            {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
+                            {
+                                (chat._id === latestMessage.chatId) &&
+                                    (latestMessage.type === "image") ? `Sent an Image` :
+                                    (latestMessage.content.length > 10) ? latestMessage.content.substring(0, 10) + `...` : latestMessage.content
+                            }
+                        </>
                     </LatestText>
                 }
             </Box >

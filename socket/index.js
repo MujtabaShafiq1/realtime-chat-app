@@ -65,10 +65,21 @@ io.on("connection", (socket) => {
         io.to(userSockets).emit('getLatestMessage', message);
     });
 
+    // update latest message of chat
+    socket.on("updateLatest", (message) => {
+        const userSockets = getUsersSocket(message.users)
+        io.to(userSockets).emit('getUpdatedLatest', message.messageBody);
+    });
+
     // read message when user is in chat
     socket.on("readMessage", (details) => {
         socket.in(details.chatId).emit('getMessageReadby', details);
     });
+
+    // delete message
+    socket.on("deleteMessage", (details) => {
+        io.in(details.chatId).emit("messageDeleted", details.messageId)
+    })
 
     // typing 
     socket.on("typing", (details) => {

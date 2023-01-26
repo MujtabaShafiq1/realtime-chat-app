@@ -117,6 +117,7 @@ const Chat = ({ open }) => {
                 </Flexbox>
             }
         </Box >
+
     )
 }
 
