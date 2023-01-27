@@ -50,13 +50,13 @@ io.on("connection", (socket) => {
     // add user to group chat
     socket.on("add user", (data) => {
         const userSocket = getUsersSocket(data.users)
-        io.to(userSocket).emit("getNewuser", { newUser: data.newUsers, chatId: data.chatId })
+        io.to(userSocket).emit("getNewUser", { newUser: data.newUsers, chatId: data.chatId })
     })
 
     // remove user from group chat
-    socket.on("remove member", (chat) => {
-        // const userSockets = getUsersSocket(chat.members)
-        // io.to(userSockets).emit("getChats", chat)
+    socket.on("remove member", (data) => {
+        const userSockets = getUsersSocket(data.users)
+        io.to(userSockets).emit("getRemovedUser", { removedUsers: data.removedUsers, chatId: data.chatId })
     })
 
     // get latest message of chat

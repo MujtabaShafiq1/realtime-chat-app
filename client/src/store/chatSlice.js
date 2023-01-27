@@ -21,7 +21,7 @@ const chatSlice = createSlice({
             state.createdAt = action.payload.createdAt || null;
         },
         removeUser(state, action) {
-            state.otherMembers = state.otherMembers.filter(member => !JSON.stringify(action.payload).includes(member._id));
+            state.otherMembers = state.otherMembers.filter(m => !action.payload.includes(m._id))
         },
         addUser(state, action) {
             state.otherMembers.push(...action.payload)

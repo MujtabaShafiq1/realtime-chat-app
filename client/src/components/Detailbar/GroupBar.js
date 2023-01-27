@@ -45,8 +45,10 @@ const GroupBar = ({ users }) => {
     // remove member from chat
     const groupRemoveHandler = async () => {
         if (chat.otherMembers.length > 1) {
-            closeHandler()
+            socket.emit("remove member", { removedUsers: userList.map(r => r._id), chatId: chat.chatId, users: [loggedInUser, ...chat.otherMembers] })
+            // socket.emit("latestMessage", { messageBody: response.data.latestMessage, users: [loggedInUser.id, ...chat.otherMembers] });
             // await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { users: userList })
+            closeHandler()
             return;
         }
         setSnackbar({ open: true, details: "Minimum user limit reached" })

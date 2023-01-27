@@ -40,7 +40,7 @@ const Messages = () => {
         }
         socket.off("messageDeleted", messageDeletedHandler);
         setMessages((prev) => prev.filter(m => m._id !== mId))
-    }, [socket, messages, chat.otherMembers,])
+    }, [socket, messages, chat.otherMembers])
 
 
     useEffect(() => {

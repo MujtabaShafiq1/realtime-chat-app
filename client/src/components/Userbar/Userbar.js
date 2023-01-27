@@ -39,17 +39,24 @@ const Userbar = ({ users }) => {
         setChats(response.data)
     }, [user.id])
 
+
     useEffect(() => {
         fetchingChats();
     }, [fetchingChats])
 
 
     useEffect(() => {
-        socket.on("getChats", (data) => {
-            console.log(`Updating chats`)
-            setChats((prev) => [...prev, data])
-        })
+        socket.on("getChats", (data) => setChats((prev) => [...prev, data]))
     }, [socket])
+
+
+    useEffect(() => {
+        socket.on("getRemovedUser", (data) => {
+            if (data.removedUsers.includes(user.id)) {
+                setChats((prev) => prev.filter(c => c._id !== data.chatId))
+            }
+        })
+    }, [socket, chats, user.id])
 
 
     const logoutHandler = async () => {

@@ -53,8 +53,8 @@ const addUser = asyncHandler(async (req, res) => {
 });
 
 const removeUser = asyncHandler(async (req, res) => {
-    const updatedChat = await Chat.findByIdAndUpdate(req.params.id, { $pull: { "members": { $in: req.body.users } } }, { new: true }).populate("members", "-password");
-    res.status(200).json(updatedChat)
+    await Chat.findByIdAndUpdate(req.params.id, { $pull: { "members": { $in: req.body.users } } });
+    res.status(200).json("user removed")
 });
 
 module.exports = { createChat, getChat, findChat, updateLatestMessage, addUser, removeUser }

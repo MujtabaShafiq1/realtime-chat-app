@@ -41,7 +41,7 @@ const Chat = ({ open }) => {
 
     // adding new user
     useEffect(() => {
-        socket.on("getNewuser", (data) => {
+        socket.on("getNewUser", (data) => {
             if (chat.chatId === data.chatId) {
                 console.log("adding new user")
                 setFilteredUser(prev => [...prev, ...data.newUser])
@@ -49,6 +49,18 @@ const Chat = ({ open }) => {
             }
         })
     }, [dispatch, socket, chat.chatId])
+
+
+    // remove a user
+    useEffect(() => {
+        socket.on("getRemovedUser", (data) => {
+            if (chat.chatId === data.chatId && !data.removedUsers.includes(user.id)) {
+                setFilteredUser(prev => prev.filter(p => !data.removedUsers.includes(p._id)))
+                dispatch(chatActions.removeUser(data.removedUsers))
+            }
+        })
+    }, [dispatch, socket, user.id, chat.chatId])
+
 
     return (
 

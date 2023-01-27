@@ -101,10 +101,12 @@ const Message = ({ message, next, index }) => {
                                     <ImageGrid images={message.images} />
                                 }
                                 {message.senderId === user.id &&
-                                    <NotifyMark sx={{
-                                        fontSize: "20px", alignSelf: "flex-end", position: "absolute", top: "90%", right: "4%",
-                                        color: ((chat.otherMembers.length + 1) === readBy.length ? "blue" : "gray"),
-                                    }} />
+                                    <>
+                                        <NotifyMark sx={{
+                                            fontSize: "20px", alignSelf: "flex-end", position: "absolute", top: "90%", right: "4%",
+                                            color: ((chat.otherMembers.length + 1) <= readBy.length ? "blue" : "gray"),
+                                        }} />
+                                    </>
                                 }
                             </Box>
                         </>
@@ -119,7 +121,7 @@ const Message = ({ message, next, index }) => {
                             {
                                 message.senderId === user.id &&
                                 <NotifyMark sx={{
-                                    fontSize: "20px", alignSelf: "flex-end", color: ((chat.otherMembers.length + 1) === readBy.length ? "blue" : "gray"),
+                                    fontSize: "20px", alignSelf: "flex-end", color: ((chat.otherMembers.length + 1) <= readBy.length ? "blue" : "gray"),
                                 }} />
                             }
                         </TextBox>

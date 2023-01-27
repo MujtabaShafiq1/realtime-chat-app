@@ -43,14 +43,23 @@ const RecentUserbox = ({ members, chat }) => {
 
     // adding new user in group chat
     useEffect(() => {
-        socket.on("getNewuser", (data) => {
+        socket.on("getNewUser", (data) => {
             if (chat._id === data.chatId) {
-                chat.members.push(...data.newUser)
                 setFilteredUser(prev => [...prev, ...data.newUser])
             }
         })
         // eslint-disable-next-line
-    }, [dispatch, socket])
+    }, [socket])
+
+
+    // removing user from group chat
+    useEffect(() => {
+        socket.on("getRemovedUser", (data) => {
+            if (chat._id === data.chatId && !data.removedUsers.includes(userId)) {
+                setFilteredUser(prev => prev.filter(m => !data.removedUsers.includes(m._id)))
+            }
+        })
+    }, [socket, chat._id, chat.members, userId])
 
 
     //message read
@@ -132,7 +141,7 @@ const RecentUserbox = ({ members, chat }) => {
 
 
                 {latestMessage &&
-                    <LatestText all={+(chat.members.length === latestMessage.readBy.length)}>
+                    <LatestText all={+(chat.members.length >= latestMessage.readBy.length)}>
                         <>
                             {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
                             {
