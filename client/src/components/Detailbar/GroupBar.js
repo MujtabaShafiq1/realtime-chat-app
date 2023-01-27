@@ -122,6 +122,8 @@ const GroupBar = ({ users }) => {
                                     <Flexbox key={user._id} sx={{ justifyContent: "space-around" }}>
                                         <Userbox user={user} />
                                         {chat.groupAdmin === loggedInUser.id &&
+                                            userList.includes(user) ?
+                                            <AddIcon sx={{ fontSize: "28px", color: "text.primary", cursor: "pointer" }} onClick={() => clickHandler(user)} /> :
                                             <RemoveIcon sx={{ fontSize: "28px", color: "red", cursor: "pointer" }} onClick={() => clickHandler(user)} />
                                         }
                                     </Flexbox>
@@ -144,6 +146,8 @@ const GroupBar = ({ users }) => {
                                     <Flexbox key={user._id} sx={{ justifyContent: "space-around" }}>
                                         <Userbox user={user} />
                                         {chat.groupAdmin === loggedInUser.id &&
+                                            userList.includes(user) ?
+                                            <RemoveIcon sx={{ fontSize: "28px", color: "red", cursor: "pointer" }} onClick={() => clickHandler(user)} /> :
                                             <AddIcon sx={{ fontSize: "28px", color: "text.primary", cursor: "pointer" }} onClick={() => clickHandler(user)} />
                                         }
                                     </Flexbox>
