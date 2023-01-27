@@ -1,8 +1,9 @@
 import { useState, useContext } from "react"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography } from '@mui/material'
 import { Flexbox, StyledButton } from '../../misc/MUIComponents'
 import { SocketContext } from "../../context/Socket";
+import { chatActions } from "../../store/chatSlice";
 import CustomSnackbar from "../UI/CustomSnackbar"
 import Userbox from '../Userbar/Userbox';
 import moment from 'moment';
@@ -15,7 +16,9 @@ import RemoveCircleIcon from '@mui/icons-material/CancelRounded';
 
 const GroupBar = ({ users }) => {
 
+    const dispatch = useDispatch();
     const { socket } = useContext(SocketContext)
+
     const [addUser, setAddUser] = useState(false)
     const [userList, setUserList] = useState([])
     const [snackbar, setSnackbar] = useState({ open: false, details: "" })
@@ -43,11 +46,22 @@ const GroupBar = ({ users }) => {
     }
 
     // remove member from chat
-    const groupRemoveHandler = async () => {
+    const groupRemoveHandler = async (ruser) => {
         if (chat.otherMembers.length > 1) {
-            socket.emit("remove member", { removedUsers: userList.map(r => r._id), chatId: chat.chatId, users: [loggedInUser, ...chat.otherMembers] })
-            // socket.emit("latestMessage", { messageBody: response.data.latestMessage, users: [loggedInUser.id, ...chat.otherMembers] });
-            // await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { users: userList })
+
+            if (ruser) dispatch(chatActions.reset())
+
+            const response = await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { ruser, users: userList, sender: loggedInUser })
+            socket.emit("remove member", {
+                removedUsers: (ruser?.id || userList.map(r => r._id)) || loggedInUser.id,
+                users: [loggedInUser, ...chat.otherMembers],
+                chatId: chat.chatId,
+            })
+
+            socket.emit("latestMessage", {
+                messageBody: response.data.latestMessage,
+                users: [loggedInUser.id, ...chat.otherMembers.filter(co => !userList.includes(co.id))]
+            });
             closeHandler()
             return;
         }
@@ -56,6 +70,7 @@ const GroupBar = ({ users }) => {
             setSnackbar({ open: false, details: "" })
         }, 2000)
     }
+
 
     const clickHandler = (user) => {
         if (userList.some(member => member._id.includes(user._id))) {
@@ -82,8 +97,10 @@ const GroupBar = ({ users }) => {
 
             <Flexbox sx={{ flexDirection: "column", minHeight: "30vh", gap: 2 }}>
 
-                <Typography sx={{ fontSize: "24px", fontWeight: 500 }}>Group Admin: {groupAdmin}</Typography>
-                <Typography sx={{ fontSize: "20px", fontWeight: 300 }}>Created {moment(chat.createdAt).calendar()}</Typography>
+
+                <Typography sx={{ fontSize: "24px", fontWeight: 500, textAlign: "center" }}>Group Admin: {groupAdmin}</Typography>
+                <Typography sx={{ fontSize: "20px", fontWeight: 300, textAlign: "center" }}>Created {moment(chat.createdAt).fromNow()}</Typography>
+
                 {chat.groupAdmin === loggedInUser.id && !addUser &&
                     <StyledButton sx={{ alignSelf: "center" }} onClick={AddHandler}>Add User</StyledButton>
                 }
@@ -152,6 +169,9 @@ const GroupBar = ({ users }) => {
                     </Box>
                 </>
             }
+            <Flexbox>
+                <StyledButton sx={{ background: "red" }} onClick={() => groupRemoveHandler(loggedInUser)}>Leave</StyledButton>
+            </Flexbox>
         </>
     )
 }

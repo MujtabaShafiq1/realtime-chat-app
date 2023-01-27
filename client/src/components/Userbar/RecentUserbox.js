@@ -96,7 +96,6 @@ const RecentUserbox = ({ members, chat }) => {
         dispatch(chatActions.conversation(activeChat))
     }
 
-
     return (
         <Box
             sx={{
@@ -143,7 +142,9 @@ const RecentUserbox = ({ members, chat }) => {
                 {latestMessage &&
                     <LatestText all={+(chat.members.length >= latestMessage.readBy.length)}>
                         <>
-                            {(userId === latestMessage.senderId) ? `You: ` : `${filteredUser[0].username}: `}
+                            {latestMessage.type !== "info" && ((userId === latestMessage.senderId) ?
+                                `You: ` : `${filteredUser.filter(u => u._id === latestMessage.senderId)[0].username}: `)
+                            }
                             {
                                 (chat._id === latestMessage.chatId) &&
                                     (latestMessage.type === "image") ? `Sent an Image` :

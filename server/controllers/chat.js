@@ -34,6 +34,7 @@ const updateLatestMessage = asyncHandler(async (req, res) => {
     res.status(200).json(updatedChat)
 });
 
+
 const addUser = asyncHandler(async (req, res) => {
 
     const { id } = req.params
@@ -52,9 +53,23 @@ const addUser = asyncHandler(async (req, res) => {
     res.status(200).json(updatedChat)
 });
 
+
 const removeUser = asyncHandler(async (req, res) => {
-    await Chat.findByIdAndUpdate(req.params.id, { $pull: { "members": { $in: req.body.users } } });
-    res.status(200).json("user removed")
+
+    const { id } = req.params
+    const { ruser, sender, users } = req.body;
+
+    const newMessage = new Message({
+        chatId: id, senderId: (ruser?._id || sender.id), type: "info", readBy: [(ruser?._id || sender.id)],
+        content: ruser?.id ? `${ruser.username} left` : `${sender.username} removed ${users.map(u => u.username).join(', ')}`,
+    });
+    const savedMessage = await newMessage.save();
+
+    const updatedChat = await Chat.findByIdAndUpdate(req.params.id, {
+        $pull: { "members": { $in: req.body.users } }, latestMessage: savedMessage._id
+    }, { new: true }).populate("members latestMessage", "-password");
+
+    res.status(200).json(updatedChat)
 });
 
 module.exports = { createChat, getChat, findChat, updateLatestMessage, addUser, removeUser }
