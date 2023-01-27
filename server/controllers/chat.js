@@ -55,21 +55,24 @@ const addUser = asyncHandler(async (req, res) => {
 
 
 const removeUser = asyncHandler(async (req, res) => {
+    try {
+        const { id } = req.params
+        const { sender, users } = req.body;
 
-    const { id } = req.params
-    const { ruser, sender, users } = req.body;
+        const newMessage = new Message({
+            chatId: id, senderId: sender.id, type: "info", readBy: [sender.id],
+            content: (users.length > 0) ? `${sender.username} removed ${users.map(u => u.username).join(', ')}` : `${sender.username} left`,
+        });
+        const savedMessage = await newMessage.save();
 
-    const newMessage = new Message({
-        chatId: id, senderId: (ruser?._id || sender.id), type: "info", readBy: [(ruser?._id || sender.id)],
-        content: ruser?.id ? `${ruser.username} left` : `${sender.username} removed ${users.map(u => u.username).join(', ')}`,
-    });
-    const savedMessage = await newMessage.save();
+        const updatedChat = await Chat.findByIdAndUpdate(req.params.id, {
+            $pull: { "members": { $in: (users.length > 0 ? users : [sender.id]) } }, latestMessage: savedMessage._id
+        }, { new: true }).populate("members latestMessage", "-password");
 
-    const updatedChat = await Chat.findByIdAndUpdate(req.params.id, {
-        $pull: { "members": { $in: req.body.users } }, latestMessage: savedMessage._id
-    }, { new: true }).populate("members latestMessage", "-password");
-
-    res.status(200).json(updatedChat)
+        res.status(200).json(updatedChat)
+    } catch (e) {
+        console.log(e)
+    }
 });
 
 module.exports = { createChat, getChat, findChat, updateLatestMessage, addUser, removeUser }

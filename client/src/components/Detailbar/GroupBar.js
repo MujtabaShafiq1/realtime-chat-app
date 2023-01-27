@@ -1,9 +1,8 @@
 import { useState, useContext } from "react"
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Box, Typography } from '@mui/material'
 import { Flexbox, StyledButton } from '../../misc/MUIComponents'
 import { SocketContext } from "../../context/Socket";
-import { chatActions } from "../../store/chatSlice";
 import CustomSnackbar from "../UI/CustomSnackbar"
 import Userbox from '../Userbar/Userbox';
 import moment from 'moment';
@@ -16,7 +15,6 @@ import RemoveCircleIcon from '@mui/icons-material/CancelRounded';
 
 const GroupBar = ({ users }) => {
 
-    const dispatch = useDispatch();
     const { socket } = useContext(SocketContext)
 
     const [addUser, setAddUser] = useState(false)
@@ -47,28 +45,16 @@ const GroupBar = ({ users }) => {
 
     // remove member from chat
     const groupRemoveHandler = async (ruser) => {
-        if (chat.otherMembers.length > 1) {
 
-            if (ruser) dispatch(chatActions.reset())
-
-            const response = await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { ruser, users: userList, sender: loggedInUser })
-            socket.emit("remove member", {
-                removedUsers: (ruser?.id || userList.map(r => r._id)) || loggedInUser.id,
-                users: [loggedInUser, ...chat.otherMembers],
-                chatId: chat.chatId,
-            })
-
-            socket.emit("latestMessage", {
-                messageBody: response.data.latestMessage,
-                users: [loggedInUser.id, ...chat.otherMembers.filter(co => !userList.includes(co.id))]
-            });
-            closeHandler()
-            return;
-        }
-        setSnackbar({ open: true, details: "Minimum user limit reached" })
-        setTimeout(() => {
-            setSnackbar({ open: false, details: "" })
-        }, 2000)
+        const response = await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { users: userList, sender: loggedInUser })
+        socket.emit("remove member", {
+            removedUsers: (userList.length > 0 ? userList.map(r => r._id) : loggedInUser.id), users: [loggedInUser, ...chat.otherMembers], chatId: chat.chatId,
+        })
+        socket.emit("latestMessage", {
+            messageBody: response.data.latestMessage, users: [loggedInUser.id, ...chat.otherMembers.filter(co => !userList.includes(co.id))]
+        });
+        closeHandler()
+        return;
     }
 
 
@@ -170,7 +156,7 @@ const GroupBar = ({ users }) => {
                 </>
             }
             <Flexbox>
-                <StyledButton sx={{ background: "red" }} onClick={() => groupRemoveHandler(loggedInUser)}>Leave</StyledButton>
+                <StyledButton sx={{ background: "red" }} onClick={groupRemoveHandler}>Leave</StyledButton>
             </Flexbox>
         </>
     )

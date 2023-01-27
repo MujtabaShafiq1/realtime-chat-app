@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SocketContext } from "../../context/Socket"
 import { Avatar, Box, Typography, Container, InputAdornment, Divider } from '@mui/material'
 import { Flexbox, StyledButton, StyledField } from '../../misc/MUIComponents'
+import axios from 'axios';
 
 import { userActions } from '../../store/userSlice';
 import { chatActions } from '../../store/chatSlice';
 import { ThemeContext } from '../../context/ThemeProvider';
-import axios from 'axios';
 
 import RecentChats from '../Chat/RecentChats';
 import SearchedChats from '../Chat/SearchedChats';
@@ -53,10 +53,11 @@ const Userbar = ({ users }) => {
     useEffect(() => {
         socket.on("getRemovedUser", (data) => {
             if (data.removedUsers.includes(user.id)) {
+                if (chat.chatId === data.chatId) dispatch(chatActions.reset())
                 setChats((prev) => prev.filter(c => c._id !== data.chatId))
             }
         })
-    }, [socket, chats, user.id])
+    }, [socket, dispatch, chats, chat.chatId, user.id])
 
 
     const logoutHandler = async () => {

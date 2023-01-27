@@ -71,7 +71,7 @@ const Chat = ({ open }) => {
             display: { xs: (!chat.chatId && "none"), sm: "block" }
         }}>
 
-            {chat.otherMembers.length > 0 ?
+            {(chat.otherMembers.length > 0 || chat.chatId) ?
 
                 <Box sx={{ minHeight: "100vh" }}>
 
