@@ -44,15 +44,19 @@ const GroupBar = ({ users }) => {
     }
 
     // remove member from chat
-    const groupRemoveHandler = async (ruser) => {
+    const groupRemoveHandler = async () => {
 
-        const response = await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { users: userList, sender: loggedInUser })
+        if (chat.otherMembers.length === 0) return groupDeleteHandler()
+
         socket.emit("remove member", {
             removedUsers: (userList.length > 0 ? userList.map(r => r._id) : loggedInUser.id), users: [loggedInUser, ...chat.otherMembers], chatId: chat.chatId,
         })
+
+        const response = await axios.put(`${process.env.REACT_APP_SERVER}/chat/remove/${chat.chatId}`, { users: userList, sender: loggedInUser })
         socket.emit("latestMessage", {
             messageBody: response.data.latestMessage, users: [loggedInUser.id, ...chat.otherMembers.filter(co => !userList.includes(co.id))]
         });
+
         closeHandler()
         return;
     }
@@ -64,6 +68,12 @@ const GroupBar = ({ users }) => {
             return;
         }
         setUserList(prev => [...prev, user])
+    }
+
+    const groupDeleteHandler = async () => {
+        console.log("deleting chat + messages");
+        await axios.delete(`${process.env.REACT_APP_SERVER}/chat`, { chatId: chat.chatId })
+        await axios.delete(`${process.env.REACT_APP_SERVER}/message`, { chatId: chat.chatId })
     }
 
     const AddHandler = () => {

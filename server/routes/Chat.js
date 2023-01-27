@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const { validateToken } = require("../middlewares/verifyToken");
-const { createChat, getChat, findChat, updateLatestMessage, addUser, removeUser } = require("../controllers/chat");
+const { createChat, deleteChat, getChat, findChat, updateLatestMessage, addUser, removeUser } = require("../controllers/chat");
 
 router.post("/", validateToken, createChat)
 router.put("/:id", validateToken, updateLatestMessage)
+router.delete("/", validateToken, deleteChat)
 
 router.put("/add/:id", validateToken, addUser)
 router.put("/remove/:id", validateToken, removeUser)

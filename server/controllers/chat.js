@@ -29,6 +29,11 @@ const findChat = asyncHandler(async (req, res) => {
     res.status(200).json(chat);
 });
 
+const deleteChat = asyncHandler(async (req, res) => {
+    await Chat.deleteOne({ _id: req.body.chatId });
+    res.status(200).json(`Chat Deleted Successfully`)
+});
+
 const updateLatestMessage = asyncHandler(async (req, res) => {
     const updatedChat = await Chat.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true }).populate("latestMessage");
     res.status(200).json(updatedChat)
@@ -75,4 +80,4 @@ const removeUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { createChat, getChat, findChat, updateLatestMessage, addUser, removeUser }
+module.exports = { createChat, deleteChat, getChat, findChat, updateLatestMessage, addUser, removeUser }
