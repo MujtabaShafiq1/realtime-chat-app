@@ -10,7 +10,7 @@ const RecentUserbox = ({ members, chat }) => {
 
     const dispatch = useDispatch()
 
-    const userId = useSelector((state) => state.user.details.id)
+    const user = useSelector((state) => state.user.details)
     const chatId = useSelector((state) => state.chat.chatId)
     const { socket, onlineUsers } = useContext(SocketContext)
 
@@ -25,7 +25,7 @@ const RecentUserbox = ({ members, chat }) => {
             const { messageBody } = data;
             if (chat._id === messageBody.chatId) {
                 console.log("updating latest message");
-                if (messageBody.chatId === chatId && !messageBody.readBy.includes(userId)) messageBody.readBy.push(userId);
+                if (messageBody.chatId === chatId && !messageBody.readBy.includes(user.id)) messageBody.readBy.push(user.id);
                 setLatestMessage(data.messageBody)
             }
         })
@@ -55,11 +55,11 @@ const RecentUserbox = ({ members, chat }) => {
     // removing user from group chat
     useEffect(() => {
         socket.on("getRemovedUser", (data) => {
-            if (chat._id === data.chatId && !data.removedUsers.includes(userId)) {
+            if (chat._id === data.chatId && !data.removedUsers.includes(user.id)) {
                 setFilteredUser(prev => prev.filter(m => !data.removedUsers.includes(m._id)))
             }
         })
-    }, [socket, chat._id, chat.members, userId])
+    }, [socket, chat._id, chat.members, user.id])
 
 
     //message read
@@ -74,7 +74,7 @@ const RecentUserbox = ({ members, chat }) => {
     // user online and offline 
     useEffect(() => {
         socket.on("newConnection", (uid) => { if (filteredUser.some(filtered => filtered._id === uid)) setOnlineStatus(true) })
-        socket.on("disconnectedUser", (uid) => { if (filteredUser.some(user => user._id === uid)) setOnlineStatus(false) })
+        socket.on("disconnectedUser", (uid) => { if (filteredUser.some(u => u._id === uid)) setOnlineStatus(false) })
     }, [socket, filteredUser])
 
 
@@ -88,8 +88,8 @@ const RecentUserbox = ({ members, chat }) => {
     // select chat 
     const clickHandler = (selectedChat) => {
         if (selectedChat._id === chatId) return;
-        if (latestMessage?._id && !latestMessage.readBy.includes(userId))
-            setLatestMessage(prev => ({ ...prev, readBy: [...prev.readBy, userId] }));
+        if (latestMessage?._id && !latestMessage.readBy.includes(user.id))
+            setLatestMessage(prev => ({ ...prev, readBy: [...prev.readBy, user.id] }));
 
         const { _id, isGroupChat, groupAdmin, createdAt } = selectedChat;
         const activeChat = { chatId: _id, isGroupChat, otherMembers: filteredUser, groupAdmin, createdAt }
@@ -118,7 +118,7 @@ const RecentUserbox = ({ members, chat }) => {
                 >
                     <Avatar
                         sx={{ width: 50, height: 50 }}
-                        src={filteredUser[0]?.profilePicture || UserImage}
+                        src={(filteredUser.length > 0) ? (filteredUser[0]?.profilePicture || UserImage) : (user.profilePicture || UserImage)}
                     />
                 </StyledStatusBadge>
             </AvatarGroup>
@@ -142,7 +142,7 @@ const RecentUserbox = ({ members, chat }) => {
                 {latestMessage &&
                     <LatestText all={+(chat.members.length >= latestMessage.readBy.length)}>
                         <>
-                            {latestMessage.type !== "info" && ((userId === latestMessage.senderId) ?
+                            {latestMessage.type !== "info" && ((user.id === latestMessage.senderId) ?
                                 `You: ` : `${filteredUser.filter(u => u._id === latestMessage.senderId)[0].username}: `)
                             }
                             {

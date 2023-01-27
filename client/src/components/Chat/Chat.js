@@ -90,7 +90,9 @@ const Chat = ({ open }) => {
                                     variant="dot"
                                     show={+(onlineStatus)}
                                 >
-                                    <Avatar src={chat.otherMembers[0]?.profilePicture || UserImage} />
+                                    <Avatar
+                                        src={(filteredUser.length > 0) ? (filteredUser[0]?.profilePicture || UserImage) : (user.profilePicture || UserImage)}
+                                    />
                                 </StyledStatusBadge>
                                 {chat.isGroupChat && <Avatar sx={{ width: 35, height: 35 }} src={user?.profilePicture || UserImage} />}
                             </AvatarGroup>
