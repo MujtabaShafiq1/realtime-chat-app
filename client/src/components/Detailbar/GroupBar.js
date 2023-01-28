@@ -61,7 +61,6 @@ const GroupBar = ({ users }) => {
         return;
     }
 
-
     const clickHandler = (user) => {
         if (userList.some(member => member._id.includes(user._id))) {
             setUserList(userList.filter(member => member._id !== user._id))
