@@ -72,8 +72,9 @@ const GroupBar = ({ users }) => {
 
     const groupDeleteHandler = async () => {
         console.log("deleting chat + messages");
-        await axios.delete(`${process.env.REACT_APP_SERVER}/chat`, { chatId: chat.chatId })
-        await axios.delete(`${process.env.REACT_APP_SERVER}/message`, { chatId: chat.chatId })
+        socket.emit("remove member", { removedUsers: loggedInUser.id, users: [loggedInUser], chatId: chat.chatId })
+        await axios.delete(`${process.env.REACT_APP_SERVER}/chat`, { data: { chatId: chat.chatId } })
+        await axios.delete(`${process.env.REACT_APP_SERVER}/message`, { data: { chatId: chat.chatId } })
     }
 
     const AddHandler = () => {
