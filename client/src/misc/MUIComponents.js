@@ -1,5 +1,23 @@
 import { Box, TextField, Button, styled, Badge, Typography, Avatar } from "@mui/material"
 
+const MainContainer = styled(Box)(({ theme }) => ({
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    bgcolor: theme.palette.primary.main,
+    color: theme.palette.text.primary,
+}))
+
+const DetailBarContainer = styled(Box)(({ theme }) => ({
+    width: "22%",
+    display: "flex",
+    flexDirection: "column",
+    [theme.breakpoints.down('lg')]: {
+        display: "none"
+    },
+    borderRight: "0.5px solid rgba(102, 51, 153, 0.1)",
+}))
+
 const Flexbox = styled(Box)({
     display: "flex",
     justifyContent: "center",
@@ -17,13 +35,13 @@ const LongTypography = styled(Typography)(({ all, theme }) => ({
 const UserAvatar = styled(Avatar)(({ theme }) => ({
     width: 45,
     height: 45,
-    [theme.breakpoints.up('SM')]: {
+    [theme.breakpoints.up('sm')]: {
         width: 35,
         height: 35,
     },
 }))
 
-const UserContainer = styled(Box)({
+const ChatListContainer = styled(Box)({
     display: "flex",
     alignItems: "left",
     justifyContent: "flex-start",
@@ -39,11 +57,11 @@ const UserListItem = styled(Box)({
     padding: "5px 10px",
     borderRadius: "20px",
     backgroundColor: "rgba(191,191,191,1)",
-    gap: 0.5,
+    gap: 10,
 })
 
 
-const AddUserContainer = styled(Box)(({ theme }) => ({
+const UserContainer = styled(Box)(({ theme }) => ({
     mt: "3%",
     padding: "10px",
     display: "flex",
@@ -55,17 +73,6 @@ const AddUserContainer = styled(Box)(({ theme }) => ({
     }
 }))
 
-const UserListContainer = styled(Box)(({ theme }) => ({
-    gap: 10,
-    padding: "10px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "left",
-    '&:hover': {
-        cursor: "pointer",
-        backgroundColor: theme.palette.primary.light,
-    }
-}))
 
 const StyledField = styled(TextField)(({ auth, error, theme }) => ({
     width: "90%",
@@ -188,13 +195,14 @@ const StyledStatusBadge = styled(Badge)(({ show }) => ({
 
 export {
     Flexbox,
-    LongTypography,
     TextBox,
+    LongTypography,
+    MainContainer,
+    DetailBarContainer,
     UserAvatar,
     UserListItem,
-    AddUserContainer,
     UserContainer,
-    UserListContainer,
+    ChatListContainer,
     ChatContainer,
     MessageContainer,
     NewMessageContainer,

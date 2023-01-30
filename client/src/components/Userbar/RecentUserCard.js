@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux"
 import { Box, Typography, AvatarGroup } from '@mui/material';
-import { LongTypography, StyledStatusBadge, UserAvatar, UserContainer, UserListContainer } from '../../misc/MUIComponents';
+import { LongTypography, StyledStatusBadge, UserAvatar, ChatListContainer, UserContainer } from '../../misc/MUIComponents';
 import { chatActions } from "../../store/chatSlice"
 import { SocketContext } from '../../context/Socket';
 import UserImage from "../../assets/User/user.jpg";
@@ -97,7 +97,7 @@ const RecentUserCard = ({ members, chat }) => {
     }
 
     return (
-        <UserListContainer onClick={() => clickHandler(chat)}>
+        <UserContainer sx={{ justifyContent: "left", gap: 2 }} onClick={() => clickHandler(chat)}>
 
             <AvatarGroup total={filteredUser.length + (chat.isGroupChat && 1)} >
                 <StyledStatusBadge
@@ -111,7 +111,7 @@ const RecentUserCard = ({ members, chat }) => {
             </AvatarGroup>
 
             <Box sx={{ overflow: "hidden" }}>
-                <UserContainer>
+                <ChatListContainer>
                     <Box sx={{ gap: 1, display: "flex" }}>
                         {chat.isGroupChat ?
                             <Typography variant='subBody'>You {filteredUser.length >= 1 && ` and ${filteredUser.length} others`}</Typography>
@@ -120,7 +120,7 @@ const RecentUserCard = ({ members, chat }) => {
                         }
                     </Box>
                     {typingDetails?.typer && typingDetails.chatId === chat._id && <Typography sx={{ fontSize: "16px" }} color="green">typing... </Typography>}
-                </UserContainer>
+                </ChatListContainer>
 
                 {latestMessage &&
                     <LongTypography all={+(chat.members.length <= latestMessage.readBy.length)}>
@@ -131,7 +131,8 @@ const RecentUserCard = ({ members, chat }) => {
                     </LongTypography>
                 }
             </Box>
-        </UserListContainer >
+
+        </UserContainer >
     )
 }
 

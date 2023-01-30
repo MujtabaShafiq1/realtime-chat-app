@@ -1,13 +1,14 @@
 import { useState, useContext } from "react"
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Typography, Avatar } from "@mui/material"
-import { Flexbox, AddUserContainer, UserListItem } from "../../misc/MUIComponents"
+import { Box, Typography } from "@mui/material"
+import { Flexbox, UserContainer, UserListItem } from "../../misc/MUIComponents"
 import { SocketContext } from "../../context/Socket";
 import { chatActions } from "../../store/chatSlice";
 import { createChat } from "../../store/chatActions";
+import UserCard from "../Userbar/UserCard";
 import CustomSnackbar from "../UI/CustomSnackbar"
 
-import UserImage from "../../assets/User/user.jpg";
+
 import AddIcon from '@mui/icons-material/PersonAddAltRounded';
 import RemoveIcon from '@mui/icons-material/PersonRemoveRounded';
 import ConfirmIcon from '@mui/icons-material/CheckCircleRounded';
@@ -59,8 +60,8 @@ const CreateGroupChat = ({ users, close }) => {
         <>
             {snackbar.open && <CustomSnackbar type="error" details={snackbar.details} />}
 
-            <Flexbox sx={{ justifyContent: "space-around" }}>
-                <Typography sx={{ fontSize: "22px", m: "3% 0%" }}>Create New Group</Typography>
+            <Flexbox sx={{ justifyContent: "space-between" }}>
+                <Typography variant="body" sx={{ m: "3% 0%" }}>Create New Group</Typography>
                 <RemoveCircleIcon sx={{ fontSize: "24px", cursor: "pointer", color: "red" }} onClick={close} />
             </Flexbox>
             {addedUsers.length > 0
@@ -70,7 +71,7 @@ const CreateGroupChat = ({ users, close }) => {
                         {addedUsers.map(user => {
                             return (
                                 <UserListItem key={user._id} >
-                                    <Typography sx={{ fontSize: "12px" }}>{user.username}</Typography>
+                                    <Typography sx={{ color: "black", fontSize: "12px" }}>{user.username}</Typography>
                                     <RemoveCircleIcon sx={{ fontSize: "18px", cursor: "pointer", color: "red" }} onClick={() => clickHandler(user)} />
                                 </UserListItem>
                             )
@@ -79,21 +80,18 @@ const CreateGroupChat = ({ users, close }) => {
                     <ConfirmIcon sx={{ fontSize: "24px", color: "text.primary", cursor: "pointer" }} onClick={createGroup} />
                 </Flexbox>
             }
-
-            {users.map(user =>
-                <AddUserContainer key={user._id}>
-                    <Flexbox gap={2}>
-                        <Avatar sx={{ marginLeft: "3%", }} src={user.profilePicture || UserImage} />
-                        <Typography sx={{ fontSize: "18px" }}>{user.username}</Typography>
-                    </Flexbox>
-                    <Box sx={{ cursor: "pointer" }} onClick={() => clickHandler(user)}>
-                        {addedUsers.some(member => member._id.includes(user._id)) ?
-                            <RemoveIcon sx={{ fontSize: "28px", color: "red" }} />
-                            : <AddIcon sx={{ fontSize: "28px", color: "text.primary" }} />}
-                    </Box>
-                </AddUserContainer>
-            )
-            }
+            <Box sx={{ maxWidth: "sm", grow: 1, overflow: { sm: "auto" } }}>
+                {users.map(user =>
+                    <UserContainer key={user._id}>
+                        <UserCard user={user} />
+                        <Box sx={{ cursor: "pointer" }} onClick={() => clickHandler(user)}>
+                            {addedUsers.some(member => member._id.includes(user._id)) ?
+                                <RemoveIcon sx={{ fontSize: "28px", color: "red" }} />
+                                : <AddIcon sx={{ fontSize: "28px", color: "text.primary" }} />}
+                        </Box>
+                    </UserContainer>
+                )}
+            </Box>
         </>
     )
 }

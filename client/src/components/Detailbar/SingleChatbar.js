@@ -11,9 +11,9 @@ const SingleChatbar = () => {
 
     return (
         <Flexbox sx={{ minHeight: "35vh", flexDirection: "column", gap: 3 }}>
-            <Avatar src={chat.otherMembers[0].profilePicture || UserImage} sx={{ width: 150, height: 150 }} />
+            <Avatar src={chat.otherMembers[0].profilePicture || UserImage} sx={{ width: 120, height: 120 }} />
             <Typography sx={{ fontSize: "24px" }}>{chat.otherMembers[0].username}</Typography>
-            <Typography sx={{ fontSize: "20px" }}>Joined {moment(chat.otherMembers[0].createdAt, "YYYYMMDD").fromNow()}</Typography>
+            <Typography variant="body">Joined {moment(chat.otherMembers[0].createdAt, "YYYYMMDD").fromNow()}</Typography>
         </Flexbox>
     )
 }

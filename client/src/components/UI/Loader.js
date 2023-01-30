@@ -13,11 +13,7 @@ const Loader = () => {
     };
 
     return (
-
-        <>
-            <Lottie options={defaultOptions} style={{ height: "100vh", width: "50%" }} />
-        </>
-
+        <Lottie options={defaultOptions} style={{ height: "100vh", width: "50%" }} />
     )
 }
 

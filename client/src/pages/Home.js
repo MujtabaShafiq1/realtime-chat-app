@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { SocketContext } from '../context/Socket'
-import { Box, SwipeableDrawer } from '@mui/material'
+import { MainContainer, DetailBarContainer } from "../misc/MUIComponents"
+import { SwipeableDrawer } from '@mui/material'
 import axios from "axios"
 
 import Chat from '../components/Chat/Chat'
@@ -36,21 +37,19 @@ const Home = () => {
     }, [fetchUsers])
 
     return (
-        <Box sx={{ height: "100vh", display: "flex", justifyContent: "center", bgcolor: "primary.main", color: "text.primary" }}>
+        <MainContainer>
             <Userbar users={users} />
             <Chat open={() => setDrawer(true)} />
             {chat.chatId &&
                 <>
-                    <Box sx={{ minHeight: "100vh", width: "22%", display: { xs: "none", lg: "block" }, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
-                        {chat.isGroupChat ? <GroupBar users={users} /> : <SingleChatbar />}
-                    </Box>
+                    <DetailBarContainer>{chat.isGroupChat ? <GroupBar users={users} /> : <SingleChatbar />}</DetailBarContainer>
                     <SwipeableDrawer
                         open={drawer}
                         onOpen={() => setDrawer(true)}
                         onClose={() => setDrawer(false)}
                         anchor="right"
                         disableSwipeToOpen
-                        PaperProps={{ sx: { zIndex: 1, width: { xs: "70%", sm: "50%", md: "30%" }, minHeight: "100vh" } }}>
+                        PaperProps={{ sx: { zIndex: 1, width: { xs: "100%", sm: "50%", md: "30%" } } }}>
                         <CloseIcon
                             sx={{ fontSize: "28px", mt: "1% ", color: "red", cursor: "pointer", position: "absolute", left: "85%" }}
                             onClick={() => setDrawer(false)}
@@ -59,7 +58,7 @@ const Home = () => {
                     </SwipeableDrawer>
                 </>
             }
-        </Box >
+        </MainContainer >
     )
 }
 

@@ -1,7 +1,7 @@
 import { useState, useContext } from "react"
 import { useSelector } from 'react-redux'
-import { Box, Typography } from '@mui/material'
-import { Flexbox, StyledButton } from '../../misc/MUIComponents'
+import { Typography, Container } from '@mui/material'
+import { Flexbox, StyledButton, UserContainer, UserListItem } from '../../misc/MUIComponents'
 import { SocketContext } from "../../context/Socket";
 import CustomSnackbar from "../UI/CustomSnackbar"
 import UserCard from '../Userbar/UserCard';
@@ -94,8 +94,8 @@ const GroupBar = ({ users }) => {
             <Flexbox sx={{ flexDirection: "column", minHeight: "30vh", gap: 2 }}>
 
 
-                <Typography sx={{ fontSize: "24px", fontWeight: 500, textAlign: "center" }}>Group Admin: {groupAdmin}</Typography>
-                <Typography sx={{ fontSize: "20px", fontWeight: 300, textAlign: "center" }}>Created {moment(chat.createdAt).fromNow()}</Typography>
+                <Typography variant="body" sx={{ fontWeight: 500, textAlign: " center" }}>Group Admin: {groupAdmin}</Typography>
+                <Typography variant="body" sx={{ fontWeight: 300, textAlign: "center" }}>Created {moment(chat.createdAt).fromNow()}</Typography>
 
                 {chat.groupAdmin === loggedInUser.id && !addUser &&
                     <StyledButton sx={{ alignSelf: "center" }} onClick={AddHandler}>Add User</StyledButton>
@@ -103,73 +103,71 @@ const GroupBar = ({ users }) => {
 
                 {userList.length > 0 &&
                     <Flexbox sx={{ flexDirection: "column", margin: "4% 0%", gap: 2 }}>
-                        <Typography sx={{ fontSize: "20px", fontWeight: 300 }}>Removing Members from Group</Typography>
+                        <Typography variant="body" sx={{ fontWeight: 300 }}>Removing Members from Group</Typography>
                         <Flexbox sx={{ flexWrap: "wrap", gap: 1 }}>
                             {userList.map(user => {
                                 return (
-                                    <Flexbox key={user._id} sx={{ padding: "5px 10px", borderRadius: "20px", backgroundColor: "rgba(191,191,191,1)", gap: 0.5 }}>
+                                    <UserListItem key={user._id} >
                                         <Typography sx={{ color: "black", fontSize: "12px" }}>{user.username}</Typography>
-                                        <RemoveCircleIcon sx={{ fontSize: "24px", height: "auto", cursor: "pointer", color: "red" }} onClick={() => clickHandler(user)} />
-                                    </Flexbox>
+                                        <RemoveCircleIcon sx={{ fontSize: "18px", cursor: "pointer", color: "red" }} onClick={() => clickHandler(user)} />
+                                    </UserListItem>
                                 )
                             })}
-                            <ConfirmIcon
-                                sx={{ fontSize: "28px", color: "text.primary", cursor: "pointer" }}
-                                onClick={addUser ? addUserHandler : groupRemoveHandler}
-                            />
+                            <ConfirmIcon sx={{ fontSize: "28px", cursor: "pointer" }} onClick={addUser ? addUserHandler : groupRemoveHandler} />
                         </Flexbox>
                     </Flexbox>
                 }
             </Flexbox>
 
-            {!addUser ?
-                <>
-                    <Typography sx={{ fontSize: "24px", m: "3% 0%", textAlign: "center" }}>Group Members</Typography>
-                    <Box sx={{ height: "50vh", overflow: "auto" }}>
-                        {
-                            chat.otherMembers.map(user => {
+            {
+                !addUser ?
+                    <>
+                        <Typography variant="body" sx={{ m: "3% 0%", textAlign: "center" }}>Group members</Typography>
+                        <Container sx={{ maxWidth: "sm", grow: 1, overflow: { sm: "auto" } }}>
+                            {chat.otherMembers.map(user => {
                                 return (
-                                    <Flexbox key={user._id} sx={{ justifyContent: "space-around" }}>
+                                    <UserContainer key={user._id}>
                                         <UserCard user={user} />
                                         {chat.groupAdmin === loggedInUser.id &&
                                             userList.includes(user) ?
                                             <AddIcon sx={{ fontSize: "28px", color: "text.primary", cursor: "pointer" }} onClick={() => clickHandler(user)} /> :
                                             <RemoveIcon sx={{ fontSize: "28px", color: "red", cursor: "pointer" }} onClick={() => clickHandler(user)} />
                                         }
-                                    </Flexbox>
+                                    </UserContainer>
                                 )
-                            })
-                        }
-                    </Box>
-                </>
-                :
-                <>
-                    <Flexbox sx={{ justifyContent: "space-around" }}>
-                        <Typography sx={{ fontSize: "24px", m: "3% 0%", textAlign: "center" }}>Add new members</Typography>
-                        <RemoveCircleIcon sx={{ fontSize: "24px", height: "auto", cursor: "pointer", color: "red" }} onClick={closeHandler} />
-                    </Flexbox>
-                    <Box sx={{ height: "50vh", overflow: "auto" }}>
-                        {nonGroupMembers.length > 0
-                            ?
-                            nonGroupMembers.map(user => {
-                                return (
-                                    <Flexbox key={user._id} sx={{ justifyContent: "space-around" }}>
-                                        <UserCard user={user} />
-                                        {chat.groupAdmin === loggedInUser.id &&
-                                            userList.includes(user) ?
-                                            <RemoveIcon sx={{ fontSize: "28px", color: "red", cursor: "pointer" }} onClick={() => clickHandler(user)} /> :
-                                            <AddIcon sx={{ fontSize: "28px", color: "text.primary", cursor: "pointer" }} onClick={() => clickHandler(user)} />
-                                        }
-                                    </Flexbox>
-                                )
-                            })
-                            :
-                            <Typography sx={{ fontSize: "22px", textAlign: "center" }}>All users added</Typography>
-                        }
-                    </Box>
-                </>
+                            })}
+                        </Container>
+                    </>
+                    :
+                    <>
+                        <Flexbox sx={{ justifyContent: "space-around" }}>
+                            <Typography variant="body" sx={{ m: "3% 0%", textAlign: "center" }}>Add new members</Typography>
+                            <RemoveCircleIcon sx={{ fontSize: "24px", height: "auto", cursor: "pointer", color: "red" }} onClick={closeHandler} />
+                        </Flexbox>
+
+                        <Container sx={{ maxWidth: "sm", grow: 1, overflow: { sm: "auto" } }}>
+                            {nonGroupMembers.length > 0
+                                ?
+                                nonGroupMembers.map(user => {
+                                    return (
+                                        <UserContainer key={user._id}>
+                                            <UserCard user={user} />
+                                            {chat.groupAdmin === loggedInUser.id &&
+                                                userList.includes(user) ?
+                                                <RemoveIcon sx={{ fontSize: "28px", color: "red", cursor: "pointer" }} onClick={() => clickHandler(user)} /> :
+                                                <AddIcon sx={{ fontSize: "28px", color: "text.primary", cursor: "pointer" }} onClick={() => clickHandler(user)} />
+                                            }
+                                        </UserContainer>
+                                    )
+                                })
+                                :
+                                <Typography sx={{ fontSize: "22px", textAlign: "center" }}>All users added</Typography>
+                            }
+                        </Container>
+
+                    </>
             }
-            <Flexbox>
+            <Flexbox sx={{ m: "3% 0%" }}>
                 <StyledButton sx={{ background: "red" }} onClick={groupRemoveHandler}>Leave</StyledButton>
             </Flexbox>
         </>

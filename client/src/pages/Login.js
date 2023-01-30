@@ -93,17 +93,11 @@ const Login = () => {
 
                     <Divider orientation='vertical' sx={{ height: "35vh", marginRight: "6%", bgcolor: "purple", opacity: "0.1" }} />
 
-                    <Box sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 2,
-                        flex: 4,
-                        padding: "10px"
-                    }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, flex: 4, padding: "10px" }}>
 
                         <Box>
-                            <Typography sx={{ fontSize: "30px" }} fontWeight={500}>Welcome Back</Typography>
-                            <Typography sx={{ fontSize: "20px" }} variant="h6" color="gray" fontWeight={300}>login to continue</Typography>
+                            <Typography sx={{ fontSize: "30px", fontWeight: 500 }} >Welcome Back</Typography>
+                            <Typography sx={{ fontSize: "20px", fontWeight: 300 }} color="gray" >login to continue</Typography>
                         </Box>
 
                         <form onSubmit={formik.handleSubmit} autoComplete="off" style={{ display: "flex", flexDirection: "column", gap: 20, }}>
