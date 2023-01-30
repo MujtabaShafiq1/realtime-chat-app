@@ -36,11 +36,10 @@ const Home = () => {
     }, [fetchUsers])
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", bgcolor: "primary.main", color: "text.primary" }} >
+        <Box sx={{ height: "100vh", display: "flex", justifyContent: "center", bgcolor: "primary.main", color: "text.primary" }}>
             <Userbar users={users} />
             <Chat open={() => setDrawer(true)} />
-            {
-                chat.chatId &&
+            {chat.chatId &&
                 <>
                     <Box sx={{ minHeight: "100vh", width: "22%", display: { xs: "none", lg: "block" }, borderRight: "0.5px solid rgba(102, 51, 153, 0.1)" }}>
                         {chat.isGroupChat ? <GroupBar users={users} /> : <SingleChatbar />}

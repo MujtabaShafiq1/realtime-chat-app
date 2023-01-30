@@ -8,9 +8,15 @@ const theme = (mode) => ({
         body: {
             fontSize: 20,
             fontWeight: 400,
+            [breakpoints.down("sm")]: {
+                fontSize: 18
+            },
         },
         subBody: {
             fontSize: 18,
+            [breakpoints.down("sm")]: {
+                fontSize: 16
+            },
         },
         header: {
             fontSize: 32,

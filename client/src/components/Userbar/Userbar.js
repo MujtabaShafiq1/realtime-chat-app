@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { SocketContext } from "../../context/Socket"
-import { Avatar, Box, Typography, Container, InputAdornment, Divider } from '@mui/material'
-import { Flexbox, StyledButton, StyledField } from '../../misc/MUIComponents'
+import { Box, Typography, Container, InputAdornment, Divider } from '@mui/material'
+import { Flexbox, StyledButton, StyledField, UserAvatar } from '../../misc/MUIComponents'
 import axios from 'axios';
 
 import { userActions } from '../../store/userSlice';
@@ -75,69 +75,72 @@ const Userbar = ({ users }) => {
     }
 
     return (
-        <>
-            <Box sx={{
-                height: "100vh",
-                width: { xs: "100%", sm: "33%", lg: "22%" },
-                display: { xs: (chat.chatId && "none"), sm: "block" },
-                borderRight: "1px solid", borderColor: "secondary.other",
-            }}>
-                <Flexbox sx={{ justifyContent: "space-around", gap: 1, padding: "10px" }}>
-                    <Avatar src={user.profilePicture || UserImage} sx={{ width: 50, height: 50 }} />
-                    <Typography variant="body">{user.username}</Typography>
-                    <StyledButton onClick={logoutHandler}>Logout</StyledButton>
-                    <Box onClick={toggleColorMode} sx={{ height: 30, width: 30, cursor: "pointer" }}>
-                        {mode === "light" ? <DarkIcon /> : <LightIcon />}
+
+        <Box sx={{
+            height: "100%",
+            width: { xs: "100%", sm: "33%", lg: "22%" },
+            borderRight: "1px solid",
+            borderColor: "secondary.other",
+            display: { xs: (chat.chatId && "none"), sm: "flex" },
+            flexDirection: "column",
+        }}>
+
+            <Flexbox sx={{ justifyContent: "space-around", gap: 1, padding: "10px" }}>
+                <UserAvatar src={user.profilePicture || UserImage} />
+                <Typography variant="body">{user.username}</Typography>
+                <StyledButton onClick={logoutHandler}>Logout</StyledButton>
+                <Box onClick={toggleColorMode} sx={{ height: 30, width: 30, cursor: "pointer" }}>
+                    {mode === "light" ? <DarkIcon /> : <LightIcon />}
+                </Box>
+            </Flexbox>
+
+            <Flexbox sx={{ gap: 1, padding: "10px" }} >
+
+                <StyledField
+                    variant="outlined"
+                    placeholder="Search user"
+                    type="text"
+                    size="small"
+                    hiddenLabel
+                    onChange={searchHandler}
+                    value={search}
+                    InputProps={{
+                        autoComplete: "off",
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <SearchIcon sx={{ fontSize: "38px", cursor: "pointer", color: "text.primary" }} />
+                            </InputAdornment>
+                        ),
+                    }}
+                    sx={{ margin: "4% 0%", width: "90%" }}
+                />
+
+                <Flexbox sx={{ flexDirection: "column" }}>
+                    <Typography sx={{ fontSize: "10px", fontWeight: 500, textAlign: "center" }}>
+                        New Group
+                    </Typography>
+                    <NewGroupIcon sx={{ fontSize: "30px", color: "text.primary", cursor: "pointer" }} onClick={() => setCreateGroup(true)} />
+                </Flexbox>
+
+            </Flexbox>
+
+            <Container sx={{ maxWidth: "sm", grow: 1, overflow: { sm: "auto" } }}>
+                {createGroup ?
+                    <CreateGroupChat users={search ? searchedUsers : users} close={() => setCreateGroup(false)} />
+                    :
+                    <Box>
+                        <Divider orientation='horizontal' sx={{ m: "1% 0%", background: "secondary.other" }} />
+                        {search ?
+                            <SearchedChats searchedUsers={searchedUsers} clear={() => setSearch("")} />
+                            :
+                            <RecentChats chats={chats} clear={() => setSearch("")} />
+                        }
                     </Box>
-                </Flexbox>
+                }
+            </Container>
 
-                <Flexbox sx={{ gap: 3, padding: "10px", flexDirection: { xs: "row", sm: "column", md: "row" } }} >
+        </Box >
 
-                    <StyledField
-                        variant="outlined"
-                        placeholder="Search user"
-                        type="text"
-                        size="small"
-                        hiddenLabel
-                        onChange={searchHandler}
-                        value={search}
-                        InputProps={{
-                            autoComplete: "off",
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <SearchIcon sx={{ fontSize: "38px", cursor: "pointer", color: "text.primary" }} />
-                                </InputAdornment>
-                            ),
-                        }}
-                        sx={{ margin: "4% 0%", width: { xs: "50%", sm: "75%" } }}
-                    />
-
-                    <Flexbox sx={{ flexDirection: { md: "column" }, gap: { xs: 2, md: 0 } }}>
-                        <Typography sx={{ fontSize: { xs: "14px", md: "12px" }, fontWeight: 500, textAlign: "center" }}>
-                            New Group
-                        </Typography>
-                        <NewGroupIcon sx={{ fontSize: "36px", color: "text.primary", cursor: "pointer" }} onClick={() => setCreateGroup(true)} />
-                    </Flexbox>
-
-                </Flexbox>
-
-                <Container maxWidth="sm">
-                    {createGroup ?
-                        <CreateGroupChat users={search ? searchedUsers : users} close={() => setCreateGroup(false)} />
-                        :
-                        <Box sx={{ height: { xs: "75vh", sm: "70vh", md: "75vh" }, overflow: "auto" }}>
-                            <Divider orientation='horizontal' sx={{ m: "1% 0%", background: "secondary.other" }} />
-                            {search ?
-                                <SearchedChats searchedUsers={searchedUsers} clear={() => setSearch("")} />
-                                :
-                                <RecentChats chats={chats} clear={() => setSearch("")} />
-                            }
-                        </Box>
-                    }
-                </Container>
-
-            </Box>
-        </>
     )
 }
 

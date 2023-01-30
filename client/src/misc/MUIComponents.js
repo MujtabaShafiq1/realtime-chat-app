@@ -14,10 +14,14 @@ const LongTypography = styled(Typography)(({ all, theme }) => ({
 }))
 
 
-const UserAvatar = styled(Avatar)({
+const UserAvatar = styled(Avatar)(({ theme }) => ({
     width: 45,
     height: 45,
-})
+    [theme.breakpoints.up('SM')]: {
+        width: 35,
+        height: 35,
+    },
+}))
 
 const UserContainer = styled(Box)({
     display: "flex",
