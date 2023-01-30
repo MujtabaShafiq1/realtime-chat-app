@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material'
 import { Flexbox, StyledButton } from '../../misc/MUIComponents'
 import { SocketContext } from "../../context/Socket";
 import CustomSnackbar from "../UI/CustomSnackbar"
-import Userbox from '../Userbar/Userbox';
+import UserCard from '../Userbar/UserCard';
 import moment from 'moment';
 import axios from 'axios';
 
@@ -130,7 +130,7 @@ const GroupBar = ({ users }) => {
                             chat.otherMembers.map(user => {
                                 return (
                                     <Flexbox key={user._id} sx={{ justifyContent: "space-around" }}>
-                                        <Userbox user={user} />
+                                        <UserCard user={user} />
                                         {chat.groupAdmin === loggedInUser.id &&
                                             userList.includes(user) ?
                                             <AddIcon sx={{ fontSize: "28px", color: "text.primary", cursor: "pointer" }} onClick={() => clickHandler(user)} /> :
@@ -154,7 +154,7 @@ const GroupBar = ({ users }) => {
                             nonGroupMembers.map(user => {
                                 return (
                                     <Flexbox key={user._id} sx={{ justifyContent: "space-around" }}>
-                                        <Userbox user={user} />
+                                        <UserCard user={user} />
                                         {chat.groupAdmin === loggedInUser.id &&
                                             userList.includes(user) ?
                                             <RemoveIcon sx={{ fontSize: "28px", color: "red", cursor: "pointer" }} onClick={() => clickHandler(user)} /> :

@@ -1,4 +1,4 @@
-import { Box, TextField, Button, styled, Badge, Typography } from "@mui/material"
+import { Box, TextField, Button, styled, Badge, Typography, Avatar } from "@mui/material"
 
 const Flexbox = styled(Box)({
     display: "flex",
@@ -6,33 +6,61 @@ const Flexbox = styled(Box)({
     alignItems: "center",
 })
 
-const LatestText = styled(Typography)(({ all, theme }) => ({
-    fontWeight: 400,
+const LongTypography = styled(Typography)(({ all, theme }) => ({
     color: all ? theme.palette.text.secondary : theme.palette.text.primary,
-    [theme.breakpoints.down(750)]: {
-        display: 'none'
-    },
-    [theme.breakpoints.down("sm")]: {
-        display: "block",
-    },
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
 }))
 
-const UserContainer = styled(Box)(({ theme }) => ({
+
+const UserAvatar = styled(Avatar)({
+    width: 45,
+    height: 45,
+})
+
+const UserContainer = styled(Box)({
+    display: "flex",
+    alignItems: "left",
+    justifyContent: "flex-start",
+    flexDirection: "column",
+    gap: 10,
+})
+
+
+const UserListItem = styled(Box)({
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "5px 10px",
+    borderRadius: "20px",
+    backgroundColor: "rgba(191,191,191,1)",
+    gap: 0.5,
+})
+
+
+const AddUserContainer = styled(Box)(({ theme }) => ({
+    mt: "3%",
+    padding: "10px",
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-start",
-    [theme.breakpoints.up(750)]: {
-        flexDirection: 'row',
-        gap: 10,
-    },
-    [theme.breakpoints.down(750)]: {
-        flexDirection: 'column',
-        gap: 0,
-    },
-    [theme.breakpoints.down("sm")]: {
-        flexDirection: 'row',
-        gap: 10,
-    },
+    justifyContent: "space-between",
+    '&:hover': {
+        cursor: "pointer",
+        backgroundColor: theme.palette.primary.light,
+    }
+}))
+
+const UserListContainer = styled(Box)(({ theme }) => ({
+    gap: 10,
+    padding: "10px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "left",
+    '&:hover': {
+        cursor: "pointer",
+        backgroundColor: theme.palette.primary.light,
+    }
 }))
 
 const StyledField = styled(TextField)(({ auth, error, theme }) => ({
@@ -156,13 +184,17 @@ const StyledStatusBadge = styled(Badge)(({ show }) => ({
 
 export {
     Flexbox,
+    LongTypography,
+    TextBox,
+    UserAvatar,
+    UserListItem,
+    AddUserContainer,
+    UserContainer,
+    UserListContainer,
+    ChatContainer,
+    MessageContainer,
+    NewMessageContainer,
     StyledField,
     StyledButton,
-    TextBox,
-    LatestText,
-    UserContainer,
-    MessageContainer,
     StyledStatusBadge,
-    NewMessageContainer,
-    ChatContainer
 }

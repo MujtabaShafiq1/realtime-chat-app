@@ -1,7 +1,7 @@
 import { useState, useContext } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { Box, Typography, Avatar } from "@mui/material"
-import { Flexbox } from "../../misc/MUIComponents"
+import { Flexbox, AddUserContainer, UserListItem } from "../../misc/MUIComponents"
 import { SocketContext } from "../../context/Socket";
 import { chatActions } from "../../store/chatSlice";
 import { createChat } from "../../store/chatActions";
@@ -69,10 +69,10 @@ const CreateGroupChat = ({ users, close }) => {
                     <Flexbox sx={{ justifyContent: "flex-start", flexWrap: "wrap", gap: 1 }}>
                         {addedUsers.map(user => {
                             return (
-                                <Flexbox key={user._id} sx={{ padding: "5px 10px", borderRadius: "20px", backgroundColor: "rgba(191,191,191,1)", gap: 0.5 }}>
+                                <UserListItem key={user._id} >
                                     <Typography sx={{ fontSize: "12px" }}>{user.username}</Typography>
                                     <RemoveCircleIcon sx={{ fontSize: "18px", cursor: "pointer", color: "red" }} onClick={() => clickHandler(user)} />
-                                </Flexbox>
+                                </UserListItem>
                             )
                         })}
                     </Flexbox>
@@ -80,29 +80,19 @@ const CreateGroupChat = ({ users, close }) => {
                 </Flexbox>
             }
 
-            {
-                users.map(user =>
-                    <Flexbox key={user._id} sx={{
-                        mt: "3%",
-                        justifyContent: "space-between",
-                        padding: "10px",
-                        '&:hover': {
-                            cursor: "pointer",
-                            backgroundColor: "primary.light",
-                        }
-                    }}
-                    >
-                        <Flexbox gap={2}>
-                            <Avatar sx={{ marginLeft: "3%", }} src={user.profilePicture || UserImage} />
-                            <Typography sx={{ fontSize: "18px" }}>{user.username}</Typography>
-                        </Flexbox>
-                        <Box sx={{ cursor: "pointer" }} onClick={() => clickHandler(user)}>
-                            {addedUsers.some(member => member._id.includes(user._id)) ?
-                                <RemoveIcon sx={{ fontSize: "28px", color: "red" }} />
-                                : <AddIcon sx={{ fontSize: "28px", color: "text.primary" }} />}
-                        </Box>
+            {users.map(user =>
+                <AddUserContainer key={user._id}>
+                    <Flexbox gap={2}>
+                        <Avatar sx={{ marginLeft: "3%", }} src={user.profilePicture || UserImage} />
+                        <Typography sx={{ fontSize: "18px" }}>{user.username}</Typography>
                     </Flexbox>
-                )
+                    <Box sx={{ cursor: "pointer" }} onClick={() => clickHandler(user)}>
+                        {addedUsers.some(member => member._id.includes(user._id)) ?
+                            <RemoveIcon sx={{ fontSize: "28px", color: "red" }} />
+                            : <AddIcon sx={{ fontSize: "28px", color: "text.primary" }} />}
+                    </Box>
+                </AddUserContainer>
+            )
             }
         </>
     )

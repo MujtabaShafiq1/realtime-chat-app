@@ -1,12 +1,12 @@
 import { useState, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux"
-import { Box, Avatar, Typography, AvatarGroup } from '@mui/material';
-import { LatestText, StyledStatusBadge, UserContainer } from '../../misc/MUIComponents';
+import { Box, Typography, AvatarGroup } from '@mui/material';
+import { LongTypography, StyledStatusBadge, UserAvatar, UserContainer, UserListContainer } from '../../misc/MUIComponents';
 import { chatActions } from "../../store/chatSlice"
 import { SocketContext } from '../../context/Socket';
 import UserImage from "../../assets/User/user.jpg";
 
-const RecentUserbox = ({ members, chat }) => {
+const RecentUserCard = ({ members, chat }) => {
 
     const dispatch = useDispatch()
 
@@ -97,17 +97,7 @@ const RecentUserbox = ({ members, chat }) => {
     }
 
     return (
-        <Box
-            sx={{
-                gap: 2,
-                display: "flex",
-                justifyContent: "left",
-                alignItems: "center",
-                padding: "10px",
-                '&:hover': { cursor: "pointer", backgroundColor: "primary.light" }
-            }}
-            onClick={() => clickHandler(chat)}
-        >
+        <UserListContainer onClick={() => clickHandler(chat)}>
 
             <AvatarGroup total={filteredUser.length + (chat.isGroupChat && 1)} >
                 <StyledStatusBadge
@@ -116,47 +106,33 @@ const RecentUserbox = ({ members, chat }) => {
                     variant="dot"
                     show={+(onlineStatus)}
                 >
-                    <Avatar
-                        sx={{ width: 50, height: 50 }}
-                        src={(filteredUser.length > 0) ? (filteredUser[0]?.profilePicture || UserImage) : (user.profilePicture || UserImage)}
-                    />
+                    <UserAvatar src={(filteredUser.length > 0) ? (filteredUser[0]?.profilePicture || UserImage) : (user.profilePicture || UserImage)} />
                 </StyledStatusBadge>
             </AvatarGroup>
 
-            <Box>
-
+            <Box sx={{ overflow: "hidden" }}>
                 <UserContainer>
                     <Box sx={{ gap: 1, display: "flex" }}>
                         {chat.isGroupChat ?
-                            <Typography sx={{ fontSize: "18px" }}>
-                                You {filteredUser.length >= 1 && <span sx={{ fontSize: "18px" }}>and {filteredUser.length} others</span>}
-                            </Typography>
+                            <Typography variant='subBody'>You {filteredUser.length >= 1 && ` and ${filteredUser.length} others`}</Typography>
                             :
-                            <Typography sx={{ fontSize: "18px" }}>{filteredUser[0].username}</Typography>
+                            <Typography variant='subBody'>{filteredUser[0].username}</Typography>
                         }
                     </Box>
                     {typingDetails?.typer && typingDetails.chatId === chat._id && <Typography sx={{ fontSize: "16px" }} color="green">typing... </Typography>}
                 </UserContainer>
 
-
                 {latestMessage &&
-                    <LatestText all={+(chat.members.length >= latestMessage.readBy.length)}>
-                        <>
-                            {latestMessage.type !== "info" && ((user.id === latestMessage.senderId) ?
-                                `You: ` : `${filteredUser.filter(u => u._id === latestMessage.senderId)[0].username}: `)
-                            }
-                            {
-                                (chat._id === latestMessage.chatId) &&
-                                    (latestMessage.type === "image") ? `Sent an Image` :
-                                    (latestMessage.content.length > 10) ? latestMessage.content.substring(0, 10) + `...` : latestMessage.content
-                            }
-                        </>
-                    </LatestText>
+                    <LongTypography all={+(chat.members.length <= latestMessage.readBy.length)}>
+                        {latestMessage.type !== "info" && ((user.id === latestMessage.senderId) ?
+                            `You: ` : `${filteredUser.filter(u => u._id === latestMessage.senderId)[0].username}: `)
+                        }
+                        {(chat._id === latestMessage.chatId) && (latestMessage.type === "image") ? `Sent an Image` : latestMessage.content}
+                    </LongTypography>
                 }
-            </Box >
-
-        </Box >
+            </Box>
+        </UserListContainer >
     )
 }
 
-export default RecentUserbox;
+export default RecentUserCard;

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { chatActions } from '../../store/chatSlice';
 import { Flexbox } from '../../misc/MUIComponents'
 import { Box, Typography } from '@mui/material'
-import Userbox from '../Userbar/Userbox';
+import UserCard from '../Userbar/UserCard';
 import axios from "axios"
 
 const SearchedChats = ({ searchedUsers, clear }) => {
@@ -35,7 +35,7 @@ const SearchedChats = ({ searchedUsers, clear }) => {
                 <>
                     {searchedUsers.map(user =>
                         <Box key={user._id} onClick={() => chatHandler(user)}>
-                            <Userbox user={user} />
+                            <UserCard user={user} />
                         </Box>
                     )}
                 </>

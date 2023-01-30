@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux"
 import { Box, Typography } from "@mui/material"
 import { Flexbox } from "../../misc/MUIComponents"
-import RecentUserbox from "../Userbar/RecentUserbox"
+import RecentUserCard from "../Userbar/RecentUserCard"
 
 const RecentChats = ({ chats }) => {
 
@@ -16,14 +16,14 @@ const RecentChats = ({ chats }) => {
                         {chats.map(chat => {
                             return (
                                 <Box key={chat._id}>
-                                    <RecentUserbox chat={chat} members={chat.members.filter(member => member._id !== userId)} />
+                                    <RecentUserCard chat={chat} members={chat.members.filter(member => member._id !== userId)} />
                                 </Box>
                             )
                         })}
                     </>
                     :
                     <Flexbox sx={{ minHeight: "50vh" }}>
-                        <Typography sx={{ color: "text.secondary", opacity: 0.8, textAlign: "center", fontSize: "20px" }}>
+                        <Typography variant="body" sx={{ color: "text.secondary", opacity: 0.8, textAlign: "center" }}>
                             Your recent Chat box is empty
                         </Typography>
                     </Flexbox>

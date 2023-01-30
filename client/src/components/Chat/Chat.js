@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Typography, Avatar, AvatarGroup } from '@mui/material'
-import { ChatContainer, Flexbox, StyledStatusBadge } from '../../misc/MUIComponents'
+import { Box, Typography, AvatarGroup } from '@mui/material'
+import { ChatContainer, Flexbox, UserAvatar, StyledStatusBadge, LongTypography } from '../../misc/MUIComponents'
 import { SocketContext } from '../../context/Socket';
 import { chatActions } from '../../store/chatSlice';
 
@@ -64,24 +64,17 @@ const Chat = ({ open }) => {
 
     return (
 
-        <Box sx={{
-            flex: 4,
-            borderRight: "1px solid",
-            borderColor: "secondary.other",
-            display: { xs: (!chat.chatId && "none"), sm: "block" }
-        }}>
+        <Box sx={{ flex: 4, borderRight: "1px solid", borderColor: "secondary.other", display: { xs: (!chat.chatId && "none"), sm: "block" } }}>
 
             {(chat.otherMembers.length > 0 || chat.chatId) ?
-
                 <Box sx={{ minHeight: "100vh" }}>
 
                     <ChatContainer>
 
-                        <BackIcon sx={{ fontSize: "24px", cursor: "pointer", color: "text.primary", display: { xs: "block", sm: "none" } }}
+                        <BackIcon sx={{ fontSize: "24px", cursor: "pointer", display: { xs: "block", sm: "none" } }}
                             onClick={() => dispatch(chatActions.reset())} />
 
-
-                        <Flexbox gap={1}>
+                        <Flexbox sx={{ gap: 1 }}>
 
                             <AvatarGroup total={chat.otherMembers.length + (chat.isGroupChat && 1)}>
                                 <StyledStatusBadge
@@ -90,22 +83,22 @@ const Chat = ({ open }) => {
                                     variant="dot"
                                     show={+(onlineStatus)}
                                 >
-                                    <Avatar
-                                        src={(chat.otherMembers.length > 0) ? (chat.otherMembers[0]?.profilePicture || UserImage) : (user.profilePicture || UserImage)}
+                                    <UserAvatar
+                                        src={(chat.otherMembers.length > 0) ? (chat.otherMembers[0]?.profilePicture || UserImage) : (user?.profilePicture || UserImage)}
                                     />
                                 </StyledStatusBadge>
-                                {chat.isGroupChat && <Avatar sx={{ width: 35, height: 35 }} src={user?.profilePicture || UserImage} />}
+                                {chat.isGroupChat && <UserAvatar src={user?.profilePicture || UserImage} />}
                             </AvatarGroup>
 
-                            <Box>
+                            <Box sx={{ width: "80%", overflow: "hidden" }}>
                                 {chat.isGroupChat ?
-                                    <Typography sx={{ fontSize: "18px" }}>
+                                    <LongTypography>
                                         You
-                                        {chat.otherMembers.length >= 1 && <span style={{ fontSize: "18px" }}> and {chat.otherMembers[0].username}</span>}
-                                        {chat.otherMembers.length > 1 && <span style={{ fontSize: "18px" }}> + {chat.otherMembers.length - 1} others</span>}
-                                    </Typography>
+                                        {chat.otherMembers.length >= 1 && ` and ${chat.otherMembers[0].username}`}
+                                        {chat.otherMembers.length > 1 && ` + ${chat.otherMembers.length - 1} others`}
+                                    </LongTypography>
                                     :
-                                    <Typography sx={{ fontSize: "18px" }}>{chat.otherMembers[0].username}</Typography>
+                                    <LongTypography variant='username'>{chat.otherMembers[0].username}</LongTypography>
                                 }
                                 {onlineStatus && <Typography sx={{ fontSize: "12px", color: "gray" }}>Active Now</Typography>}
                             </Box>
@@ -125,7 +118,7 @@ const Chat = ({ open }) => {
                 </Box>
                 :
                 <Flexbox sx={{ minHeight: "50vh" }}>
-                    <Typography sx={{ fontSize: "32px", color: "text.secondary", textAlign: "center" }}>
+                    <Typography variant="header" sx={{ color: "text.secondary" }}>
                         Please select a conversation to start
                     </Typography>
                 </Flexbox>

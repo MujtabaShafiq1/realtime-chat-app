@@ -1,5 +1,24 @@
+import { createBreakpoints } from "@mui/system";
+
+const breakpoints = createBreakpoints({})
+
 const theme = (mode) => ({
+
     typography: {
+        body: {
+            fontSize: 20,
+            fontWeight: 400,
+        },
+        subBody: {
+            fontSize: 18,
+        },
+        header: {
+            fontSize: 32,
+            textAlign: "center",
+            [breakpoints.down("md")]: {
+                fontSize: 26
+            },
+        },
         allVariants: {
             fontFamily: '"Poppins", sans-serif',
             textTransform: 'none',

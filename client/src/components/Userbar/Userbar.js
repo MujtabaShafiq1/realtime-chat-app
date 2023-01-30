@@ -22,6 +22,7 @@ import LightIcon from '@mui/icons-material/Brightness7';
 const Userbar = ({ users }) => {
 
     const dispatch = useDispatch();
+
     const { socket } = useContext(SocketContext);
     const { mode, toggleColorMode } = useContext(ThemeContext)
 
@@ -75,17 +76,15 @@ const Userbar = ({ users }) => {
 
     return (
         <>
-            <Box
-                sx={{
-                    height: "100vh",
-                    width: { xs: "100%", sm: "33%", lg: "22%" },
-                    display: { xs: (chat.chatId && "none"), sm: "block" },
-                    borderRight: "1px solid", borderColor: "secondary.other",
-                }}
-            >
+            <Box sx={{
+                height: "100vh",
+                width: { xs: "100%", sm: "33%", lg: "22%" },
+                display: { xs: (chat.chatId && "none"), sm: "block" },
+                borderRight: "1px solid", borderColor: "secondary.other",
+            }}>
                 <Flexbox sx={{ justifyContent: "space-around", gap: 1, padding: "10px" }}>
                     <Avatar src={user.profilePicture || UserImage} sx={{ width: 50, height: 50 }} />
-                    <Typography sx={{ fontSize: "20px", display: { xs: "block", sm: "none", md: "block" } }}>{user.username}</Typography>
+                    <Typography variant="body">{user.username}</Typography>
                     <StyledButton onClick={logoutHandler}>Logout</StyledButton>
                     <Box onClick={toggleColorMode} sx={{ height: 30, width: 30, cursor: "pointer" }}>
                         {mode === "light" ? <DarkIcon /> : <LightIcon />}
@@ -113,7 +112,7 @@ const Userbar = ({ users }) => {
                         sx={{ margin: "4% 0%", width: { xs: "50%", sm: "75%" } }}
                     />
 
-                    <Flexbox sx={{ flexDirection: { xs: "row", md: "column" }, gap: { xs: 2, md: 0 } }}>
+                    <Flexbox sx={{ flexDirection: { md: "column" }, gap: { xs: 2, md: 0 } }}>
                         <Typography sx={{ fontSize: { xs: "14px", md: "12px" }, fontWeight: 500, textAlign: "center" }}>
                             New Group
                         </Typography>
