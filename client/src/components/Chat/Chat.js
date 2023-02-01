@@ -63,17 +63,15 @@ const Chat = ({ open }) => {
 
 
     return (
-
         <Box sx={{
-            flex: 3.5,
+            flex: 4,
             height: "100%",
             width: "100%",
+            flexDirection: "column",
             borderRight: "1px solid",
             borderColor: "secondary.other",
-            flexDirection: "column",
-            display: { xs: (!chat.chatId ? "none" : "flex") },
+            display: { xs: (!chat.chatId ? "none" : "flex") }
         }}>
-
 
             {(chat.otherMembers.length > 0 || chat.chatId) ?
 
@@ -124,7 +122,7 @@ const Chat = ({ open }) => {
                     <NewMessage />
                 </>
                 :
-                <Flexbox sx={{ flexGrow: 1 }}>
+                <Flexbox sx={{ height: "100%" }}>
                     <Typography variant="header" sx={{ color: "text.secondary", textAlign: "center" }}>
                         Please select a conversation to start
                     </Typography>

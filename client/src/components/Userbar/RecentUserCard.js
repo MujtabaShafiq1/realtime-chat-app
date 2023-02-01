@@ -110,17 +110,16 @@ const RecentUserCard = ({ members, chat }) => {
                 </StyledStatusBadge>
             </AvatarGroup>
 
-            <Box sx={{ overflow: "hidden" }}>
-                <ChatListContainer>
-                    <Box sx={{ gap: 1, display: "flex" }}>
-                        {chat.isGroupChat ?
-                            <Typography variant='subBody'>You {filteredUser.length >= 1 && ` and ${filteredUser.length} others`}</Typography>
-                            :
-                            <Typography variant='subBody'>{filteredUser[0].username}</Typography>
-                        }
-                    </Box>
-                    {typingDetails?.typer && typingDetails.chatId === chat._id && <Typography sx={{ fontSize: "16px" }} color="green">typing... </Typography>}
-                </ChatListContainer>
+            <ChatListContainer>
+
+                <Box sx={{ gap: 1, display: "flex" }}>
+                    {chat.isGroupChat ?
+                        <LongTypography variant='subBody'>You {filteredUser.length >= 1 && ` and ${filteredUser.length} others`}</LongTypography>
+                        :
+                        <LongTypography variant='subBody'>{filteredUser[0].username}</LongTypography>
+                    }
+                </Box>
+                {typingDetails?.typer && typingDetails.chatId === chat._id && <Typography sx={{ fontSize: "16px" }} color="green">typing... </Typography>}
 
                 {latestMessage &&
                     <LongTypography all={+(chat.members.length <= latestMessage.readBy.length)}>
@@ -130,7 +129,8 @@ const RecentUserCard = ({ members, chat }) => {
                         {(chat._id === latestMessage.chatId) && (latestMessage.type === "image") ? `Sent an Image` : latestMessage.content}
                     </LongTypography>
                 }
-            </Box>
+            </ChatListContainer>
+
 
         </UserContainer >
     )

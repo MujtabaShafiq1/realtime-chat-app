@@ -40,6 +40,7 @@ const ChatListContainer = styled(Box)({
     alignItems: "left",
     justifyContent: "flex-start",
     flexDirection: "column",
+    overflow: "hidden",
     gap: 10,
 })
 
