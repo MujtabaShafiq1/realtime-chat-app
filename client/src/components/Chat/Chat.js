@@ -70,7 +70,7 @@ const Chat = ({ open }) => {
             flexDirection: "column",
             borderRight: "1px solid",
             borderColor: "secondary.other",
-            display: { xs: (!chat.chatId ? "none" : "flex") }
+            display: { xs: (!chat?.chatId ? "none" : "flex"), sm: "flex" }
         }}>
 
             {(chat.otherMembers.length > 0 || chat.chatId) ?

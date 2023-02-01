@@ -195,7 +195,7 @@ const Login = () => {
 
                             <Box display="flex" alignItems="center" gap={2}>
                                 <StyledButton variant="contained" component="label" sx={{ backgroundColor: "gray", width: "auto" }}>
-                                    <Typography sx={{ fontSize: "12px", textAlign: "center" }}>Upload Image</Typography>
+                                    <Typography sx={{ fontSize: "11px", textAlign: "center" }}>Upload Image</Typography>
                                     <input type="file" hidden onChange={(e) => setFile(e.target.files[0])} />
                                 </StyledButton>
                                 <Typography sx={{ fontSize: "10px" }}>{file?.name}</Typography>
@@ -204,19 +204,19 @@ const Login = () => {
 
                             <Flexbox sx={{ justifyContent: "left", gap: 2, width: "90%" }}>
                                 <StyledButton type="submit" disabled={loading} sx={{ backgroundColor: "rgba( 76,76,163, 1 )" }} >
-                                    {loading ? <CircularProgress sx={{ size: "26px", color: "white" }} /> : <Typography>Signup</Typography>}
+                                    {loading ? <CircularProgress variant="body" sx={{ color: "white" }} /> : <Typography variant="subBody">Signup</Typography>}
                                 </StyledButton>
                             </Flexbox>
                             <Box sx={{ display: "flex", gap: 2 }}>
-                                <Typography variant="subBody" sx={{ display: { xs: "none", md: "block" } }}>Already have an account ? </Typography>
-                                <Typography variant="subBody" sx={{ color: "green", cursor: "pointer" }} onClick={() => navigate("/login")}>Login</Typography>
+                                <Typography variant="subBody">Already have an account?</Typography>
+                                <Typography variant="subBody" sx={{ color: "green" }} onClick={() => navigate("/login")}>Login</Typography>
                             </Box>
 
                         </form>
                     </Box>
 
                     <Divider orientation='vertical' sx={{ height: "35vh", bgcolor: "purple", opacity: "0.1" }} />
-                    <Box component="img" src={SignupImage} sx={{ height: "auto", width: "45%", display: { xs: "none", md: "none", lg: "block" } }} />
+                    <Box component="img" src={SignupImage} sx={{ height: "auto", width: "45%", display: { xs: "none", lg: "block" } }} />
 
                 </Flexbox>
             </Grid >

@@ -136,9 +136,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
         width: "35%"
     },
-    [theme.breakpoints.down('sm')]: {
-        width: "25%"
-    },
+
 }))
 
 const TextBox = styled(Box)(({ sender }) => ({
