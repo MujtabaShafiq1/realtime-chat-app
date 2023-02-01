@@ -35,41 +35,42 @@ const LongTypography = styled(Typography)(({ all, theme }) => ({
 }))
 
 
-const ChatListContainer = styled(Box)({
-    display: "flex",
-    alignItems: "left",
-    justifyContent: "flex-start",
-    flexDirection: "column",
-    overflow: "hidden",
-    gap: 10,
-})
-
 const ChatHeader = styled(Box)(({ theme }) => ({
+    gap: 12,
+    padding: "2px 10px",
     display: "flex",
     alignItems: "center",
-    Content: "flex-start",
-    gap: 10,
-    padding: "1% 2%",
+    justifyContent: "flex-start",
     borderBottom: "0.1px solid",
     backgroundColor: theme.palette.secondary.main,
     borderColor: theme.palette.secondary.other,
     boxShadow: "0px 10px 10px rgba(180, 180, 180, 0.4)",
 }))
 
-const ChatHeaderContainer = styled(Box)(({ theme }) => ({
-    gap: 10,
+const ChatHeaderContainer = styled(Box)({
+    gap: 2,
     flexGrow: 1,
     overflow: "hidden",
     display: "flex",
-    alignItems: "center",
+    alignItems: "left",
     justifyContent: "flex-start",
-}))
+    flexDirection: "column",
+})
+
+
+const ChatListContainer = styled(Box)({
+    display: "flex",
+    alignItems: "left",
+    justifyContent: "flex-start",
+    flexDirection: "column",
+    overflow: "hidden",
+})
 
 
 const UserAvatar = styled(Avatar)(({ theme }) => ({
-    width: 45,
-    height: 45,
-    [theme.breakpoints.up('sm')]: {
+    width: 50,
+    height: 50,
+    [theme.breakpoints.down('sm')]: {
         width: 35,
         height: 35,
     },
