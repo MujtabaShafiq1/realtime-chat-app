@@ -1,5 +1,12 @@
 import { Box, TextField, Button, styled, Badge, Typography, Avatar } from "@mui/material"
 
+const Flexbox = styled(Box)({
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+})
+
+
 const MainContainer = styled(Box)(({ theme }) => ({
     height: "100vh",
     display: "flex",
@@ -19,17 +26,42 @@ const DetailBarContainer = styled(Box)(({ theme }) => ({
     borderRight: "0.5px solid rgba(102, 51, 153, 0.1)",
 }))
 
-const Flexbox = styled(Box)({
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-})
 
 const LongTypography = styled(Typography)(({ all, theme }) => ({
     color: all ? theme.palette.text.secondary : theme.palette.text.primary,
     overflow: "hidden",
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
+}))
+
+
+const ChatListContainer = styled(Box)({
+    display: "flex",
+    alignItems: "left",
+    justifyContent: "flex-start",
+    flexDirection: "column",
+    gap: 10,
+})
+
+const ChatHeader = styled(Box)(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    Content: "flex-start",
+    gap: 10,
+    padding: "1% 2%",
+    borderBottom: "0.1px solid",
+    backgroundColor: theme.palette.secondary.main,
+    borderColor: theme.palette.secondary.other,
+    boxShadow: "0px 10px 10px rgba(180, 180, 180, 0.4)",
+}))
+
+const ChatHeaderContainer = styled(Box)(({ theme }) => ({
+    gap: 10,
+    flexGrow: 1,
+    overflow: "hidden",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
 }))
 
 
@@ -41,14 +73,6 @@ const UserAvatar = styled(Avatar)(({ theme }) => ({
         height: 35,
     },
 }))
-
-const ChatListContainer = styled(Box)({
-    display: "flex",
-    alignItems: "left",
-    justifyContent: "flex-start",
-    flexDirection: "column",
-    gap: 10,
-})
 
 
 const UserListItem = styled(Box)({
@@ -153,16 +177,7 @@ const NewMessageContainer = styled(Box)(({ theme }) => ({
     boxShadow: "0px -10px 20px rgba(180, 180, 180, 0.4)",
 }))
 
-const ChatHeader = styled(Box)(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "1% 2%",
-    borderBottom: "0.1px solid",
-    backgroundColor: theme.palette.secondary.main,
-    borderColor: theme.palette.secondary.other,
-    boxShadow: "0px 10px 10px rgba(180, 180, 180, 0.4)",
-}))
+
 
 const StyledStatusBadge = styled(Badge)(({ show }) => ({
     '& .MuiBadge-badge': {
@@ -203,8 +218,9 @@ export {
     UserAvatar,
     UserListItem,
     UserContainer,
-    ChatListContainer,
     ChatHeader,
+    ChatHeaderContainer,
+    ChatListContainer,
     MessageContainer,
     NewMessageContainer,
     StyledField,

@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Typography, AvatarGroup } from '@mui/material'
-import { ChatHeader, Flexbox, UserAvatar, StyledStatusBadge, LongTypography } from '../../misc/MUIComponents'
+import { ChatHeader, Flexbox, UserAvatar, StyledStatusBadge, LongTypography, ChatHeaderContainer } from '../../misc/MUIComponents'
 import { SocketContext } from '../../context/Socket';
 import { chatActions } from '../../store/chatSlice';
 
@@ -65,8 +65,9 @@ const Chat = ({ open }) => {
     return (
 
         <Box sx={{
-            flex: 4,
+            flex: 3.5,
             height: "100%",
+            width: "100%",
             borderRight: "1px solid",
             borderColor: "secondary.other",
             flexDirection: "column",
@@ -82,36 +83,35 @@ const Chat = ({ open }) => {
                         <BackIcon sx={{ fontSize: "24px", cursor: "pointer", display: { xs: "block", sm: "none" } }}
                             onClick={() => dispatch(chatActions.reset())} />
 
-                        <Flexbox sx={{ gap: 1 }}>
+                        <AvatarGroup total={chat.otherMembers.length + (chat.isGroupChat && 1)}>
+                            <StyledStatusBadge
+                                overlap="circular"
+                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                variant="dot"
+                                show={+(onlineStatus)}
+                            >
+                                <UserAvatar
+                                    src={(chat.otherMembers.length > 0) ? (chat.otherMembers[0]?.profilePicture || UserImage) : (user?.profilePicture || UserImage)}
+                                />
+                            </StyledStatusBadge>
+                            {chat.isGroupChat && <UserAvatar src={user?.profilePicture || UserImage} />}
+                        </AvatarGroup>
 
-                            <AvatarGroup total={chat.otherMembers.length + (chat.isGroupChat && 1)}>
-                                <StyledStatusBadge
-                                    overlap="circular"
-                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                    variant="dot"
-                                    show={+(onlineStatus)}
-                                >
-                                    <UserAvatar
-                                        src={(chat.otherMembers.length > 0) ? (chat.otherMembers[0]?.profilePicture || UserImage) : (user?.profilePicture || UserImage)}
-                                    />
-                                </StyledStatusBadge>
-                                {chat.isGroupChat && <UserAvatar src={user?.profilePicture || UserImage} />}
-                            </AvatarGroup>
 
-                            <Box sx={{ width: "80%", overflow: "hidden" }}>
-                                {chat.isGroupChat ?
-                                    <LongTypography>
-                                        You
-                                        {chat.otherMembers.length >= 1 && ` and ${chat.otherMembers[0].username}`}
-                                        {chat.otherMembers.length > 1 && ` + ${chat.otherMembers.length - 1} others`}
-                                    </LongTypography>
-                                    :
-                                    <LongTypography variant='username'>{chat.otherMembers[0].username}</LongTypography>
-                                }
-                                {onlineStatus && <Typography sx={{ fontSize: "12px", color: "gray" }}>Active Now</Typography>}
-                            </Box>
+                        <ChatHeaderContainer>
+                            {chat.isGroupChat ?
+                                <LongTypography>
+                                    You
+                                    {chat.otherMembers.length >= 1 && ` and ${chat.otherMembers[0].username}`}
+                                    {chat.otherMembers.length > 1 && ` + ${chat.otherMembers.length - 1} others`}
+                                </LongTypography>
+                                :
+                                <LongTypography variant='username'>{chat.otherMembers[0].username}</LongTypography>
+                            }
+                            {onlineStatus && <Typography sx={{ fontSize: "12px", color: "gray" }}>Active Now</Typography>}
+                        </ChatHeaderContainer>
 
-                        </Flexbox>
+
 
                         <Flexbox sx={{ gap: 0.2, flexDirection: "column", cursor: "pointer", display: { md: "flex", lg: "none" } }} onClick={open}>
                             <CircleIcon sx={{ fontSize: "7px" }} />
