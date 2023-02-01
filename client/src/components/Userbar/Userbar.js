@@ -124,7 +124,7 @@ const Userbar = ({ users }) => {
 
             </Flexbox>
 
-            <Container sx={{ maxWidth: "sm", grow: 1, overflow: { sm: "auto" } }}>
+            <Container sx={{ maxWidth: "sm", overflow: { sm: "auto" } }}>
                 {createGroup ?
                     <CreateGroupChat users={search ? searchedUsers : users} close={() => setCreateGroup(false)} />
                     :

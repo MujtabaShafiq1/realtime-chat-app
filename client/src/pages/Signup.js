@@ -104,10 +104,10 @@ const Login = () => {
 
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, flex: 4, marginLeft: "5%" }}>
 
-                        <Box>
-                            <Typography sx={{ fontSize: "32px" }} fontWeight={500}>SIGN UP  </Typography>
-                            <Typography sx={{ fontSize: { xs: "16px", md: "20px" } }} color="gray" fontWeight={300}>create account to continue</Typography>
-                        </Box>
+
+                        <Typography variant="header" fontWeight={500}>SIGN UP  </Typography>
+                        <Typography variant="body" color="gray" fontWeight={300}>create account to continue</Typography>
+
 
                         <form onSubmit={formik.handleSubmit} autoComplete="off" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
@@ -198,7 +198,7 @@ const Login = () => {
                                     <Typography sx={{ fontSize: "12px", textAlign: "center" }}>Upload Image</Typography>
                                     <input type="file" hidden onChange={(e) => setFile(e.target.files[0])} />
                                 </StyledButton>
-                                <Typography sx={{ fontSize: "11px" }}>{file?.name}</Typography>
+                                <Typography sx={{ fontSize: "10px" }}>{file?.name}</Typography>
                             </Box>
 
 
@@ -206,11 +206,11 @@ const Login = () => {
                                 <StyledButton type="submit" disabled={loading} sx={{ backgroundColor: "rgba( 76,76,163, 1 )" }} >
                                     {loading ? <CircularProgress sx={{ size: "26px", color: "white" }} /> : <Typography>Signup</Typography>}
                                 </StyledButton>
-                                <Flexbox sx={{ gap: 1 }}>
-                                    <Typography sx={{ fontSize: "16px", display: { xs: "none", md: "block" } }}>Already have an account ? </Typography>
-                                    <Typography sx={{ color: "green", cursor: "pointer", fontSize: "16px" }} onClick={() => navigate("/login")}>Login</Typography>
-                                </Flexbox>
                             </Flexbox>
+                            <Box sx={{ display: "flex", gap: 2 }}>
+                                <Typography variant="subBody" sx={{ display: { xs: "none", md: "block" } }}>Already have an account ? </Typography>
+                                <Typography variant="subBody" sx={{ color: "green", cursor: "pointer" }} onClick={() => navigate("/login")}>Login</Typography>
+                            </Box>
 
                         </form>
                     </Box>

@@ -136,6 +136,7 @@ const NewMessage = () => {
                         placeholder="Send Message"
                         type="text"
                         size="small"
+                        multiline={true}
                         hiddenLabel
                         value={newMessage}
                         onChange={newMessageHandler}

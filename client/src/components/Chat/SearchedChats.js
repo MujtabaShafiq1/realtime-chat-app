@@ -33,7 +33,7 @@ const SearchedChats = ({ searchedUsers, clear }) => {
             <Typography sx={{ fontSize: "22px", m: "3% 0%", textAlign: "center" }}>Searching user</Typography>
             {searchedUsers.length > 0 ?
 
-                <Box sx={{ maxWidth: "sm", grow: 1, overflow: { sm: "auto" } }}>
+                <Box sx={{ maxWidth: "sm", overflow: { sm: "auto" } }}>
                     {searchedUsers.map(user =>
                         <UserContainer key={user._id} onClick={() => chatHandler(user)}>
                             <UserCard user={user} />
@@ -41,7 +41,11 @@ const SearchedChats = ({ searchedUsers, clear }) => {
                     )}
                 </Box>
                 :
-                <Flexbox sx={{ minHeight: "50vh" }}>No users found</Flexbox>
+                <Flexbox sx={{ minHeight: "30vh" }}>
+                    <Typography variant="body" sx={{ color: "text.secondary", opacity: 0.8, textAlign: "center" }}>
+                        No users found
+                    </Typography>
+                </Flexbox>
             }
         </>
     )

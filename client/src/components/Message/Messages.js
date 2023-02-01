@@ -66,9 +66,8 @@ const Messages = () => {
     }, [socket])
 
 
-    //"79.5vh" : "86.6vh"
     return (
-        <Box sx={{ height: "79.5vh", overflow: "auto", backgroundColor: "secondary.light" }}>
+        <Box sx={{ flexGrow: 1, overflow: "auto", backgroundColor: "secondary.light" }}>
             {(messages.length > 0 && chat.chatId === messages[0].chatId) ?
                 <>
                     <Box sx={{ padding: "15px 15px 0px 15px" }}>
@@ -83,8 +82,8 @@ const Messages = () => {
                     </Box>
                 </>
                 :
-                <Flexbox sx={{ minHeight: "50vh" }}>
-                    <Typography sx={{ fontSize: { xs: "20px", lg: "32px" }, color: "gray", opacity: 0.4 }}>
+                <Flexbox sx={{ height: "100%" }}>
+                    <Typography variant="header" sx={{ textAlign: "center", color: "gray", opacity: 0.4 }}>
                         No message found
                     </Typography>
                 </Flexbox>

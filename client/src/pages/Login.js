@@ -95,10 +95,10 @@ const Login = () => {
 
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, flex: 4, padding: "10px" }}>
 
-                        <Box>
-                            <Typography sx={{ fontSize: "30px", fontWeight: 500 }} >Welcome Back</Typography>
-                            <Typography sx={{ fontSize: "20px", fontWeight: 300 }} color="gray" >login to continue</Typography>
-                        </Box>
+
+                        <Typography variant="header" sx={{ fontWeight: 500 }} >Welcome Back</Typography>
+                        <Typography variant="subBody" sx={{ color: "gray", fontWeight: 300 }} >login to continue</Typography>
+
 
                         <form onSubmit={formik.handleSubmit} autoComplete="off" style={{ display: "flex", flexDirection: "column", gap: 20, }}>
 
@@ -148,8 +148,8 @@ const Login = () => {
                             </StyledButton>
 
                             <Box display="flex" gap={2} flexDirection={{ xs: "column", md: "row" }}>
-                                <Typography sx={{ fontSize: "16px" }}>Dont have an account? </Typography>
-                                <Typography sx={{ color: "green", cursor: "pointer", fontSize: "16px" }} onClick={() => navigate("/signup")}>
+                                <Typography sx={{ fontSize: "15px" }}>Dont have an account? </Typography>
+                                <Typography sx={{ color: "green", cursor: "pointer", fontSize: "15px" }} onClick={() => navigate("/signup")}>
                                     Signup now
                                 </Typography>
                             </Box>

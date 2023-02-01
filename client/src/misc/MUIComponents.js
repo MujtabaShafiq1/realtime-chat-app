@@ -4,9 +4,10 @@ const MainContainer = styled(Box)(({ theme }) => ({
     height: "100vh",
     display: "flex",
     justifyContent: "center",
-    bgcolor: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.text.primary,
 }))
+
 
 const DetailBarContainer = styled(Box)(({ theme }) => ({
     width: "22%",
@@ -152,7 +153,7 @@ const NewMessageContainer = styled(Box)(({ theme }) => ({
     boxShadow: "0px -10px 20px rgba(180, 180, 180, 0.4)",
 }))
 
-const ChatContainer = styled(Box)(({ theme }) => ({
+const ChatHeader = styled(Box)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -203,7 +204,7 @@ export {
     UserListItem,
     UserContainer,
     ChatListContainer,
-    ChatContainer,
+    ChatHeader,
     MessageContainer,
     NewMessageContainer,
     StyledField,

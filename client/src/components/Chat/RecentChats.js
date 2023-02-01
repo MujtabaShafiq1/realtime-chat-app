@@ -22,7 +22,7 @@ const RecentChats = ({ chats }) => {
                         })}
                     </>
                     :
-                    <Flexbox sx={{ minHeight: "50vh" }}>
+                    <Flexbox sx={{ minHeight: "30vh" }}>
                         <Typography variant="body" sx={{ color: "text.secondary", opacity: 0.8, textAlign: "center" }}>
                             Your recent Chat box is empty
                         </Typography>

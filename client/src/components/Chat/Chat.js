@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Typography, AvatarGroup } from '@mui/material'
-import { ChatContainer, Flexbox, UserAvatar, StyledStatusBadge, LongTypography } from '../../misc/MUIComponents'
+import { ChatHeader, Flexbox, UserAvatar, StyledStatusBadge, LongTypography } from '../../misc/MUIComponents'
 import { SocketContext } from '../../context/Socket';
 import { chatActions } from '../../store/chatSlice';
 
@@ -64,12 +64,20 @@ const Chat = ({ open }) => {
 
     return (
 
-        <Box sx={{ flex: 4, borderRight: "1px solid", borderColor: "secondary.other", display: { xs: (!chat.chatId && "none"), sm: "block" } }}>
+        <Box sx={{
+            flex: 4,
+            height: "100%",
+            borderRight: "1px solid",
+            borderColor: "secondary.other",
+            flexDirection: "column",
+            display: { xs: (!chat.chatId ? "none" : "flex") },
+        }}>
+
 
             {(chat.otherMembers.length > 0 || chat.chatId) ?
-                <Box sx={{ minHeight: "100vh" }}>
 
-                    <ChatContainer>
+                <>
+                    <ChatHeader>
 
                         <BackIcon sx={{ fontSize: "24px", cursor: "pointer", display: { xs: "block", sm: "none" } }}
                             onClick={() => dispatch(chatActions.reset())} />
@@ -105,26 +113,24 @@ const Chat = ({ open }) => {
 
                         </Flexbox>
 
-
                         <Flexbox sx={{ gap: 0.2, flexDirection: "column", cursor: "pointer", display: { md: "flex", lg: "none" } }} onClick={open}>
                             <CircleIcon sx={{ fontSize: "7px" }} />
                             <CircleIcon sx={{ fontSize: "7px" }} />
                             <CircleIcon sx={{ fontSize: "7px" }} />
                         </Flexbox>
 
-                    </ChatContainer>
+                    </ChatHeader>
                     <Messages />
                     <NewMessage />
-                </Box>
+                </>
                 :
-                <Flexbox sx={{ minHeight: "50vh" }}>
-                    <Typography variant="header" sx={{ color: "text.secondary" }}>
+                <Flexbox sx={{ flexGrow: 1 }}>
+                    <Typography variant="header" sx={{ color: "text.secondary", textAlign: "center" }}>
                         Please select a conversation to start
                     </Typography>
                 </Flexbox>
             }
         </Box >
-
     )
 }
 
