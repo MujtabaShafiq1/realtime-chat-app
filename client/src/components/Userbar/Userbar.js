@@ -2,7 +2,7 @@ import { useState, useEffect, useContext, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { SocketContext } from "../../context/Socket"
 import { Box, Typography, Container, InputAdornment, Divider } from '@mui/material'
-import { Flexbox, StyledButton, StyledField, UserAvatar } from '../../misc/MUIComponents'
+import { Flexbox, LongTypography, StyledButton, StyledField, UserAvatar } from '../../misc/MUIComponents'
 import axios from 'axios';
 
 import { userActions } from '../../store/userSlice';
@@ -87,7 +87,9 @@ const Userbar = ({ users }) => {
 
             <Flexbox sx={{ justifyContent: "space-around", gap: 1, padding: "10px" }}>
                 <UserAvatar src={user.profilePicture || UserImage} />
-                <Typography variant="body">{user.username}</Typography>
+                <Flexbox sx={{ overflow: "hidden" }}>
+                    <LongTypography variant="body">{user.username}</LongTypography>
+                </Flexbox>
                 <StyledButton onClick={logoutHandler}>Logout</StyledButton>
                 <Box onClick={toggleColorMode} sx={{ height: 30, width: 30, cursor: "pointer" }}>
                     {mode === "light" ? <DarkIcon /> : <LightIcon />}
