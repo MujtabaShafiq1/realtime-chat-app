@@ -174,18 +174,12 @@ const ImageDetails = styled(Box)({
 })
 
 
-const ImageBox = styled(Box)(({ theme }) => ({
+const ImageBox = styled(Box)({
     borderRadius: "5px",
-    [theme.breakpoints.up("md")]: {
-        maxWidth: 300,
-        maxHeight: 300
-    },
-    [theme.breakpoints.down("md")]: {
-        maxWidth: 250,
-        maxHeight: 250
-    },
+    maxWidth: "100%",
+    maxHeight: "100%"
+})
 
-}))
 
 const ImageContainer = styled(Box)({
     cursor: "pointer",
