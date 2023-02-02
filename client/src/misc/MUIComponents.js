@@ -76,6 +76,19 @@ const UserAvatar = styled(Avatar)(({ theme }) => ({
     },
 }))
 
+const ChatAvatar = styled(Avatar)(({ visible, sender, theme }) => ({
+    display: "block",
+    alignSelf: "flex-end",
+    width: 40,
+    height: 40,
+    visibility: (!visible && "hidden"),
+    [theme.breakpoints.down("md")]: {
+        display: sender ? "block" : "none",
+        width: 25,
+        height: 25,
+    },
+}))
+
 
 const UserListItem = styled(Box)({
     display: "flex",
@@ -143,7 +156,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 const TextBox = styled(Box)(({ sender }) => ({
     display: "flex",
     color: sender ? "black" : "white",
-    backgroundColor: sender ? "lightgray" : "lightblue",
+    backgroundColor: sender ? "rgba(228,230,235,0.8)" : "rgba(0,132,255,0.8)",
     padding: "5px 10px",
     borderRadius: "15px",
     wordBreak: "break-word",
@@ -152,18 +165,14 @@ const TextBox = styled(Box)(({ sender }) => ({
 
 
 const MessageContainer = styled(Box)(({ sender, consecutive, theme }) => ({
+    gap: 10,
+    margin: "1% 0%",
     display: "flex",
     flexDirection: sender && "row-reverse",
-    gap: 15,
     alignItems: "center",
     justifyContent: sender ? "flex-between" : "flex-start",
-    [theme.breakpoints.down("sm")]: {
-        margin: sender ? "0 1% 0.5% 0" : "0 0 0.5% 1%",
-    },
-    [theme.breakpoints.up("sm")]: {
-        margin: sender ? (!consecutive ? "0 6% 0.5% 0" : "0 1% 0.4% 0") : (!consecutive && "0 0 0.4% 5%"),
-    },
 }))
+
 
 const NewMessageContainer = styled(Box)(({ theme }) => ({
     display: "flex",
@@ -218,6 +227,7 @@ export {
     UserAvatar,
     UserListItem,
     UserContainer,
+    ChatAvatar,
     ChatHeader,
     ChatHeaderContainer,
     ChatListContainer,

@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { useSelector } from 'react-redux';
-import { Box, Typography, Avatar } from '@mui/material'
-import { Flexbox, TextBox, MessageContainer } from "../../misc/MUIComponents"
+import { Box, Typography } from '@mui/material'
+import { Flexbox, TextBox, MessageContainer, ChatAvatar } from "../../misc/MUIComponents"
 import { SocketContext } from '../../context/Socket';
 import ImageGallery from './ImageGallery';
 import ImageGrid from './ImageGrid';
@@ -69,21 +69,22 @@ const Message = ({ message, next, index }) => {
         <>
             <MessageContainer sender={+currentUserMessage} consecutive={+consecutiveMessage} >
 
-                {(consecutiveMessage && currentUserMessage && message.type !== "info") &&
-                    <Avatar
+                {(message.type !== "info" && currentUserMessage) &&
+                    <ChatAvatar
+                        visible={+(consecutiveMessage)}
                         src={user.profilePicture || UserImage}
-                        sx={{ alignSelf: "flex-end", display: { xs: "none", sm: "block" } }}
                     />
                 }
 
-                {(consecutiveMessage && !currentUserMessage && message.type !== "info") &&
-                    <Avatar
+                {(!currentUserMessage && message.type !== "info") &&
+                    <ChatAvatar
+                        sender={+(true)}
+                        visible={+(consecutiveMessage)}
                         src={chat.otherMembers.filter(member => (member._id === message.senderId))[0]?.profilePicture || UserImage}
-                        sx={{ alignSelf: "flex-end", width: { xs: 20, sm: 50 }, height: { xs: 20, sm: 50 }, }}
                     />
                 }
 
-                <Flexbox sx={{ flexDirection: "column", alignItems: currentUserMessage ? "flex-end" : "flex-start", maxWidth: "50%" }}>
+                <Flexbox sx={{ flexDirection: "column", alignItems: currentUserMessage ? "flex-end" : "flex-start", maxWidth: "65%" }}>
 
                     {/* Images */}
                     {message.images.length > 0 &&
@@ -114,7 +115,7 @@ const Message = ({ message, next, index }) => {
 
                     {/* Text */}
                     {(message.content && message.type !== "info") &&
-                        <TextBox onMouseEnter={() => setHover(true)} onMouseLeave={hideMessageDetails}>
+                        <TextBox sender={+(message.senderId === user.id)} onMouseEnter={() => setHover(true)} onMouseLeave={hideMessageDetails}>
                             <Flexbox>
                                 <Typography sx={{ fontSize: { xs: "14px", sm: "16px" } }}>{message.content}</Typography>
                             </Flexbox>
