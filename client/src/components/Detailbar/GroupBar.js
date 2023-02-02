@@ -94,11 +94,13 @@ const GroupBar = ({ users }) => {
             <Flexbox sx={{ flexDirection: "column", minHeight: "30vh", gap: 2 }}>
 
 
-                <Typography variant="body" sx={{ fontWeight: 500, textAlign: " center" }}>Group Admin: {groupAdmin}</Typography>
+                <Typography variant="body" sx={{ fontWeight: 500, textAlign: "center" }}>Group Admin: {groupAdmin}</Typography>
                 <Typography variant="body" sx={{ fontWeight: 300, textAlign: "center" }}>Created {moment(chat.createdAt).fromNow()}</Typography>
 
                 {chat.groupAdmin === loggedInUser.id && !addUser &&
-                    <StyledButton sx={{ alignSelf: "center" }} onClick={AddHandler}>Add User</StyledButton>
+                    <StyledButton onClick={AddHandler}>
+                        <Typography sx={{ fontWeight: 500, fontSize: "12px" }}>Add User</Typography>
+                    </StyledButton>
                 }
 
                 {userList.length > 0 &&
