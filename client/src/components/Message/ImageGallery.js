@@ -36,8 +36,8 @@ const ImageGallery = ({ images, close }) => {
                 justifyContent: "center",
                 alignItems: "center",
                 backgroundColor: "rgba(0,0,0,0.5)",
-                height: "100vh",
-                width: "100vw",
+                height: "100%",
+                width: "100%",
             }}
         >
             <>
@@ -116,9 +116,10 @@ const ImageGallery = ({ images, close }) => {
 
                 {/* Slider button */}
                 <Flexbox sx={{ position: "absolute", top: "90%", gap: { xs: 1, md: 3 } }}>
-                    {images.map((image, index) => {
+                    {images.map((index) => {
                         return (
                             <CircleIcon
+                                key={index}
                                 sx={{ width: { xs: 10, md: 20 }, cursor: "pointer", fill: (slider === index ? "white" : "primary.other") }}
                                 onClick={() => { if (index !== slider) setSlider(index) }}
                             />

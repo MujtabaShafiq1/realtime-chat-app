@@ -84,7 +84,7 @@ const Message = ({ message, next }) => {
                     />
                 }
 
-                <Flexbox sx={{ flexDirection: "column", alignItems: currentUserMessage ? "flex-end" : "flex-start", maxWidth: "65%" }}>
+                <Flexbox sx={{ flexDirection: "column", alignItems: currentUserMessage ? "flex-end" : "flex-start", maxWidth: { xs: "80%", sm: "65%" } }}>
 
                     {/* Images */}
                     {message.images.length > 0 &&
