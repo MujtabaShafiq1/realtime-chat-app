@@ -163,7 +163,7 @@ const TextBox = styled(Box)(({ sender }) => ({
 }))
 
 
-const ImageDetails = styled(Box)(({ theme }) => ({
+const ImageDetails = styled(Box)({
     gap: 5,
     top: "90%",
     right: "4%",
@@ -171,7 +171,28 @@ const ImageDetails = styled(Box)(({ theme }) => ({
     position: "absolute",
     alignItems: "center",
     justifyContent: "flex-end",
+})
+
+
+const ImageBox = styled(Box)(({ theme }) => ({
+    borderRadius: "5px",
+    [theme.breakpoints.up("md")]: {
+        maxWidth: 300,
+        maxHeight: 300
+    },
+    [theme.breakpoints.down("md")]: {
+        maxWidth: 250,
+        maxHeight: 250
+    },
+
 }))
+
+const ImageContainer = styled(Box)({
+    cursor: "pointer",
+    display: "flex",
+    position: "relative",
+    flexDirection: "column",
+})
 
 
 const MessageContainer = styled(Box)(({ sender }) => ({
@@ -232,6 +253,8 @@ export {
     Flexbox,
     TextBox,
     ImageDetails,
+    ImageBox,
+    ImageContainer,
     LongTypography,
     MainContainer,
     DetailBarContainer,

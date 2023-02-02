@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { useSelector } from 'react-redux';
-import { Box, Typography } from '@mui/material'
-import { Flexbox, TextBox, ImageDetails, MessageContainer, ChatAvatar } from "../../misc/MUIComponents"
+import { Typography } from '@mui/material'
+import { Flexbox, TextBox, ImageDetails, MessageContainer, ChatAvatar, ImageBox, ImageContainer } from "../../misc/MUIComponents"
 import { SocketContext } from '../../context/Socket';
 import ImageGallery from './ImageGallery';
 import ImageGrid from './ImageGrid';
@@ -90,14 +90,13 @@ const Message = ({ message, next }) => {
                     {message.images.length > 0 &&
                         <>
                             {gallery && <ImageGallery images={message.images} close={() => setGallery(false)} />}
-                            <Box
-                                sx={{ display: "flex", flexDirection: "column", m: "1.5% 0%", cursor: "pointer", position: "relative" }}
+                            <ImageContainer
                                 onClick={() => setGallery(true)}
                                 onMouseEnter={() => setHover(true)}
                                 onMouseLeave={hideMessageDetails}
                             >
                                 {message.images.length === 1 ?
-                                    <Box component="img" sx={{ maxWidth: { xs: 250, md: 300 }, maxHeight: { xs: 200, md: 300 } }} src={message.images[0]} />
+                                    <ImageBox component="img" src={message.images[0]} />
                                     :
                                     <ImageGrid images={message.images} />
                                 }
@@ -109,7 +108,7 @@ const Message = ({ message, next }) => {
                                         <NotifyMark sx={{ fontSize: "19px", color: ((chat.otherMembers.length + 1) <= readBy.length ? "blue" : "gray") }} />
                                     }
                                 </ImageDetails>
-                            </Box>
+                            </ImageContainer>
                         </>
                     }
 

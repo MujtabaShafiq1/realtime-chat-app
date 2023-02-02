@@ -1,9 +1,12 @@
-import { Typography, ImageListItem, ImageList } from '@mui/material'
+import { useMediaQuery, Typography, ImageListItem, ImageList } from '@mui/material'
 import { Flexbox } from '../../misc/MUIComponents';
+
 
 const ImageGrid = ({ images }) => {
 
-    function srcset(image, size = 148, rows = 1, cols = 1) {
+    const matches = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
+    function srcset(image, size = (matches ? 120 : 148), rows = 1, cols = 1) {
         return {
             src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
             srcSet: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format&dpr=2 2x`,
@@ -12,11 +15,8 @@ const ImageGrid = ({ images }) => {
 
     return (
         <ImageList
-            sx={{
-                width: { xs: 250, md: 500 },
-                height: { xs: 200, md: 300 },
-            }}
-            rowHeight={148}
+            sx={{ alignSelf: "flex-end", width: "100%", height: "100%" }}
+            rowHeight={matches ? 120 : 148}
             cols={4}
             variant="quilted"
         >
