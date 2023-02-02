@@ -154,7 +154,6 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }))
 
 const TextBox = styled(Box)(({ sender }) => ({
-    display: "flex",
     color: sender ? "black" : "white",
     backgroundColor: sender ? "rgba(228,230,235,0.8)" : "rgba(0,132,255,0.8)",
     padding: "5px 10px",
@@ -164,7 +163,18 @@ const TextBox = styled(Box)(({ sender }) => ({
 }))
 
 
-const MessageContainer = styled(Box)(({ sender, consecutive, theme }) => ({
+const ImageDetails = styled(Box)(({ theme }) => ({
+    gap: 5,
+    top: "90%",
+    right: "4%",
+    display: "flex",
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "flex-end",
+}))
+
+
+const MessageContainer = styled(Box)(({ sender }) => ({
     gap: 10,
     margin: "1% 0%",
     display: "flex",
@@ -221,6 +231,7 @@ const StyledStatusBadge = styled(Badge)(({ show }) => ({
 export {
     Flexbox,
     TextBox,
+    ImageDetails,
     LongTypography,
     MainContainer,
     DetailBarContainer,

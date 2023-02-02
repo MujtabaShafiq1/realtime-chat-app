@@ -18,6 +18,12 @@ const theme = (mode) => ({
                 fontSize: 16
             },
         },
+        content: {
+            fontSize: 16,
+            [breakpoints.down("sm")]: {
+                fontSize: 14
+            },
+        },
         header: {
             fontSize: 32,
             textAlign: "center",

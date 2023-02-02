@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { useSelector } from 'react-redux';
 import { Box, Typography } from '@mui/material'
-import { Flexbox, TextBox, MessageContainer, ChatAvatar } from "../../misc/MUIComponents"
+import { Flexbox, TextBox, ImageDetails, MessageContainer, ChatAvatar } from "../../misc/MUIComponents"
 import { SocketContext } from '../../context/Socket';
 import ImageGallery from './ImageGallery';
 import ImageGrid from './ImageGrid';
@@ -12,7 +12,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import UserImage from "../../assets/User/user.jpg"
 import axios from 'axios';
 
-const Message = ({ message, next, index }) => {
+const Message = ({ message, next }) => {
 
     const { socket } = useContext(SocketContext)
 
@@ -101,55 +101,52 @@ const Message = ({ message, next, index }) => {
                                     :
                                     <ImageGrid images={message.images} />
                                 }
-                                {message.senderId === user.id &&
-                                    <>
-                                        <NotifyMark sx={{
-                                            fontSize: "20px", alignSelf: "flex-end", position: "absolute", top: "90%", right: "4%",
-                                            color: ((chat.otherMembers.length + 1) <= readBy.length ? "blue" : "gray"),
-                                        }} />
-                                    </>
-                                }
+                                <ImageDetails>
+                                    <Typography sx={{ color: "white", fontSize: "11px", fontWeight: 500 }}>
+                                        {moment(message.createdAt).calendar()}
+                                    </Typography>
+                                    {(message.senderId === user.id) &&
+                                        <NotifyMark sx={{ fontSize: "19px", color: ((chat.otherMembers.length + 1) <= readBy.length ? "blue" : "gray") }} />
+                                    }
+                                </ImageDetails>
                             </Box>
                         </>
                     }
 
                     {/* Text */}
                     {(message.content && message.type !== "info") &&
-                        <TextBox sender={+(message.senderId === user.id)} onMouseEnter={() => setHover(true)} onMouseLeave={hideMessageDetails}>
-                            <Flexbox>
-                                <Typography sx={{ fontSize: { xs: "14px", sm: "16px" } }}>{message.content}</Typography>
-                            </Flexbox>
-                            {
-                                message.senderId === user.id &&
-                                <NotifyMark sx={{
-                                    fontSize: "20px", alignSelf: "flex-end", color: ((chat.otherMembers.length + 1) <= readBy.length ? "blue" : "gray"),
-                                }} />
-                            }
-                        </TextBox>
+                        <>
+                            <TextBox sender={+(message.senderId === user.id)} onMouseEnter={() => setHover(true)} onMouseLeave={hideMessageDetails}>
+
+                                <Typography variant="content">{message.content}</Typography>
+
+                                <Flexbox sx={{ gap: 1, justifyContent: "flex-end" }}>
+                                    <Typography sx={{ fontSize: "11px", fontWeight: 400 }}>
+                                        {moment(message.createdAt).calendar()}
+                                    </Typography>
+                                    {(message.senderId === user.id) &&
+                                        <NotifyMark sx={{ fontSize: "18px", color: ((chat.otherMembers.length + 1) <= readBy.length ? "blue" : "gray") }} />
+                                    }
+                                </Flexbox>
+                            </TextBox>
+                        </>
                     }
 
                 </Flexbox>
 
-                {hover &&
-                    <Flexbox>
-                        {message.senderId === user.id && <DeleteForeverIcon sx={{ fontSize: "20px", fill: "red", cursor: "pointer" }} onClick={deleteHandler} />}
-                        <Flexbox sx={{ backgroundColor: "gray", borderRadius: "30px", opacity: 0.8, padding: "2px 6px" }}>
-                            <Typography sx={{ fontSize: "11px", fontWeight: 300, opacity: 1, color: "white", textAlign: "center" }}>
-                                {moment(message.createdAt).calendar()}
-                            </Typography>
-                        </Flexbox>
-                    </Flexbox>
-                }
+                {hover && message.senderId === user.id && <DeleteForeverIcon sx={{ fontSize: "20px", fill: "red", cursor: "pointer" }} onClick={deleteHandler} />}
 
             </MessageContainer >
 
-            {message.type === "info" &&
+            {
+                message.type === "info" &&
                 <Typography sx={{ fontSize: "15px", fontWeight: 300, color: "gray", textAlign: "center", margin: "1% 0" }}>
                     {message.content}
                 </Typography>
             }
 
-            {(duration > 2 && next) &&
+            {
+                (duration > 2 && next) &&
                 <Typography sx={{ fontSize: "15px", fontWeight: 300, color: "gray", textAlign: "center", margin: "1% 0" }}>
                     {moment(next?.createdAt).calendar()}
                 </Typography>
