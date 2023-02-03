@@ -80,7 +80,7 @@ const CreateGroupChat = ({ users, close }) => {
                     <ConfirmIcon sx={{ fontSize: "24px", color: "text.primary", cursor: "pointer" }} onClick={createGroup} />
                 </Flexbox>
             }
-            <Box sx={{ maxWidth: "sm", grow: 1, overflow: { sm: "auto" } }}>
+            <Box sx={{ maxWidth: "sm", grow: 1, overflow: "auto" }}>
                 {users.map(user =>
                     <UserContainer key={user._id}>
                         <UserCard user={user} />

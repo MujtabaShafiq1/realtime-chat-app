@@ -81,7 +81,7 @@ const Userbar = ({ users }) => {
             width: { xs: "100%", sm: "33%", lg: "22%" },
             borderRight: "1px solid",
             borderColor: "secondary.other",
-            display: { xs: (chat.chatId && "none"), sm: "flex" },
+            display: { xs: (chat.chatId ? "none" : "flex"), sm: "flex" },
             flexDirection: "column",
         }}>
 
@@ -126,7 +126,7 @@ const Userbar = ({ users }) => {
 
             </Flexbox>
 
-            <Container sx={{ maxWidth: "sm", overflow: { sm: "auto" } }}>
+            <Container sx={{ maxWidth: "sm", overflow: "auto" }}>
                 {createGroup ?
                     <CreateGroupChat users={search ? searchedUsers : users} close={() => setCreateGroup(false)} />
                     :

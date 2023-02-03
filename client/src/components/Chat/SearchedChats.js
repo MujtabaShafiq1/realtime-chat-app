@@ -33,7 +33,7 @@ const SearchedChats = ({ searchedUsers, clear }) => {
             <Typography sx={{ fontSize: "22px", m: "3% 0%", textAlign: "center" }}>Searching user</Typography>
             {searchedUsers.length > 0 ?
 
-                <Box sx={{ maxWidth: "sm", overflow: { sm: "auto" } }}>
+                <Box sx={{ maxWidth: "sm", overflow: "auto" }}>
                     {searchedUsers.map(user =>
                         <UserContainer key={user._id} onClick={() => chatHandler(user)}>
                             <UserCard user={user} />
