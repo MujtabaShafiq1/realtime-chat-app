@@ -16,8 +16,7 @@ const ImageGrid = ({ images }) => {
     return (
         <ImageList
             sx={{ width: "100%", height: "100%" }}
-            // rowHeight={matches ? 120 : 148}
-            rowHeight={160}
+            rowHeight={matches ? 120 : 160}
             cols={4}
             variant="quilted"
         >

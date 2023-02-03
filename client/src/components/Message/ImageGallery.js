@@ -54,7 +54,7 @@ const ImageGallery = ({ images, close }) => {
                         }}
                     >
                         <ArrowIcon sx={{
-                            color: "text.primary",
+                            color: "white",
                             fontSize: { xs: "24px", md: "48px" },
                             cursor: "pointer",
                             transform: "rotate(90deg)",
@@ -104,7 +104,7 @@ const ImageGallery = ({ images, close }) => {
                         }}
                     >
                         <ArrowIcon sx={{
-                            color: "text.primary",
+                            color: "white",
                             fontSize: { xs: "24px", md: "48px" },
                             cursor: "pointer",
                             transform: "rotate(270deg)"
@@ -116,11 +116,11 @@ const ImageGallery = ({ images, close }) => {
 
                 {/* Slider button */}
                 <Flexbox sx={{ position: "absolute", top: "90%", gap: { xs: 1, md: 3 } }}>
-                    {images.map((index) => {
+                    {images.map((value, index) => {
                         return (
                             <CircleIcon
                                 key={index}
-                                sx={{ width: { xs: 10, md: 20 }, cursor: "pointer", fill: (slider === index ? "white" : "primary.other") }}
+                                sx={{ width: { xs: 10, md: 20 }, cursor: "pointer", fill: (slider === index ? "white" : "rgb(60, 60, 60)") }}
                                 onClick={() => { if (index !== slider) setSlider(index) }}
                             />
                         )
