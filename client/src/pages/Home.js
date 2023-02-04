@@ -25,7 +25,7 @@ const Home = () => {
         const response = await axios.get(`${process.env.REACT_APP_SERVER}/user/all`)
         const data = response.data.filter((person) => person._id !== userId)
         setUsers(data)
-        console.clear()
+        // console.clear()
     }, [userId])
 
     useEffect(() => {
@@ -49,7 +49,7 @@ const Home = () => {
                         onClose={() => setDrawer(false)}
                         anchor="right"
                         disableSwipeToOpen
-                        PaperProps={{ sx: { zIndex: 1, width: { xs: "100%", sm: "50%", md: "30%" } } }}>
+                        PaperProps={{ sx: { zIndex: 1, width: { xs: "100%", sm: "50%", md: "30%" }, backgroundColor: "primary.main" } }}>
                         <CloseIcon
                             sx={{ fontSize: "28px", mt: "1% ", color: "red", cursor: "pointer", position: "absolute", left: "85%" }}
                             onClick={() => setDrawer(false)}

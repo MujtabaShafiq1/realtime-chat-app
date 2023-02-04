@@ -125,7 +125,7 @@ const GroupBar = ({ users }) => {
                 !addUser ?
                     <>
                         <Typography variant="body" sx={{ m: "3% 0%", textAlign: "center" }}>Group members</Typography>
-                        <Container sx={{ maxWidth: "sm", grow: 1, overflow: { sm: "auto" } }}>
+                        <Container sx={{ maxWidth: "sm", grow: 1, overflow: "auto" }}>
                             {chat.otherMembers.map(user => {
                                 return (
                                     <UserContainer key={user._id}>
@@ -147,7 +147,7 @@ const GroupBar = ({ users }) => {
                             <RemoveCircleIcon sx={{ fontSize: "24px", height: "auto", cursor: "pointer", color: "red" }} onClick={closeHandler} />
                         </Flexbox>
 
-                        <Container sx={{ maxWidth: "sm", grow: 1, overflow: { sm: "auto" } }}>
+                        <Container sx={{ maxWidth: "sm", grow: 1, overflow: "auto" }}>
                             {nonGroupMembers.length > 0
                                 ?
                                 nonGroupMembers.map(user => {
